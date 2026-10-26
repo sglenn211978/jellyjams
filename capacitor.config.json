@@ -1,0 +1,10 @@
+{
+  "appId": "com.jellyjams.game",
+  "appName": "Jelly Jams",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "android": {
+    "backgroundColor": "#090d16",
+    "allowMixedContent": false
+  }
+}
