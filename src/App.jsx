@@ -677,12 +677,16 @@ export default function App() {
       return;
     }
 
-    // 3. If monster was sleeping, wake it up so it sings! If already awake, keep it singing and play its signature solo riff!
+    // 3. DIRECT TAP TOGGLES SINGING / MUTED (SLEEP)
     const wasSleeping = performers[member]?.isSleeping;
+    togglePerformerSleep(member);
+
     if (wasSleeping) {
-      togglePerformerSleep(member);
+      engineRef.current?.playMonsterSolo(member);
+      triggerCoinBonusToast(`🎤 ${performers[member]?.name || member.toUpperCase()} IS SINGING!`);
+    } else {
+      triggerCoinBonusToast(`💤 ${performers[member]?.name || member.toUpperCase()} MUTED (TAP TO SING)`);
     }
-    engineRef.current?.playMonsterSolo(member);
 
     setPokedPerformer({
       id: member,
@@ -1159,160 +1163,120 @@ export default function App() {
 
       {/* Responsive Top Header Bar */}
       <header className="game-header-bar">
-        {/* Top Left: Plaque, Island Map & Rave, and Game Modes */}
+        {/* Top Left: Plaque & Compact Single-Row Action Toolbar */}
         <div className="header-hud-left">
-          {/* Top Row: Bubbly Game Crest + Island Map + Sunlit/Midnight Rave */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div className="kid-game-logo-crest" title="Jelly Jams: Musical Monster Reef">
-              <span style={{ fontSize: '30px', animation: 'wiggle 2s infinite' }}>🪼</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'nowrap' }}>
+            {/* Compact Brand Badge */}
+            <div 
+              className="kid-game-logo-crest" 
+              onClick={() => setIsMapOpen(true)}
+              title="Jelly Jams: Musical Monster Reef — Tap for Island Map"
+              style={{ padding: '6px 12px', cursor: 'pointer', gap: '8px' }}
+            >
+              <span style={{ fontSize: '24px' }}>🪼</span>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <span style={{
                   fontFamily: "'Fredoka', 'Lilita One', cursive, sans-serif",
-                  fontSize: '22px',
+                  fontSize: '16px',
                   fontWeight: '900',
                   color: '#fef08a',
-                  letterSpacing: '0.8px',
+                  letterSpacing: '0.5px',
                   paintOrder: 'stroke fill',
-                  WebkitTextStroke: '3px #78350f',
-                  textShadow: '0 3px 0 #451a03',
+                  WebkitTextStroke: '2.5px #78350f',
                   lineHeight: 1
                 }}>
                   JELLY JAMS
                 </span>
                 <span style={{
                   fontFamily: "'Fredoka', sans-serif",
-                  fontSize: '11px',
+                  fontSize: '9.5px',
                   fontWeight: '900',
-                  color: '#ffffff',
-                  paintOrder: 'stroke fill',
-                  WebkitTextStroke: '2px #0c4a6e',
-                  letterSpacing: '0.5px',
-                  marginTop: '2px'
+                  color: '#bae6fd',
+                  marginTop: '1px'
                 }}>
-                  ★ REEF CHOIR ★
+                  {currentIslandConfig.name.toUpperCase()} ▾
                 </span>
               </div>
             </div>
 
-            <button
-              onClick={() => setIsMapOpen(true)}
-              className="kid-toy-btn kid-toy-cyan"
-              title="Open Island Map Archipelago Navigation"
-            >
-              <span className="kid-toy-icon">{currentIslandConfig.icon}</span>
-              <span className="kid-toy-title">{currentIslandConfig.name}</span>
-              <span className="kid-toy-sub">MAP ▾</span>
-            </button>
-
             {hasStarted && (
               <>
+                <button
+                  onClick={() => setIsDexOpen(true)}
+                  className="kid-toy-btn kid-toy-gold"
+                  style={{ padding: '6px 10px', minWidth: 'auto', gap: '4px' }}
+                  title="Open Jelly Dex Almanac"
+                >
+                  <span className="kid-toy-icon" style={{ fontSize: '15px' }}>📖</span>
+                  <span className="kid-toy-title" style={{ fontSize: '11px' }}>DEX</span>
+                </button>
+
                 <button
                   onClick={() => setIsQuestsOpen(true)}
                   className="kid-toy-btn kid-toy-purple"
-                  title={`Band Fame: ${currentFameRank.title} (Level ${currentFameRank.level}) - ${currentFameRank.xp} XP • ${currentFameRank.perk}`}
+                  style={{ padding: '6px 10px', minWidth: 'auto', gap: '4px', position: 'relative' }}
+                  title="Open Daily Quests & Sticker Album"
                 >
-                  <span className="kid-toy-icon">{currentFameRank.icon}</span>
-                  <span className="kid-toy-title">LV.{currentFameRank.level} FAME</span>
-                  <span className="kid-toy-sub">{currentFameRank.title.toUpperCase()}</span>
-                </button>
-
-                <button
-                  onClick={toggleNightRave}
-                  className={`kid-toy-btn ${isNightRave ? 'kid-toy-purple' : 'kid-toy-gold'}`}
-                  title="Toggle between Sunlit Reef and Midnight Neon Rave!"
-                >
-                  <span className="kid-toy-icon">{isNightRave ? '🌙' : '☀️'}</span>
-                  <span className="kid-toy-title">{isNightRave ? 'NIGHT' : 'DAY'}</span>
-                  <span className="kid-toy-sub">{isNightRave ? 'RAVE' : 'SUNLIT'}</span>
-                </button>
-              </>
-            )}
-          </div>
-
-          {/* Bottom Row: Kid-Friendly Arcade Toy Badges */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px',
-            marginTop: '4px'
-          }}>
-            <button
-              onClick={() => setIsDexOpen(true)}
-              className="kid-toy-btn kid-toy-gold"
-              title="Open Jelly Dex Almanac & Breeding Lab Guide"
-            >
-              <span className="kid-toy-icon">📖</span>
-              <span className="kid-toy-title">JELLY DEX</span>
-              <span className="kid-toy-sub">{totalDiscoveredAcrossIslands}/17 FOUND</span>
-            </button>
-
-            {hasStarted && (
-              <>
-                <button
-                  onClick={() => setIsQuestsOpen(true)}
-                  className="kid-toy-btn kid-toy-gold"
-                  title="Open Hudson's Daily Star Quests & Sticker Album!"
-                  style={{ position: 'relative' }}
-                >
-                  <span className="kid-toy-icon">⭐</span>
-                  <span className="kid-toy-title">QUESTS</span>
-                  <span className="kid-toy-sub">
-                    {dailyQuests.filter(q => (q.progress || 0) >= q.target && !q.claimed).length > 0 ? 'CLAIM!' : 'STICKERS'}
-                  </span>
+                  <span className="kid-toy-icon" style={{ fontSize: '15px' }}>⭐</span>
+                  <span className="kid-toy-title" style={{ fontSize: '11px' }}>QUESTS</span>
                   {dailyQuests.filter(q => (q.progress || 0) >= q.target && !q.claimed).length > 0 && (
                     <span style={{
                       position: 'absolute',
-                      top: '-6px',
-                      right: '-6px',
+                      top: '-4px',
+                      right: '-4px',
                       background: '#ef4444',
                       color: '#ffffff',
                       borderRadius: '50%',
-                      width: '20px',
-                      height: '20px',
+                      width: '16px',
+                      height: '16px',
+                      fontSize: '10px',
+                      fontWeight: '900',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: '12px',
-                      fontWeight: '900',
-                      border: '2px solid #ffffff',
-                      boxShadow: '0 2px 5px rgba(0,0,0,0.4)',
-                      animation: 'bounce 0.8s infinite'
-                    }}>
-                      !
-                    </span>
+                      border: '1.5px solid #ffffff'
+                    }}>!</span>
                   )}
-                </button>
-
-                <button
-                  onClick={() => setIsEchoJamOpen(true)}
-                  className="kid-toy-btn kid-toy-purple"
-                  title="Play Reef Echo Jam 3-note Simon Says musical memory mini-game!"
-                >
-                  <span className="kid-toy-icon">🎮</span>
-                  <span className="kid-toy-title">ECHO JAM</span>
-                  <span className="kid-toy-sub">JAM!</span>
-                </button>
-
-                <button
-                  onClick={() => setIsRhythmRushOpen(true)}
-                  className="kid-toy-btn kid-toy-green"
-                  style={{ animation: 'wiggle 4s ease-in-out infinite' }}
-                  title="Play Rhythm Rush: Bubble Beats arcade rhythm action mini-game!"
-                >
-                  <span className="kid-toy-icon">🎵</span>
-                  <span className="kid-toy-title">RHYTHM</span>
-                  <span className="kid-toy-sub">BEATS!</span>
                 </button>
 
                 <button
                   onClick={() => setIsWheelOpen(true)}
                   className="kid-toy-btn kid-toy-coral"
-                  style={{ animation: 'wiggle 3s ease-in-out infinite' }}
-                  title="Spin the Lucky Starfish Prize Wheel for daily rewards!"
+                  style={{ padding: '6px 10px', minWidth: 'auto', gap: '4px' }}
+                  title="Spin the Prize Wheel"
                 >
-                  <span className="kid-toy-icon">🎡</span>
-                  <span className="kid-toy-title">WHEEL</span>
-                  <span className="kid-toy-sub">SPIN!</span>
+                  <span className="kid-toy-icon" style={{ fontSize: '15px' }}>🎡</span>
+                  <span className="kid-toy-title" style={{ fontSize: '11px' }}>WHEEL</span>
+                </button>
+
+                <button
+                  onClick={() => setIsEchoJamOpen(true)}
+                  className="kid-toy-btn kid-toy-cyan"
+                  style={{ padding: '6px 10px', minWidth: 'auto', gap: '4px' }}
+                  title="Play Reef Echo Jam Memory Game"
+                >
+                  <span className="kid-toy-icon" style={{ fontSize: '15px' }}>🎮</span>
+                  <span className="kid-toy-title" style={{ fontSize: '11px' }}>ECHO</span>
+                </button>
+
+                <button
+                  onClick={() => setIsRhythmRushOpen(true)}
+                  className="kid-toy-btn kid-toy-green"
+                  style={{ padding: '6px 10px', minWidth: 'auto', gap: '4px' }}
+                  title="Play Rhythm Rush Beats Mini-Game"
+                >
+                  <span className="kid-toy-icon" style={{ fontSize: '15px' }}>🎵</span>
+                  <span className="kid-toy-title" style={{ fontSize: '11px' }}>RUSH</span>
+                </button>
+
+                <button
+                  onClick={toggleNightRave}
+                  className={`kid-toy-btn ${isNightRave ? 'kid-toy-purple' : 'kid-toy-gold'}`}
+                  style={{ padding: '6px 10px', minWidth: 'auto', gap: '4px' }}
+                  title="Toggle Day / Night Rave"
+                >
+                  <span className="kid-toy-icon" style={{ fontSize: '15px' }}>{isNightRave ? '🌙' : '☀️'}</span>
+                  <span className="kid-toy-title" style={{ fontSize: '11px' }}>{isNightRave ? 'RAVE' : 'DAY'}</span>
                 </button>
               </>
             )}
@@ -1393,6 +1357,17 @@ export default function App() {
                   <span className="kid-toy-sub">{squadSynergy.shortBonus || 'BONUS!'}</span>
                 </button>
               )}
+
+              {/* Fame Rank Badge */}
+              <button
+                onClick={() => setIsQuestsOpen(true)}
+                className="kid-toy-btn kid-toy-purple"
+                style={{ padding: '6px 12px', minWidth: 'auto', gap: '5px' }}
+                title={`Band Fame: ${currentFameRank.title} (Level ${currentFameRank.level}) - ${currentFameRank.xp} XP • ${currentFameRank.perk}`}
+              >
+                <span className="kid-toy-icon" style={{ fontSize: '16px' }}>{currentFameRank.icon}</span>
+                <span className="kid-toy-title" style={{ fontSize: '12px' }}>LV.{currentFameRank.level} FAME</span>
+              </button>
 
               <div 
                 ref={bankBadgeRef}

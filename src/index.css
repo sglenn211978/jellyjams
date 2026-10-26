@@ -1238,10 +1238,10 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  padding: 12px 20px;
+  padding: 8px 16px;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   z-index: 50;
   pointer-events: none;
 }
@@ -1255,23 +1255,22 @@ body {
 
 .header-hud-left {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 8px;
-  max-width: 520px;
 }
 
 .header-hud-center {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   z-index: 55;
 }
 
 .header-hud-right {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .performers-stage-container {
@@ -1280,30 +1279,32 @@ body {
   align-items: center;
   width: 100%;
   max-width: 100vw;
-  padding: 40px 16px 20px 16px;
+  flex: 1;
+  padding: 44px 16px 20px 16px;
   z-index: 20;
-  margin-top: -24px;
 }
 
 .performers-stage-row {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
-  gap: clamp(10px, 1.8vw, 24px);
-  max-width: 96vw;
+  gap: clamp(16px, 2.5vw, 40px);
+  max-width: 98vw;
   flex-wrap: nowrap;
   transition: transform 0.25s ease;
+  transform: scale(1.05);
+  transform-origin: center bottom;
 }
 
 .seafloor-activity-bar {
   position: absolute;
-  bottom: 18px;
+  bottom: 12px;
   left: 0;
   right: 0;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  padding: 0 clamp(16px, 2.5vw, 36px);
+  padding: 0 clamp(14px, 2vw, 30px);
   z-index: 40;
   pointer-events: none;
 }
@@ -1322,7 +1323,7 @@ body {
 
 .seafloor-slot-center {
   justify-content: center;
-  gap: clamp(12px, 2vw, 28px);
+  gap: clamp(12px, 2vw, 24px);
   flex-shrink: 0;
 }
 
@@ -1331,129 +1332,68 @@ body {
   flex-shrink: 0;
 }
 
-/* Responsive Breakpoints */
+/* Tablet & Responsive Breakpoints */
 @media (max-width: 1400px) {
   .performers-stage-row {
-    transform: scale(0.92);
-    transform-origin: center center;
-    gap: 14px;
+    transform: scale(1.0);
+    gap: 20px;
   }
 }
 
 @media (max-width: 1200px) {
   .performers-stage-row {
-    transform: scale(0.82);
-    transform-origin: center center;
-    gap: 10px;
-  }
-  .seafloor-slot-left {
-    transform: scale(0.9);
-    transform-origin: bottom left;
-  }
-  .seafloor-slot-center {
-    transform: scale(0.9);
-    transform-origin: bottom center;
-  }
-  .seafloor-slot-right {
-    transform: scale(0.9);
-    transform-origin: bottom right;
+    transform: scale(0.96);
+    gap: 16px;
   }
 }
 
 @media (max-width: 992px) {
   .game-header-bar {
-    padding: 12px 16px;
+    padding: 6px 12px;
   }
   .header-hud-left {
-    transform: scale(0.88);
-    transform-origin: top left;
+    transform: scale(0.92);
+    transform-origin: left center;
   }
   .header-hud-center {
-    transform: scale(0.88);
-    transform-origin: top center;
+    transform: scale(0.92);
+    transform-origin: center center;
   }
   .header-hud-right {
-    transform: scale(0.88);
-    transform-origin: top right;
+    transform: scale(0.92);
+    transform-origin: right center;
   }
 
   .performers-stage-container {
     overflow-x: auto;
     overflow-y: hidden;
-    justify-content: flex-start;
-    padding: 40px 24px 20px 24px;
+    padding: 36px 16px 20px 16px;
     scrollbar-width: none;
   }
   .performers-stage-container::-webkit-scrollbar {
     display: none;
   }
   .performers-stage-row {
-    transform: scale(0.78);
-    transform-origin: left center;
+    transform: scale(0.92);
+    transform-origin: center bottom;
     min-width: max-content;
-    padding-right: 36px;
   }
 
   .seafloor-activity-bar {
-    padding: 0 12px;
-    bottom: 12px;
-  }
-  .seafloor-slot-left {
-    transform: scale(0.78);
-    transform-origin: bottom left;
-  }
-  .seafloor-slot-center {
-    transform: scale(0.8);
-    transform-origin: bottom center;
-    gap: 8px;
-  }
-  .seafloor-slot-right {
-    transform: scale(0.8);
-    transform-origin: bottom right;
-  }
-}
-
-@media (max-width: 768px) {
-  .game-header-bar {
-    flex-wrap: wrap;
-    gap: 6px;
-    padding: 8px 10px;
-  }
-  .header-hud-left {
-    transform: scale(0.8);
-  }
-  .header-hud-center {
-    order: 3;
-    width: 100%;
-    margin-top: 2px;
-    transform: scale(0.85);
-  }
-  .header-hud-right {
-    transform: scale(0.8);
-  }
-
-  .performers-stage-row {
-    transform: scale(0.7);
-  }
-
-  .seafloor-activity-bar {
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: flex-end;
-    gap: 8px;
+    padding: 0 10px;
     bottom: 8px;
   }
   .seafloor-slot-left {
-    transform: scale(0.68);
-    transform-origin: bottom center;
+    transform: scale(0.88);
+    transform-origin: bottom left;
   }
   .seafloor-slot-center {
-    transform: scale(0.72);
+    transform: scale(0.88);
     transform-origin: bottom center;
   }
   .seafloor-slot-right {
-    transform: scale(0.7);
-    transform-origin: bottom center;
+    transform: scale(0.88);
+    transform-origin: bottom right;
   }
 }
 

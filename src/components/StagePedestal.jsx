@@ -135,28 +135,28 @@ export default function StagePedestal({
       {/* Mounted 3D Arcade Character Plaque */}
       {name && (
         <div style={{
-          marginTop: '-10px',
-          padding: '4px 10px',
-          borderRadius: '16px',
+          marginTop: '-8px',
+          padding: '6px 14px',
+          borderRadius: '20px',
           background: 'linear-gradient(180deg, #1e293b 0%, #0f172a 100%)',
-          border: isSoloed ? '2.5px solid #facc15' : '2.5px solid #0f172a',
-          boxShadow: '0 4px 0 #0f172a, 0 8px 16px rgba(0,0,0,0.4)',
+          border: isSoloed ? '3px solid #facc15' : '3px solid #0f172a',
+          boxShadow: isSoloed ? '0 0 16px #facc15, 0 5px 0 #0f172a, 0 10px 20px rgba(0,0,0,0.5)' : '0 5px 0 #0f172a, 0 10px 20px rgba(0,0,0,0.5)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: '4px',
+          gap: '6px',
           zIndex: 5,
-          whiteSpace: 'nowrap'
+          userSelect: 'none'
         }}>
-          {/* Top Row: Level + Monster Name */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          {/* Top Row: Monster Name & Level Badge */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{
               background: level >= 5 ? 'linear-gradient(135deg, #f59e0b, #ef4444)' : 'linear-gradient(135deg, #38bdf8, #0284c7)',
               color: '#ffffff',
-              padding: '1px 6px',
-              borderRadius: '8px',
-              border: '1.5px solid #0f172a',
-              fontSize: '10px',
+              padding: '2px 8px',
+              borderRadius: '10px',
+              border: '2px solid #0f172a',
+              fontSize: '12px',
               fontWeight: '900',
               letterSpacing: '0.5px'
             }}>
@@ -165,7 +165,7 @@ export default function StagePedestal({
 
             <span style={{
               fontFamily: "'Fredoka', 'Lilita One', sans-serif",
-              fontSize: '13px',
+              fontSize: '15px',
               fontWeight: '900',
               color: '#ffffff',
               letterSpacing: '0.5px'
@@ -174,8 +174,8 @@ export default function StagePedestal({
             </span>
           </div>
 
-          {/* Bottom Row: SING/WAKE + Quick Volume Boost + SOLO */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+          {/* Bottom Row: BIG TOUCH-FRIENDLY MUTE/SING TOGGLE & SOLO */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <button
               type="button"
               onClick={(e) => {
@@ -187,26 +187,30 @@ export default function StagePedestal({
               title={isSleeping ? `Wake up ${name} to sing!` : `Put ${name} to sleep (mute)`}
               style={{
                 background: isSleeping
-                  ? 'linear-gradient(180deg, #64748b 0%, #334155 100%)'
+                  ? 'linear-gradient(180deg, #475569 0%, #1e293b 100%)'
                   : isSupercharged
                   ? 'linear-gradient(180deg, #fde047 0%, #eab308 100%)'
-                  : 'linear-gradient(180deg, #4ade80 0%, #16a34a 100%)',
-                color: isSleeping ? '#e2e8f0' : '#052e16',
-                border: '1.5px solid #0f172a',
-                borderRadius: '10px',
-                padding: '2px 7px',
-                fontSize: '10.5px',
+                  : 'linear-gradient(180deg, #22c55e 0%, #15803d 100%)',
+                color: isSleeping ? '#cbd5e1' : '#ffffff',
+                border: '2.5px solid #0f172a',
+                borderRadius: '16px',
+                padding: '8px 16px',
+                minHeight: '44px',
+                minWidth: '110px',
+                fontSize: '13px',
                 fontWeight: '900',
                 fontFamily: "'Fredoka', 'Lilita One', sans-serif",
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '3px',
-                boxShadow: '0 2px 0 #0f172a'
+                justifyContent: 'center',
+                gap: '6px',
+                boxShadow: isSleeping ? '0 3px 0 #0f172a' : '0 4px 0 #0f172a, 0 0 12px rgba(34, 197, 94, 0.45)',
+                transition: 'all 0.15s ease'
               }}
             >
-              <span>{isSleeping ? '💤' : isSupercharged ? '⚡' : '🎤'}</span>
-              <span>{isSleeping ? 'WAKE' : 'SING'}</span>
+              <span style={{ fontSize: '18px' }}>{isSleeping ? '💤' : '🎤'}</span>
+              <span>{isSleeping ? 'MUTED' : 'SINGING'}</span>
             </button>
 
             {onCycleVolume && (
@@ -224,22 +228,21 @@ export default function StagePedestal({
                     ? 'linear-gradient(180deg, #fde047 0%, #ca8a04 100%)'
                     : 'linear-gradient(180deg, #38bdf8 0%, #0284c7 100%)',
                   color: '#ffffff',
-                  border: '1.5px solid #0f172a',
-                  borderRadius: '10px',
-                  padding: '2px 7px',
-                  fontSize: '10.5px',
+                  border: '2.5px solid #0f172a',
+                  borderRadius: '16px',
+                  padding: '8px 10px',
+                  minHeight: '44px',
+                  fontSize: '12px',
                   fontWeight: '900',
                   fontFamily: "'Fredoka', 'Lilita One', sans-serif",
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '3px',
-                  boxShadow: '0 2px 0 #0f172a',
-                  paintOrder: 'stroke fill',
-                  WebkitTextStroke: '1.5px #090d16'
+                  gap: '4px',
+                  boxShadow: '0 3px 0 #0f172a'
                 }}
               >
-                <span>{volPct >= 180 ? '🔥' : volPct <= 60 ? '🔉' : '🔊'}</span>
+                <span style={{ fontSize: '15px' }}>{volPct >= 180 ? '🔥' : volPct <= 60 ? '🔉' : '🔊'}</span>
                 <span>{volPct}%</span>
               </button>
             )}
@@ -254,24 +257,26 @@ export default function StagePedestal({
                 title={isSoloed ? `Un-solo ${name} (hear full band)` : `Solo ${name} (hear only this monster!)`}
                 style={{
                   background: isSoloed
-                    ? 'linear-gradient(180deg, #fde047 0%, #eab308 100%)'
-                    : 'linear-gradient(180deg, #475569 0%, #1e293b 100%)',
+                    ? 'linear-gradient(180deg, #fde047 0%, #ca8a04 100%)'
+                    : 'linear-gradient(180deg, #334155 0%, #1e293b 100%)',
                   color: isSoloed ? '#451a03' : '#e2e8f0',
-                  border: '1.5px solid #0f172a',
-                  borderRadius: '10px',
-                  padding: '2px 6px',
-                  fontSize: '10.5px',
+                  border: '2.5px solid #0f172a',
+                  borderRadius: '16px',
+                  padding: '8px 12px',
+                  minHeight: '44px',
+                  fontSize: '12px',
                   fontWeight: '900',
                   fontFamily: "'Fredoka', 'Lilita One', sans-serif",
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '2px',
-                  boxShadow: '0 2px 0 #0f172a'
+                  justifyContent: 'center',
+                  gap: '4px',
+                  boxShadow: isSoloed ? '0 4px 0 #0f172a, 0 0 12px rgba(250, 204, 21, 0.5)' : '0 3px 0 #0f172a'
                 }}
               >
-                <span>⭐</span>
-                <span>{isSoloed ? 'SOLO!' : 'SOLO'}</span>
+                <span style={{ fontSize: '15px' }}>⭐</span>
+                <span>{isSoloed ? 'SOLOED!' : 'SOLO'}</span>
               </button>
             )}
           </div>

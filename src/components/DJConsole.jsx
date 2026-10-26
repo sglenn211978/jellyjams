@@ -8,39 +8,32 @@ export default function DJConsole({
   onTriggerSparks
 }) {
   const speeds = [
-    { label: 'SLOW', icon: '🐢', speed: 0.75, color: 'game-btn-green', desc: '0.75x Slow Chill Groove' },
-    { label: 'NORMAL', icon: '🪼', speed: 1.0, color: 'game-btn-cyan', desc: '1.0x Normal Groove' },
+    { label: 'SLOW', icon: '🐢', speed: 0.75, color: 'game-btn-green', desc: '0.75x Chill Groove' },
+    { label: 'NORMAL', icon: '🪼', speed: 1.0, color: 'game-btn-cyan', desc: '1.0x Regular Groove' },
     { label: 'FAST', icon: '⚡', speed: 1.35, color: 'game-btn-pink', desc: '1.35x Fast Party Beat' }
   ];
 
   return (
-    <div className="kid-toy-boombox-dock" style={{ flexWrap: 'wrap', justifyContent: 'center' }}>
-      {/* Left Speaker Grille */}
-      <div className="kid-boombox-speaker">
-        <div className="kid-boombox-dot" />
-        <div className="kid-boombox-dot" />
-        <div className="kid-boombox-dot" />
-      </div>
-
+    <div style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '6px',
+      background: 'linear-gradient(180deg, #1e293b 0%, #0f172a 100%)',
+      padding: '4px 8px',
+      borderRadius: '24px',
+      border: '3px solid #090d16',
+      boxShadow: '0 4px 0 #090d16, 0 8px 16px rgba(0,0,0,0.4)',
+      userSelect: 'none'
+    }}>
+      {/* Tempo Switcher Pills */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
-        gap: '5px',
-        padding: '5px 10px',
-        background: '#78350f',
+        background: '#090d16',
+        padding: '2px',
         borderRadius: '16px',
-        color: '#fef08a',
-        fontFamily: "'Fredoka', sans-serif",
-        fontWeight: '900',
-        fontSize: '12px',
-        letterSpacing: '0.5px',
-        boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.5)'
+        gap: '2px'
       }}>
-        <span style={{ fontSize: '16px' }}>🎧</span>
-        <span>TEMPO</span>
-      </div>
-      
-      <div style={{ display: 'flex', gap: '8px' }}>
         {speeds.map((item) => {
           const isActive = currentSpeed === item.speed;
           return (
@@ -49,108 +42,98 @@ export default function DJConsole({
               onClick={() => onSpeedChange(item.speed)}
               className={`game-btn ${isActive ? item.color : 'game-btn-stone'}`}
               style={{
-                padding: '8px 16px',
-                fontSize: '14px',
-                borderRadius: '18px',
-                gap: '6px',
-                transform: isActive ? 'scale(1.06)' : 'none'
+                padding: '5px 10px',
+                fontSize: '12px',
+                borderRadius: '14px',
+                gap: '4px',
+                border: 'none',
+                boxShadow: isActive ? 'inset 0 2px 0 rgba(255,255,255,0.4)' : 'none'
               }}
               title={item.desc}
             >
-              <span style={{ fontSize: '18px' }}>{item.icon}</span>
+              <span style={{ fontSize: '14px' }}>{item.icon}</span>
               <span>{item.label}</span>
             </button>
           );
         })}
       </div>
 
-      <div style={{ width: '3px', height: '30px', background: '#78350f', borderRadius: '4px', margin: '0 2px', opacity: 0.5 }} />
+      <div style={{ width: '2px', height: '22px', background: '#334155', borderRadius: '2px', margin: '0 2px' }} />
 
+      {/* Volume & Mixer Button */}
       <button
         onClick={onOpenMixer}
         className="game-btn game-btn-purple"
         style={{
-          padding: '8px 16px',
-          fontSize: '14px',
-          borderRadius: '18px',
-          gap: '6px'
+          padding: '6px 12px',
+          fontSize: '12px',
+          borderRadius: '16px',
+          gap: '5px'
         }}
         title="Open Monster Volume Controls & Mixing Console"
       >
-        <span style={{ fontSize: '18px' }}>🔊</span>
-        <span>VOLUME</span>
+        <span style={{ fontSize: '15px' }}>🔊</span>
+        <span>MIXER</span>
       </button>
 
+      {/* DJ Scratch Booth Button */}
       <button
         onClick={onOpenDJBooth}
         className="game-btn game-btn-yellow"
         style={{
-          padding: '8px 16px',
-          fontSize: '14px',
-          borderRadius: '18px',
-          gap: '6px'
+          padding: '6px 12px',
+          fontSize: '12px',
+          borderRadius: '16px',
+          gap: '5px'
         }}
         title="Open Live DJ Booth & Scratch Turntable!"
       >
-        <span style={{ fontSize: '18px' }}>🎧</span>
+        <span style={{ fontSize: '15px' }}>🎧</span>
         <span>DJ BOOTH</span>
       </button>
 
-      <div style={{ width: '3px', height: '30px', background: '#78350f', borderRadius: '4px', margin: '0 2px', opacity: 0.5 }} />
+      <div style={{ width: '2px', height: '22px', background: '#334155', borderRadius: '2px', margin: '0 2px' }} />
 
-      {/* Interactive Live Stage FX Trigger Toys */}
-      <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+      {/* Compact Interactive FX Trigger Buttons */}
+      <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
         <button
           onClick={onTriggerConfetti}
           className="game-btn game-btn-pink"
           style={{
-            padding: '7px 12px',
-            fontSize: '13px',
-            borderRadius: '16px',
-            gap: '5px'
+            padding: '6px 8px',
+            fontSize: '14px',
+            borderRadius: '14px'
           }}
-          title="Blast colorful confetti across the stage!"
+          title="Blast confetti across the stage!"
         >
-          <span style={{ fontSize: '17px' }}>🎊</span>
-          <span>CONFETTI</span>
+          <span>🎊</span>
         </button>
 
         <button
           onClick={onTriggerBubbles}
           className="game-btn game-btn-cyan"
           style={{
-            padding: '7px 12px',
-            fontSize: '13px',
-            borderRadius: '16px',
-            gap: '5px'
+            padding: '6px 8px',
+            fontSize: '14px',
+            borderRadius: '14px'
           }}
-          title="Fire floating bubbles from the stage floor!"
+          title="Fire floating bubbles!"
         >
-          <span style={{ fontSize: '17px' }}>🫧</span>
-          <span>BUBBLES</span>
+          <span>🫧</span>
         </button>
 
         <button
           onClick={onTriggerSparks}
           className="game-btn game-btn-yellow"
           style={{
-            padding: '7px 12px',
-            fontSize: '13px',
-            borderRadius: '16px',
-            gap: '5px'
+            padding: '6px 8px',
+            fontSize: '14px',
+            borderRadius: '14px'
           }}
-          title="Shoot sparkling golden fountain fireworks!"
+          title="Shoot sparkling fireworks!"
         >
-          <span style={{ fontSize: '17px' }}>🎆</span>
-          <span>SPARKS</span>
+          <span>🎆</span>
         </button>
-      </div>
-
-      {/* Right Speaker Grille */}
-      <div className="kid-boombox-speaker">
-        <div className="kid-boombox-dot" />
-        <div className="kid-boombox-dot" />
-        <div className="kid-boombox-dot" />
       </div>
     </div>
   );
