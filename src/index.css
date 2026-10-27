@@ -518,6 +518,134 @@ body {
   transform: translateY(-2px) scale(1.03);
 }
 
+/* =========================================================================
+   TOUCH-FIRST 3D CARTOON BUBBLE BUTTONS (BRAWL STARS / MSM ARCADE STYLE)
+   ========================================================================= */
+
+.cartoon-bubble-btn {
+  border: 4px solid #090d16;
+  font-family: 'Fredoka', 'Lilita One', 'Sniglet', sans-serif;
+  font-weight: 900;
+  color: #ffffff;
+  position: relative;
+  overflow: visible;
+  user-select: none;
+  cursor: pointer;
+  outline: none;
+  touch-action: manipulation;
+  transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.12s ease, filter 0.12s ease;
+  box-shadow: 
+    inset 0 4px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -5px 0 rgba(0, 0, 0, 0.3),
+    0 7px 0 #090d16,
+    0 11px 0 rgba(0, 0, 0, 0.25),
+    0 14px 20px rgba(0, 0, 0, 0.45);
+}
+
+.cartoon-bubble-btn::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 6px;
+  right: 6px;
+  height: 42%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.08) 100%);
+  border-radius: 9999px 9999px 40px 40px;
+  pointer-events: none;
+}
+
+.cartoon-bubble-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  filter: brightness(1.08);
+}
+
+.cartoon-bubble-btn:active,
+.cartoon-bubble-btn.btn-pressed {
+  transform: translateY(5px) scale(0.95) !important;
+  box-shadow: 
+    inset 0 2px 0 rgba(0, 0, 0, 0.35),
+    0 2px 0 #090d16,
+    0 4px 8px rgba(0, 0, 0, 0.35) !important;
+}
+
+.cartoon-bubble-btn.btn-yellow {
+  background: linear-gradient(180deg, #fef08a 0%, #facc15 35%, #eab308 75%, #ca8a04 100%);
+  color: #78350f;
+  text-shadow: 0 1.5px 0 #fef08a;
+}
+
+.cartoon-bubble-btn.btn-cyan {
+  background: linear-gradient(180deg, #bae6fd 0%, #38bdf8 35%, #0284c7 75%, #0369a1 100%);
+  color: #ffffff;
+  -webkit-text-stroke: 1.5px #075985;
+  text-shadow: 0 2px 0 #0c4a6e;
+}
+
+.cartoon-bubble-btn.btn-purple {
+  background: linear-gradient(180deg, #f5d0fe 0%, #d946ef 35%, #a855f7 75%, #7e22ce 100%);
+  color: #ffffff;
+  -webkit-text-stroke: 1.5px #581c87;
+  text-shadow: 0 2px 0 #3b0764;
+}
+
+.cartoon-bubble-btn.btn-pink {
+  background: linear-gradient(180deg, #fbcfe8 0%, #f472b6 35%, #ec4899 75%, #db2777 100%);
+  color: #ffffff;
+  -webkit-text-stroke: 1.5px #831843;
+  text-shadow: 0 2px 0 #500724;
+}
+
+.cartoon-bubble-btn.btn-green {
+  background: linear-gradient(180deg, #bbf7d0 0%, #4ade80 35%, #22c55e 75%, #15803d 100%);
+  color: #ffffff;
+  -webkit-text-stroke: 1.5px #14532d;
+  text-shadow: 0 2px 0 #052e16;
+}
+
+.cartoon-bubble-btn.btn-disabled {
+  background: linear-gradient(180deg, #64748b 0%, #475569 45%, #334155 100%) !important;
+  color: #94a3b8 !important;
+  border-color: #090d16 !important;
+  box-shadow: 0 4px 0 #090d16 !important;
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* =========================================================================
+   LIVING HABITAT 2.5D WORLD CAMERA & VIEWPORT
+   ========================================================================= */
+
+.living-habitat-viewport {
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  z-index: 10;
+}
+
+.living-habitat-canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1400px;
+  height: 820px;
+  transform-origin: center center;
+  pointer-events: auto;
+}
+
+.living-habitat-perch {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
+}
+
 /* Cartoon Beach Boombox DJ Dock (Replaces the dark boring bar) */
 .kid-toy-boombox-dock {
   display: flex;
@@ -1274,14 +1402,12 @@ body {
 }
 
 .performers-stage-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  max-width: 100vw;
-  flex: 1;
-  padding: 44px 16px 20px 16px;
-  z-index: 20;
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 10;
 }
 
 .performers-stage-row {
@@ -1364,20 +1490,6 @@ body {
     transform-origin: right center;
   }
 
-  .performers-stage-container {
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding: 36px 16px 20px 16px;
-    scrollbar-width: none;
-  }
-  .performers-stage-container::-webkit-scrollbar {
-    display: none;
-  }
-  .performers-stage-row {
-    transform: scale(0.92);
-    transform-origin: center bottom;
-    min-width: max-content;
-  }
 
   .seafloor-activity-bar {
     padding: 0 10px;

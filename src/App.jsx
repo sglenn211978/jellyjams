@@ -34,6 +34,8 @@ import DiveTransition from './components/DiveTransition';
 import GameTitleScreen from './components/GameTitleScreen';
 import StagePedestal from './components/StagePedestal';
 import WebGLStage from './components/WebGLStage';
+import LivingHabitatWorld from './components/LivingHabitatWorld';
+import CartoonTouchControls from './components/CartoonTouchControls';
 import CartoonSeafloor from './components/scenery/CartoonSeafloor';
 import AnimatedOceanLife from './components/scenery/AnimatedOceanLife';
 import InteractiveReefCritters from './components/scenery/InteractiveReefCritters';
@@ -258,6 +260,11 @@ export default function App() {
   const [tempoSpeed, setTempoSpeed] = useState(1.0);
   const [isNightRave, setIsNightRave] = useState(false);
   const [useWebGLStage, setUseWebGLStage] = useState(false);
+  const [zoomLevel, setZoomLevel] = useState(1.0);
+
+  const handleZoomIn = () => setZoomLevel((z) => Math.min(1.4, Number((z + 0.15).toFixed(2))));
+  const handleZoomOut = () => setZoomLevel((z) => Math.max(0.75, Number((z - 0.15).toFixed(2))));
+  const handleResetZoom = () => setZoomLevel(1.0);
 
   // Hype Dolphin & Drops
   const [dolphinActive, setDolphinActive] = useState(false);
@@ -1428,529 +1435,51 @@ export default function App() {
           isLoading={isLoading}
         />
       ) : (
-        <div className="performers-stage-container" style={{ position: 'relative' }}>
-          {/* Stage FX Overlay: Sweeping Spotlights, Disco Lasers, Live Bubbles & Confetti */}
-          <StageFXOverlay
-            fameRank={currentFameRank.level}
-            activeFX={stageFXList}
-            onPopBubble={handlePopStageFXBubble}
-          />
-
-          {/* Multi-tiered Illustrated Organic Island Shelf / Rock Plateau */}
-          <ReefStageLandscape
-            islandId={currentIsland}
-            isNight={isNightRave}
-            tempoSpeed={tempoSpeed}
-          />
-
-          {/* Engine Mode Toggle (WebGL Lip-Sync Game Engine vs Classic Stage) */}
-          <div style={{ position: 'absolute', top: 10, right: 14, zIndex: 30, display: 'flex', gap: '8px' }}>
-            <button
-              onClick={() => setUseWebGLStage((v) => !v)}
-              className="game-hud-btn"
-              style={{
-                fontSize: '11px',
-                padding: '4px 10px',
-                background: useWebGLStage ? 'linear-gradient(135deg, #0284c7, #2563eb)' : 'rgba(15, 23, 42, 0.8)',
-                color: '#fff',
-                border: '2px solid rgba(255, 255, 255, 0.35)',
-                borderRadius: '16px',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                boxShadow: useWebGLStage ? '0 0 10px rgba(56, 189, 248, 0.5)' : 'none'
-              }}
-              title="Toggle Hardware-Accelerated 2D WebGL Lip-Sync Engine"
-            >
-              {useWebGLStage ? '⚡ WebGL Lip-Sync Engine' : '🖼️ Classic DOM Stage'}
-            </button>
-          </div>
-
+        <div className="performers-stage-container" style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden' }}>
           {useWebGLStage ? (
-            <>
-              <WebGLStage
-                islandId={currentIsland}
-                performers={performers}
-                audioEngineRef={engineRef}
-                volumes={volumes}
-                tempoSpeed={tempoSpeed}
-                isNight={isNightRave}
-                selectedParents={selectedParents}
-                isSelectingParents={isSelectingParents}
-                onPerformerClick={handleBandMemberClick}
-              />
-              {/* Quick Performer Mute / Solo Pedestal Strip */}
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  gap: '10px',
-                  flexWrap: 'wrap',
-                  padding: '6px 14px',
-                  background: 'rgba(15, 23, 42, 0.55)',
-                  backdropFilter: 'blur(8px)',
-                  borderRadius: '16px',
-                  margin: '4px auto 10px',
-                  maxWidth: '92%',
-                  zIndex: 10,
-                  position: 'relative',
-                  border: '1px solid rgba(255, 255, 255, 0.15)'
-                }}
-              >
-                {ISLANDS[currentIsland]?.species
-                  .filter((id) => performers[id]?.unlocked)
-                  .map((id) => {
-                    const p = performers[id];
-                    const isSolo = soloedPerformer === id;
-                    const isMuted = p.isSleeping;
-                    const vol = volumes[id] ?? 1.0;
-                    return (
-                      <div
-                        key={id}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '6px',
-                          background: 'rgba(255, 255, 255, 0.08)',
-                          padding: '3px 8px',
-                          borderRadius: '10px',
-                          border: isSolo ? '1px solid #facc15' : '1px solid transparent'
-                        }}
-                      >
-                        <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#fff' }}>
-                          {JELLY_SPECIES[id]?.name || id}
-                        </span>
-                        <button
-                          onClick={() => togglePerformerSleep(id)}
-                          title={isMuted ? 'Wake Up / Sing' : 'Rest / Mute'}
-                          style={{
-                            border: 'none',
-                            background: 'none',
-                            cursor: 'pointer',
-                            fontSize: '13px',
-                            padding: '1px 3px'
-                          }}
-                        >
-                          {isMuted ? '💤' : '🎤'}
-                        </button>
-                        <button
-                          onClick={() => cyclePerformerVolume(id)}
-                          title={`Cycle Volume: ${Math.round(vol * 100)}%`}
-                          style={{
-                            border: 'none',
-                            background: 'none',
-                            cursor: 'pointer',
-                            fontSize: '11px',
-                            color: '#38bdf8',
-                            padding: '1px 3px'
-                          }}
-                        >
-                          {vol <= 0 ? '🔇' : vol < 0.6 ? '🔈' : vol < 1.1 ? '🔉' : '🔊'}
-                        </button>
-                        <button
-                          onClick={() => handleToggleSolo(id)}
-                          title={isSolo ? 'Un-solo' : 'Solo Performer'}
-                          style={{
-                            border: 'none',
-                            background: isSolo ? '#eab308' : 'rgba(255, 255, 255, 0.2)',
-                            borderRadius: '4px',
-                            cursor: 'pointer',
-                            fontSize: '10px',
-                            fontWeight: 'bold',
-                            padding: '2px 5px',
-                            color: isSolo ? '#090d16' : '#fff'
-                          }}
-                        >
-                          SOLO
-                        </button>
-                      </div>
-                    );
-                  })}
-              </div>
-            </>
+            <WebGLStage
+              islandId={currentIsland}
+              performers={performers}
+              audioEngineRef={engineRef}
+              volumes={volumes}
+              tempoSpeed={tempoSpeed}
+              isNight={isNightRave}
+              selectedParents={selectedParents}
+              isSelectingParents={isSelectingParents}
+              onPerformerClick={handleBandMemberClick}
+            />
           ) : (
-            <div className="performers-stage-row" style={{ position: 'relative', zIndex: 5 }}>
-            {/* LAGOON ISLAND PERFORMERS */}
-            {currentIsland === 'lagoon' && (
-              <>
-                {/* Floaty Diva */}
-                <PerformerStageSlot id="diva" pokedPerformer={pokedPerformer}>
-                  <Jellyfish
-                    name="Floaty Diva"
-                    color={isNightRave ? '#ec4899' : '#f472b6'}
-                    accentColor={isNightRave ? '#f43f5e' : '#db2777'}
-                    isSleeping={performers.diva.isSleeping}
-                    isSupercharged={performers.diva.isSupercharged}
-                    hasCoin={performers.diva.hasCoin}
-                    coinAmount={getCoinDropAmount('diva')}
-                    level={performers.diva.level || 1}
-                    costumeId={equippedCostumes.diva}
-                    tempoSpeed={tempoSpeed}
-                    isNight={isNightRave}
-                    isSelecting={isSelectingParents}
-                    selectionIndex={selectedParents.indexOf('diva') + 1}
-                    onCoinCollect={(e) => collectCoin('diva', e)}
-                    onClick={(e) => handleBandMemberClick('diva', e)}
-                    audioEngine={audioEngineState}
-                  />
-                  <StagePedestal islandId="lagoon" name="Floaty Diva" isSleeping={performers.diva.isSleeping} isSupercharged={performers.diva.isSupercharged} level={performers.diva.level || 1} tempoSpeed={tempoSpeed} volume={volumes.diva ?? 1.0} isSoloed={soloedPerformer === 'diva'} onClick={(e) => handleBandMemberClick('diva', e)} onToggleSleep={() => togglePerformerSleep('diva')} onCycleVolume={() => cyclePerformerVolume('diva')} onToggleSolo={() => handleToggleSolo('diva')} />
-                </PerformerStageSlot>
+            <LivingHabitatWorld
+              islandId={currentIsland}
+              performers={performers}
+              volumes={volumes}
+              tempoSpeed={tempoSpeed}
+              isNight={isNightRave}
+              soloedPerformer={soloedPerformer}
+              selectedParents={selectedParents}
+              isSelectingParents={isSelectingParents}
+              equippedCostumes={equippedCostumes}
+              pokedPerformer={pokedPerformer}
+              fameRank={currentFameRank.level}
+              stageFXList={stageFXList}
+              zoomLevel={zoomLevel}
+              onZoomChange={setZoomLevel}
+              onPerformerClick={handleBandMemberClick}
+              onCoinCollect={collectCoin}
+              onToggleSleep={togglePerformerSleep}
+              onCycleVolume={cyclePerformerVolume}
+              onToggleSolo={handleToggleSolo}
+              onPopBubble={handlePopStageFXBubble}
+            />
+          )}
 
-                {/* Boombox Bob */}
-                {performers.bob.unlocked && (
-                  <PerformerStageSlot id="bob" pokedPerformer={pokedPerformer}>
-                    <BoomboxBob
-                      isSleeping={performers.bob.isSleeping}
-                      isSupercharged={performers.bob.isSupercharged}
-                      hasCoin={performers.bob.hasCoin}
-                      coinAmount={getCoinDropAmount('bob')}
-                      level={performers.bob.level || 1}
-                      costumeId={equippedCostumes.bob}
-                      tempoSpeed={tempoSpeed}
-                      isNight={isNightRave}
-                      isSelecting={isSelectingParents}
-                      selectionIndex={selectedParents.indexOf('bob') + 1}
-                      onCoinCollect={(e) => collectCoin('bob', e)}
-                      onClick={(e) => handleBandMemberClick('bob', e)}
-                      audioEngine={audioEngineState}
-                    />
-                    <StagePedestal islandId="lagoon" name="Boombox Bob" isSleeping={performers.bob.isSleeping} isSupercharged={performers.bob.isSupercharged} level={performers.bob.level || 1} tempoSpeed={tempoSpeed} volume={volumes.bob ?? 1.0} isSoloed={soloedPerformer === 'bob'} onClick={(e) => handleBandMemberClick('bob', e)} onToggleSleep={() => togglePerformerSleep('bob')} onCycleVolume={() => cyclePerformerVolume('bob')} onToggleSolo={() => handleToggleSolo('bob')} />
-                  </PerformerStageSlot>
-                )}
-
-                {/* Hybrid 1: Volt Siren (Diva + Zap) */}
-                {performers.siren.unlocked && (
-                  <PerformerStageSlot id="siren" pokedPerformer={pokedPerformer}>
-                    <VoltSiren
-                      isSleeping={performers.siren.isSleeping}
-                      isSupercharged={performers.siren.isSupercharged}
-                      hasCoin={performers.siren.hasCoin}
-                      coinAmount={getCoinDropAmount('siren')}
-                      level={performers.siren.level || 1}
-                      costumeId={equippedCostumes.siren}
-                      tempoSpeed={tempoSpeed}
-                      isNight={isNightRave}
-                      isSelecting={isSelectingParents}
-                      selectionIndex={selectedParents.indexOf('siren') + 1}
-                      onCoinCollect={(e) => collectCoin('siren', e)}
-                      onClick={(e) => handleBandMemberClick('siren', e)}
-                      audioEngine={audioEngineState}
-                    />
-                    <StagePedestal islandId="lagoon" name="Volt Siren" isSleeping={performers.siren.isSleeping} isSupercharged={performers.siren.isSupercharged} level={performers.siren.level || 1} tempoSpeed={tempoSpeed} volume={volumes.siren ?? 1.25} isSoloed={soloedPerformer === 'siren'} onClick={(e) => handleBandMemberClick('siren', e)} onToggleSleep={() => togglePerformerSleep('siren')} onCycleVolume={() => cyclePerformerVolume('siren')} onToggleSolo={() => handleToggleSolo('siren')} />
-                  </PerformerStageSlot>
-                )}
-
-                {/* Hybrid 2: DJ Spark-Puff (Zap + Bob) */}
-                {performers.sparkpuff.unlocked && (
-                  <PerformerStageSlot id="sparkpuff" pokedPerformer={pokedPerformer}>
-                    <DJSparkPuff
-                      isSleeping={performers.sparkpuff.isSleeping}
-                      isSupercharged={performers.sparkpuff.isSupercharged}
-                      hasCoin={performers.sparkpuff.hasCoin}
-                      coinAmount={getCoinDropAmount('sparkpuff')}
-                      level={performers.sparkpuff.level || 1}
-                      costumeId={equippedCostumes.sparkpuff}
-                      tempoSpeed={tempoSpeed}
-                      isNight={isNightRave}
-                      isSelecting={isSelectingParents}
-                      selectionIndex={selectedParents.indexOf('sparkpuff') + 1}
-                      onCoinCollect={(e) => collectCoin('sparkpuff', e)}
-                      onClick={(e) => handleBandMemberClick('sparkpuff', e)}
-                      audioEngine={audioEngineState}
-                    />
-                    <StagePedestal islandId="lagoon" name="DJ Spark-Puff" isSleeping={performers.sparkpuff.isSleeping} isSupercharged={performers.sparkpuff.isSupercharged} level={performers.sparkpuff.level || 1} tempoSpeed={tempoSpeed} volume={volumes.sparkpuff ?? 1.25} isSoloed={soloedPerformer === 'sparkpuff'} onClick={(e) => handleBandMemberClick('sparkpuff', e)} onToggleSleep={() => togglePerformerSleep('sparkpuff')} onCycleVolume={() => cyclePerformerVolume('sparkpuff')} onToggleSolo={() => handleToggleSolo('sparkpuff')} />
-                  </PerformerStageSlot>
-                )}
-
-                {/* Hybrid 3: Queen Beatbox (Diva + Bob) */}
-                {performers.queen.unlocked && (
-                  <PerformerStageSlot id="queen" pokedPerformer={pokedPerformer}>
-                    <QueenBeatbox
-                      isSleeping={performers.queen.isSleeping}
-                      isSupercharged={performers.queen.isSupercharged}
-                      hasCoin={performers.queen.hasCoin}
-                      coinAmount={getCoinDropAmount('queen')}
-                      level={performers.queen.level || 1}
-                      costumeId={equippedCostumes.queen}
-                      tempoSpeed={tempoSpeed}
-                      isNight={isNightRave}
-                      isSelecting={isSelectingParents}
-                      selectionIndex={selectedParents.indexOf('queen') + 1}
-                      onCoinCollect={(e) => collectCoin('queen', e)}
-                      onClick={(e) => handleBandMemberClick('queen', e)}
-                      audioEngine={audioEngineState}
-                    />
-                    <StagePedestal islandId="lagoon" name="Queen Beatbox" isSleeping={performers.queen.isSleeping} isSupercharged={performers.queen.isSupercharged} level={performers.queen.level || 1} tempoSpeed={tempoSpeed} volume={volumes.queen ?? 1.25} isSoloed={soloedPerformer === 'queen'} onClick={(e) => handleBandMemberClick('queen', e)} onToggleSleep={() => togglePerformerSleep('queen')} onCycleVolume={() => cyclePerformerVolume('queen')} onToggleSolo={() => handleToggleSolo('queen')} />
-                  </PerformerStageSlot>
-                )}
-
-                {/* Hybrid 4: Starlight Jelly */}
-                {performers.starlight.unlocked && (
-                  <PerformerStageSlot id="starlight" pokedPerformer={pokedPerformer}>
-                    <StarlightJelly
-                      isSleeping={performers.starlight.isSleeping}
-                      isSupercharged={performers.starlight.isSupercharged}
-                      hasCoin={performers.starlight.hasCoin}
-                      coinAmount={getCoinDropAmount('starlight')}
-                      level={performers.starlight.level || 1}
-                      costumeId={equippedCostumes.starlight}
-                      tempoSpeed={tempoSpeed}
-                      isNight={isNightRave}
-                      isSelecting={isSelectingParents}
-                      selectionIndex={selectedParents.indexOf('starlight') + 1}
-                      onCoinCollect={(e) => collectCoin('starlight', e)}
-                      onClick={(e) => handleBandMemberClick('starlight', e)}
-                      audioEngine={audioEngineState}
-                    />
-                    <StagePedestal islandId="lagoon" name="Starlight Jelly" isSleeping={performers.starlight.isSleeping} isSupercharged={performers.starlight.isSupercharged} level={performers.starlight.level || 1} tempoSpeed={tempoSpeed} volume={volumes.starlight ?? 1.25} isSoloed={soloedPerformer === 'starlight'} onClick={(e) => handleBandMemberClick('starlight', e)} onToggleSleep={() => togglePerformerSleep('starlight')} onCycleVolume={() => cyclePerformerVolume('starlight')} onToggleSolo={() => handleToggleSolo('starlight')} />
-                  </PerformerStageSlot>
-                )}
-
-                {/* Zap Jelly */}
-                <PerformerStageSlot id="zap" pokedPerformer={pokedPerformer}>
-                  <Jellyfish
-                    name="Zap Jelly"
-                    color={isNightRave ? '#06b6d4' : '#facc15'}
-                    accentColor={isNightRave ? '#38bdf8' : '#ca8a04'}
-                    isSleeping={performers.zap.isSleeping}
-                    isSupercharged={performers.zap.isSupercharged}
-                    hasCoin={performers.zap.hasCoin}
-                    coinAmount={getCoinDropAmount('zap')}
-                    level={performers.zap.level || 1}
-                    costumeId={equippedCostumes.zap}
-                    tempoSpeed={tempoSpeed}
-                    isNight={isNightRave}
-                    isSelecting={isSelectingParents}
-                    selectionIndex={selectedParents.indexOf('zap') + 1}
-                    onCoinCollect={(e) => collectCoin('zap', e)}
-                    onClick={(e) => handleBandMemberClick('zap', e)}
-                    audioEngine={audioEngineState}
-                  />
-                  <StagePedestal islandId="lagoon" name="Zap Jelly" isSleeping={performers.zap.isSleeping} isSupercharged={performers.zap.isSupercharged} level={performers.zap.level || 1} tempoSpeed={tempoSpeed} volume={volumes.zap ?? 1.0} isSoloed={soloedPerformer === 'zap'} onClick={(e) => handleBandMemberClick('zap', e)} onToggleSleep={() => togglePerformerSleep('zap')} onCycleVolume={() => cyclePerformerVolume('zap')} onToggleSolo={() => handleToggleSolo('zap')} />
-                </PerformerStageSlot>
-              </>
-            )}
-
-            {/* TRENCH ISLAND PERFORMERS */}
-            {currentIsland === 'trench' && (
-              <>
-                {/* 1. Angler Bass */}
-                {performers.angler?.unlocked && (
-                  <PerformerStageSlot id="angler" pokedPerformer={pokedPerformer}>
-                    <AnglerBass
-                      isSleeping={performers.angler.isSleeping}
-                      isSupercharged={performers.angler.isSupercharged}
-                      hasCoin={performers.angler.hasCoin}
-                      coinAmount={getCoinDropAmount('angler')}
-                      level={performers.angler.level || 1}
-                      costumeId={equippedCostumes.angler}
-                      tempoSpeed={tempoSpeed}
-                      isNight={isNightRave}
-                      isSelecting={isSelectingParents}
-                      selectionIndex={selectedParents.indexOf('angler') + 1}
-                      onCoinCollect={(e) => collectCoin('angler', e)}
-                      onClick={(e) => handleBandMemberClick('angler', e)}
-                    />
-                    <StagePedestal islandId="trench" name="Angler Bass" isSleeping={performers.angler.isSleeping} isSupercharged={performers.angler.isSupercharged} level={performers.angler.level || 1} tempoSpeed={tempoSpeed} volume={volumes.angler ?? 1.3} isSoloed={soloedPerformer === 'angler'} onClick={(e) => handleBandMemberClick('angler', e)} onToggleSleep={() => togglePerformerSleep('angler')} onCycleVolume={() => cyclePerformerVolume('angler')} onToggleSolo={() => handleToggleSolo('angler')} />
-                  </PerformerStageSlot>
-                )}
-
-                {/* 2. Magma Medusa */}
-                {performers.magma?.unlocked && (
-                  <PerformerStageSlot id="magma" pokedPerformer={pokedPerformer}>
-                    <MagmaMedusa
-                      isSleeping={performers.magma.isSleeping}
-                      isSupercharged={performers.magma.isSupercharged}
-                      hasCoin={performers.magma.hasCoin}
-                      coinAmount={getCoinDropAmount('magma')}
-                      level={performers.magma.level || 1}
-                      costumeId={equippedCostumes.magma}
-                      tempoSpeed={tempoSpeed}
-                      isNight={isNightRave}
-                      isSelecting={isSelectingParents}
-                      selectionIndex={selectedParents.indexOf('magma') + 1}
-                      onCoinCollect={(e) => collectCoin('magma', e)}
-                      onClick={(e) => handleBandMemberClick('magma', e)}
-                    />
-                    <StagePedestal islandId="trench" name="Magma Medusa" isSleeping={performers.magma.isSleeping} isSupercharged={performers.magma.isSupercharged} level={performers.magma.level || 1} tempoSpeed={tempoSpeed} volume={volumes.magma ?? 1.3} isSoloed={soloedPerformer === 'magma'} onClick={(e) => handleBandMemberClick('magma', e)} onToggleSleep={() => togglePerformerSleep('magma')} onCycleVolume={() => cyclePerformerVolume('magma')} onToggleSolo={() => handleToggleSolo('magma')} />
-                  </PerformerStageSlot>
-                )}
-
-                {/* 3. Vent Cracker */}
-                {performers.vent?.unlocked && (
-                  <PerformerStageSlot id="vent" pokedPerformer={pokedPerformer}>
-                    <VentCracker
-                      isSleeping={performers.vent.isSleeping}
-                      isSupercharged={performers.vent.isSupercharged}
-                      hasCoin={performers.vent.hasCoin}
-                      coinAmount={getCoinDropAmount('vent')}
-                      level={performers.vent.level || 1}
-                      costumeId={equippedCostumes.vent}
-                      tempoSpeed={tempoSpeed}
-                      isNight={isNightRave}
-                      isSelecting={isSelectingParents}
-                      selectionIndex={selectedParents.indexOf('vent') + 1}
-                      onCoinCollect={(e) => collectCoin('vent', e)}
-                      onClick={(e) => handleBandMemberClick('vent', e)}
-                    />
-                    <StagePedestal islandId="trench" name="Vent Cracker" isSleeping={performers.vent.isSleeping} isSupercharged={performers.vent.isSupercharged} level={performers.vent.level || 1} tempoSpeed={tempoSpeed} volume={volumes.vent ?? 1.3} isSoloed={soloedPerformer === 'vent'} onClick={(e) => handleBandMemberClick('vent', e)} onToggleSleep={() => togglePerformerSleep('vent')} onCycleVolume={() => cyclePerformerVolume('vent')} onToggleSolo={() => handleToggleSolo('vent')} />
-                  </PerformerStageSlot>
-                )}
-
-                {/* 4. Obsidian Siren */}
-                {performers.obsidian?.unlocked && (
-                  <PerformerStageSlot id="obsidian" pokedPerformer={pokedPerformer}>
-                    <ObsidianSiren
-                      isSleeping={performers.obsidian.isSleeping}
-                      isSupercharged={performers.obsidian.isSupercharged}
-                      hasCoin={performers.obsidian.hasCoin}
-                      coinAmount={getCoinDropAmount('obsidian')}
-                      level={performers.obsidian.level || 1}
-                      costumeId={equippedCostumes.obsidian}
-                      tempoSpeed={tempoSpeed}
-                      isNight={isNightRave}
-                      isSelecting={isSelectingParents}
-                      selectionIndex={selectedParents.indexOf('obsidian') + 1}
-                      onCoinCollect={(e) => collectCoin('obsidian', e)}
-                      onClick={(e) => handleBandMemberClick('obsidian', e)}
-                    />
-                    <StagePedestal islandId="trench" name="Obsidian Siren" isSleeping={performers.obsidian.isSleeping} isSupercharged={performers.obsidian.isSupercharged} level={performers.obsidian.level || 1} tempoSpeed={tempoSpeed} volume={volumes.obsidian ?? 1.3} isSoloed={soloedPerformer === 'obsidian'} onClick={(e) => handleBandMemberClick('obsidian', e)} onToggleSleep={() => togglePerformerSleep('obsidian')} onCycleVolume={() => cyclePerformerVolume('obsidian')} onToggleSolo={() => handleToggleSolo('obsidian')} />
-                  </PerformerStageSlot>
-                )}
-
-                {/* 5. Pyre Puff */}
-                {performers.pyre?.unlocked && (
-                  <PerformerStageSlot id="pyre" pokedPerformer={pokedPerformer}>
-                    <PyrePuff
-                      isSleeping={performers.pyre.isSleeping}
-                      isSupercharged={performers.pyre.isSupercharged}
-                      hasCoin={performers.pyre.hasCoin}
-                      coinAmount={getCoinDropAmount('pyre')}
-                      level={performers.pyre.level || 1}
-                      costumeId={equippedCostumes.pyre}
-                      tempoSpeed={tempoSpeed}
-                      isNight={isNightRave}
-                      isSelecting={isSelectingParents}
-                      selectionIndex={selectedParents.indexOf('pyre') + 1}
-                      onCoinCollect={(e) => collectCoin('pyre', e)}
-                      onClick={(e) => handleBandMemberClick('pyre', e)}
-                    />
-                    <StagePedestal islandId="trench" name="Pyre Puff" isSleeping={performers.pyre.isSleeping} isSupercharged={performers.pyre.isSupercharged} level={performers.pyre.level || 1} tempoSpeed={tempoSpeed} volume={volumes.pyre ?? 1.3} isSoloed={soloedPerformer === 'pyre'} onClick={(e) => handleBandMemberClick('pyre', e)} onToggleSleep={() => togglePerformerSleep('pyre')} onCycleVolume={() => cyclePerformerVolume('pyre')} onToggleSolo={() => handleToggleSolo('pyre')} />
-                  </PerformerStageSlot>
-                )}
-              </>
-            )}
-
-            {/* CAVERN ISLAND PERFORMERS */}
-            {currentIsland === 'cavern' && (
-              <>
-                {/* 1. Crystal Bell */}
-                {performers.crystal_bell?.unlocked && (
-                  <PerformerStageSlot id="crystal_bell" pokedPerformer={pokedPerformer}>
-                    <CrystalBell
-                      isSleeping={performers.crystal_bell.isSleeping}
-                      isSupercharged={performers.crystal_bell.isSupercharged}
-                      hasCoin={performers.crystal_bell.hasCoin}
-                      coinAmount={getCoinDropAmount('crystal_bell')}
-                      level={performers.crystal_bell.level || 1}
-                      costumeId={equippedCostumes.crystal_bell}
-                      tempoSpeed={tempoSpeed}
-                      isNight={isNightRave}
-                      isSelecting={isSelectingParents}
-                      selectionIndex={selectedParents.indexOf('crystal_bell') + 1}
-                      onCoinCollect={(e) => collectCoin('crystal_bell', e)}
-                      onClick={(e) => handleBandMemberClick('crystal_bell', e)}
-                    />
-                    <StagePedestal islandId="cavern" name="Crystal Bell" isSleeping={performers.crystal_bell.isSleeping} isSupercharged={performers.crystal_bell.isSupercharged} level={performers.crystal_bell.level || 1} tempoSpeed={tempoSpeed} volume={volumes.crystal_bell ?? 1.3} isSoloed={soloedPerformer === 'crystal_bell'} onClick={(e) => handleBandMemberClick('crystal_bell', e)} onToggleSleep={() => togglePerformerSleep('crystal_bell')} onCycleVolume={() => cyclePerformerVolume('crystal_bell')} onToggleSolo={() => handleToggleSolo('crystal_bell')} />
-                  </PerformerStageSlot>
-                )}
-
-                {/* 2. Lo-Fi Spore */}
-                {performers.lofi_spore?.unlocked && (
-                  <PerformerStageSlot id="lofi_spore" pokedPerformer={pokedPerformer}>
-                    <LoFiSpore
-                      isSleeping={performers.lofi_spore.isSleeping}
-                      isSupercharged={performers.lofi_spore.isSupercharged}
-                      hasCoin={performers.lofi_spore.hasCoin}
-                      coinAmount={getCoinDropAmount('lofi_spore')}
-                      level={performers.lofi_spore.level || 1}
-                      costumeId={equippedCostumes.lofi_spore}
-                      tempoSpeed={tempoSpeed}
-                      isNight={isNightRave}
-                      isSelecting={isSelectingParents}
-                      selectionIndex={selectedParents.indexOf('lofi_spore') + 1}
-                      onCoinCollect={(e) => collectCoin('lofi_spore', e)}
-                      onClick={(e) => handleBandMemberClick('lofi_spore', e)}
-                    />
-                    <StagePedestal islandId="cavern" name="Lo-Fi Spore" isSleeping={performers.lofi_spore.isSleeping} isSupercharged={performers.lofi_spore.isSupercharged} level={performers.lofi_spore.level || 1} tempoSpeed={tempoSpeed} volume={volumes.lofi_spore ?? 1.3} isSoloed={soloedPerformer === 'lofi_spore'} onClick={(e) => handleBandMemberClick('lofi_spore', e)} onToggleSleep={() => togglePerformerSleep('lofi_spore')} onCycleVolume={() => cyclePerformerVolume('lofi_spore')} onToggleSolo={() => handleToggleSolo('lofi_spore')} />
-                  </PerformerStageSlot>
-                )}
-
-                {/* 3. Echo Nautilus */}
-                {performers.nautilus?.unlocked && (
-                  <PerformerStageSlot id="nautilus" pokedPerformer={pokedPerformer}>
-                    <EchoNautilus
-                      isSleeping={performers.nautilus.isSleeping}
-                      isSupercharged={performers.nautilus.isSupercharged}
-                      hasCoin={performers.nautilus.hasCoin}
-                      coinAmount={getCoinDropAmount('nautilus')}
-                      level={performers.nautilus.level || 1}
-                      costumeId={equippedCostumes.nautilus}
-                      tempoSpeed={tempoSpeed}
-                      isNight={isNightRave}
-                      isSelecting={isSelectingParents}
-                      selectionIndex={selectedParents.indexOf('nautilus') + 1}
-                      onCoinCollect={(e) => collectCoin('nautilus', e)}
-                      onClick={(e) => handleBandMemberClick('nautilus', e)}
-                    />
-                    <StagePedestal islandId="cavern" name="Echo Nautilus" isSleeping={performers.nautilus.isSleeping} isSupercharged={performers.nautilus.isSupercharged} level={performers.nautilus.level || 1} tempoSpeed={tempoSpeed} volume={volumes.nautilus ?? 1.3} isSoloed={soloedPerformer === 'nautilus'} onClick={(e) => handleBandMemberClick('nautilus', e)} onToggleSleep={() => togglePerformerSleep('nautilus')} onCycleVolume={() => cyclePerformerVolume('nautilus')} onToggleSolo={() => handleToggleSolo('nautilus')} />
-                  </PerformerStageSlot>
-                )}
-
-                {/* 4. Prism Bloom */}
-                {performers.prism_bloom?.unlocked && (
-                  <PerformerStageSlot id="prism_bloom" pokedPerformer={pokedPerformer}>
-                    <PrismBloom
-                      isSleeping={performers.prism_bloom.isSleeping}
-                      isSupercharged={performers.prism_bloom.isSupercharged}
-                      hasCoin={performers.prism_bloom.hasCoin}
-                      coinAmount={getCoinDropAmount('prism_bloom')}
-                      level={performers.prism_bloom.level || 1}
-                      costumeId={equippedCostumes.prism_bloom}
-                      tempoSpeed={tempoSpeed}
-                      isNight={isNightRave}
-                      isSelecting={isSelectingParents}
-                      selectionIndex={selectedParents.indexOf('prism_bloom') + 1}
-                      onCoinCollect={(e) => collectCoin('prism_bloom', e)}
-                      onClick={(e) => handleBandMemberClick('prism_bloom', e)}
-                    />
-                    <StagePedestal islandId="cavern" name="Prism Bloom" isSleeping={performers.prism_bloom.isSleeping} isSupercharged={performers.prism_bloom.isSupercharged} level={performers.prism_bloom.level || 1} tempoSpeed={tempoSpeed} volume={volumes.prism_bloom ?? 1.3} isSoloed={soloedPerformer === 'prism_bloom'} onClick={(e) => handleBandMemberClick('prism_bloom', e)} onToggleSleep={() => togglePerformerSleep('prism_bloom')} onCycleVolume={() => cyclePerformerVolume('prism_bloom')} onToggleSolo={() => handleToggleSolo('prism_bloom')} />
-                  </PerformerStageSlot>
-                )}
-
-                {/* 5. Lapis Groove */}
-                {performers.lapis_groove?.unlocked && (
-                  <PerformerStageSlot id="lapis_groove" pokedPerformer={pokedPerformer}>
-                    <LapisGroove
-                      isSleeping={performers.lapis_groove.isSleeping}
-                      isSupercharged={performers.lapis_groove.isSupercharged}
-                      hasCoin={performers.lapis_groove.hasCoin}
-                      coinAmount={getCoinDropAmount('lapis_groove')}
-                      level={performers.lapis_groove.level || 1}
-                      costumeId={equippedCostumes.lapis_groove}
-                      tempoSpeed={tempoSpeed}
-                      isNight={isNightRave}
-                      isSelecting={isSelectingParents}
-                      selectionIndex={selectedParents.indexOf('lapis_groove') + 1}
-                      onCoinCollect={(e) => collectCoin('lapis_groove', e)}
-                      onClick={(e) => handleBandMemberClick('lapis_groove', e)}
-                    />
-                    <StagePedestal islandId="cavern" name="Lapis Groove" isSleeping={performers.lapis_groove.isSleeping} isSupercharged={performers.lapis_groove.isSupercharged} level={performers.lapis_groove.level || 1} tempoSpeed={tempoSpeed} volume={volumes.lapis_groove ?? 1.3} isSoloed={soloedPerformer === 'lapis_groove'} onClick={(e) => handleBandMemberClick('lapis_groove', e)} onToggleSleep={() => togglePerformerSleep('lapis_groove')} onCycleVolume={() => cyclePerformerVolume('lapis_groove')} onToggleSolo={() => handleToggleSolo('lapis_groove')} />
-                  </PerformerStageSlot>
-                )}
-              </>
-            )}
-          </div>
-        )}
+          {/* Touch-First Floating 3D Cartoon Zoom Controls */}
+          <CartoonTouchControls
+            zoomLevel={zoomLevel}
+            onZoomIn={handleZoomIn}
+            onZoomOut={handleZoomOut}
+            onResetView={handleResetZoom}
+          />
         </div>
       )}
 
