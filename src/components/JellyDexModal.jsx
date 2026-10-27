@@ -9,9 +9,12 @@ export default function JellyDexModal({ isOpen, onClose, performers, totalBreeds
 
   const speciesList = Object.values(JELLY_SPECIES);
   const totalDiscovered = speciesList.filter(s => performers[s.id]?.unlocked).length;
+  const rareCount = speciesList.filter(s => performers[s.id]?.unlocked && (performers[s.id]?.rarity === 'rare' || performers[s.id]?.rarity === 'epic')).length;
+  const epicCount = speciesList.filter(s => performers[s.id]?.unlocked && performers[s.id]?.rarity === 'epic').length;
   const selectedSpecies = JELLY_SPECIES[selectedSpeciesId] || speciesList[0];
   const isSelectedUnlocked = performers[selectedSpecies.id]?.unlocked;
   const selectedLevel = performers[selectedSpecies.id]?.level || 1;
+  const selectedRarity = performers[selectedSpecies.id]?.rarity || 'common';
 
   const recipes = [
     // 🪸 Coral Lagoon
@@ -25,6 +28,12 @@ export default function JellyDexModal({ isOpen, onClose, performers, totalBreeds
     // 🫧 Bioluminescent Caverns
     { island: 'Caverns', parent1: 'crystal_bell', parent2: 'lofi_spore', result: 'prism_bloom' },
     { island: 'Caverns', parent1: 'lofi_spore', parent2: 'nautilus', result: 'lapis_groove' },
+    // ☀️ Sunken Sun Temple
+    { island: 'Sun Temple', parent1: 'sol_clam', parent2: 'conch_horn', result: 'solar_siren' },
+    { island: 'Sun Temple', parent1: 'conch_horn', parent2: 'marimba_manta', result: 'sun_coral' },
+    // ❄️ Glacial Cryo Reef
+    { island: 'Cryo Reef', parent1: 'cryo_jelly', parent2: 'frost_fin', result: 'ice_walrus' },
+    { island: 'Cryo Reef', parent1: 'frost_fin', parent2: 'glacier_chime', result: 'aurora_nautilus' },
   ];
 
   return (
@@ -84,8 +93,14 @@ export default function JellyDexModal({ isOpen, onClose, performers, totalBreeds
               }}>
                 REEF ALMANAC & JELLY DEX
               </h2>
-              <div style={{ fontSize: '13px', color: '#94a3b8', fontWeight: '700' }}>
-                Discovered: <span style={{ color: '#fde047', fontWeight: '900' }}>{totalDiscovered} / {speciesList.length} Species</span> • Eggs Hatched: <span style={{ color: '#38bdf8', fontWeight: '900' }}>{totalBreedsCount}</span>
+              <div style={{ fontSize: '13px', color: '#94a3b8', fontWeight: '700', display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+                <span>Discovered: <strong style={{ color: '#fde047' }}>{totalDiscovered} / {speciesList.length}</strong></span>
+                <span>•</span>
+                <span style={{ color: '#facc15' }}>🌟 {rareCount} Rare</span>
+                <span>•</span>
+                <span style={{ color: '#ec4899' }}>👑 {epicCount} Epic</span>
+                <span>•</span>
+                <span>Hatched: <strong style={{ color: '#38bdf8' }}>{totalBreedsCount}</strong></span>
               </div>
             </div>
           </div>

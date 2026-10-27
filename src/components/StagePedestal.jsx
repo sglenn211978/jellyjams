@@ -4,6 +4,7 @@ export default function StagePedestal({
   tempoSpeed = 1.0,
   isSelected = false,
   isSoloed = false,
+  rarity = 'common',
   onClick
 }) {
   const isSinging = !isSleeping;
@@ -30,6 +31,20 @@ export default function StagePedestal({
       glow: 'rgba(16, 185, 129, 0.4)',
       accent: '#10b981',
       notes: ['#34d399', '#67e8f9', '#f472b6', '#a78bfa']
+    },
+    sun_temple: {
+      padGrad: 'radial-gradient(ellipse at center, #f59e0b 0%, #d97706 50%, #78350f 100%)',
+      border: '#fde047',
+      glow: 'rgba(245, 158, 11, 0.5)',
+      accent: '#f59e0b',
+      notes: ['#fde047', '#f97316', '#fbbf24', '#ec4899']
+    },
+    cryo_reef: {
+      padGrad: 'radial-gradient(ellipse at center, #38bdf8 0%, #0284c7 50%, #082f49 100%)',
+      border: '#e0f2fe',
+      glow: 'rgba(56, 189, 248, 0.45)',
+      accent: '#38bdf8',
+      notes: ['#e0f2fe', '#67e8f9', '#bae6fd', '#c084fc']
     }
   }[islandId] || {
     padGrad: 'radial-gradient(ellipse at center, #38bdf8 0%, #0284c7 100%)',
@@ -38,6 +53,9 @@ export default function StagePedestal({
     accent: '#0284c7',
     notes: ['#38bdf8', '#facc15']
   };
+
+  const isRare = rarity === 'rare';
+  const isEpic = rarity === 'epic';
 
   const animDuration = `${1.4 / tempoSpeed}s`;
 
@@ -114,11 +132,19 @@ export default function StagePedestal({
             ? '4px solid #facc15' 
             : isSoloed 
             ? '3.5px solid #fde047' 
+            : isEpic
+            ? '3.5px solid #ec4899'
+            : isRare
+            ? '3.5px solid #facc15'
             : '3.5px solid #0f172a',
           boxShadow: isSelected
             ? '0 0 28px #facc15, 0 8px 0 #0f172a, inset 0 3.5px 0 rgba(255,255,255,0.85)'
             : isSoloed
             ? '0 0 20px #facc15, 0 8px 0 #0f172a, inset 0 3.5px 0 rgba(255,255,255,0.75)'
+            : isEpic
+            ? '0 0 22px rgba(236, 72, 153, 0.8), 0 8px 0 #0f172a, inset 0 3.5px 0 #fbcfe8'
+            : isRare
+            ? '0 0 16px rgba(250, 204, 21, 0.75), 0 8px 0 #0f172a, inset 0 3.5px 0 #fef08a'
             : `0 8px 0 #0f172a, 0 14px 24px rgba(0, 0, 0, 0.5), inset 0 3.5px 0 rgba(255,255,255,0.55)`,
           filter: isSleeping ? 'grayscale(60%) opacity(0.6)' : 'none',
           transition: 'all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',

@@ -11,6 +11,7 @@ export default function BakeryTruck({
   onOpenDecorations,
   recruitName = 'BOB',
   recruitIcon = '📦',
+  recruitCost = 15,
   recruitUnlocked,
   onRecruit
 }) {
@@ -18,7 +19,7 @@ export default function BakeryTruck({
 
   const isUnlocked = recruitUnlocked !== undefined ? recruitUnlocked : bobUnlocked;
   const handleRecruit = onRecruit || onUnlockBob;
-  const canAffordRecruit = coins >= 15;
+  const canAffordRecruit = coins >= recruitCost;
   const canAffordCupcake = coins >= 5 && !activeTreat;
   const canAffordDonut = coins >= 12 && !activeTreat;
 
@@ -348,7 +349,7 @@ export default function BakeryTruck({
                     style={{ padding: '12px 14px', fontSize: '14px', borderRadius: '18px' }}
                   >
                     <span style={{ fontSize: '20px' }}>{recruitIcon}</span>
-                    <span>RECRUIT ({recruitName})</span>
+                    <span>RECRUIT ({recruitCost} 🪙)</span>
                   </button>
                 )}
               </div>

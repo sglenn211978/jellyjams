@@ -1,4 +1,5 @@
 import React from 'react';
+import { RARITY_TIERS } from '../constants/jellies';
 
 /**
  * MonsterActionTray - My Singing Monsters style chunky cartoon action tray.
@@ -23,6 +24,8 @@ export default function MonsterActionTray({
   const isSinging = !isSleeping;
   const level = monster.level || 1;
   const isMaxLevel = level >= 5;
+  const rarity = monster.rarity || 'common';
+  const rarityData = RARITY_TIERS[rarity] || RARITY_TIERS.common;
   const volPct = Math.round((volume ?? 1.0) * 100);
   const canAffordCupcake = coins >= 5;
   const canAffordDonut = coins >= 12;
@@ -120,6 +123,23 @@ export default function MonsterActionTray({
               }}
             >
               {monster.name || monsterId.toUpperCase()}
+            </span>
+
+            {/* Rarity Tier Badge */}
+            <span
+              style={{
+                fontSize: '11px',
+                fontWeight: '900',
+                padding: '3px 8px',
+                borderRadius: '10px',
+                background: rarityData.badgeBg,
+                color: '#ffffff',
+                border: '2px solid #090d16',
+                boxShadow: rarity !== 'common' ? `0 0 10px ${rarityData.color}` : 'none',
+                letterSpacing: '0.4px'
+              }}
+            >
+              {rarityData.icon} {rarityData.label} ({rarityData.coinMultiplier}x 🪙)
             </span>
 
             {/* Status Pill */}

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { JellyAudioEngine } from './audioEngine';
-import { JELLY_SPECIES, resolveBreedingOffspring } from './constants/jellies';
+import { JELLY_SPECIES, resolveBreedingOffspring, RARITY_TIERS, rollBreedingRarity } from './constants/jellies';
 import { ISLANDS } from './constants/islands';
 
 import Jellyfish from './components/Jellyfish';
@@ -72,7 +72,9 @@ const INITIAL_VOLUMES = {
   diva: 1.0, zap: 1.0, bob: 1.0,
   siren: 1.25, sparkpuff: 1.25, queen: 1.25, starlight: 1.25,
   angler: 1.3, magma: 1.3, vent: 1.3, obsidian: 1.3, pyre: 1.3,
-  crystal_bell: 1.3, lofi_spore: 1.3, nautilus: 1.3, prism_bloom: 1.3, lapis_groove: 1.3
+  crystal_bell: 1.3, lofi_spore: 1.3, nautilus: 1.3, prism_bloom: 1.3, lapis_groove: 1.3,
+  sol_clam: 1.25, conch_horn: 1.25, marimba_manta: 1.3, solar_siren: 1.25, sun_coral: 1.25,
+  cryo_jelly: 1.25, frost_fin: 1.3, glacier_chime: 1.25, ice_walrus: 1.3, aurora_nautilus: 1.25
 };
 
 const EMPTY_DECORATIONS = [];
@@ -120,6 +122,16 @@ function loadSavedState() {
             performers: { ...ISLANDS.cavern.defaultPerformers },
             ownedDecorations: [],
             volumes: { ...INITIAL_VOLUMES }
+          },
+          sun_temple: {
+            performers: { ...ISLANDS.sun_temple.defaultPerformers },
+            ownedDecorations: [],
+            volumes: { ...INITIAL_VOLUMES }
+          },
+          cryo_reef: {
+            performers: { ...ISLANDS.cryo_reef.defaultPerformers },
+            ownedDecorations: [],
+            volumes: { ...INITIAL_VOLUMES }
           }
         },
         ownedCostumes: Array.isArray(v1.ownedCostumes) ? v1.ownedCostumes : [],
@@ -150,6 +162,16 @@ function getInitialGameState() {
       performers: { ...ISLANDS.cavern.defaultPerformers },
       ownedDecorations: [],
       volumes: { ...INITIAL_VOLUMES }
+    },
+    sun_temple: {
+      performers: { ...ISLANDS.sun_temple.defaultPerformers },
+      ownedDecorations: [],
+      volumes: { ...INITIAL_VOLUMES }
+    },
+    cryo_reef: {
+      performers: { ...ISLANDS.cryo_reef.defaultPerformers },
+      ownedDecorations: [],
+      volumes: { ...INITIAL_VOLUMES }
     }
   };
 
@@ -178,6 +200,16 @@ function getInitialGameState() {
       performers: wakeUnlockedPerformers({ ...defaultIslandsData.cavern.performers, ...saved.islandsData.cavern?.performers }),
       ownedDecorations: saved.islandsData.cavern?.ownedDecorations ?? [],
       volumes: normalizeVolumeMap({ ...defaultIslandsData.cavern.volumes, ...saved.islandsData.cavern?.volumes })
+    },
+    sun_temple: {
+      performers: wakeUnlockedPerformers({ ...defaultIslandsData.sun_temple.performers, ...saved.islandsData.sun_temple?.performers }),
+      ownedDecorations: saved.islandsData.sun_temple?.ownedDecorations ?? [],
+      volumes: normalizeVolumeMap({ ...defaultIslandsData.sun_temple.volumes, ...saved.islandsData.sun_temple?.volumes })
+    },
+    cryo_reef: {
+      performers: wakeUnlockedPerformers({ ...defaultIslandsData.cryo_reef.performers, ...saved.islandsData.cryo_reef?.performers }),
+      ownedDecorations: saved.islandsData.cryo_reef?.ownedDecorations ?? [],
+      volumes: normalizeVolumeMap({ ...defaultIslandsData.cryo_reef.volumes, ...saved.islandsData.cryo_reef?.volumes })
     }
   } : defaultIslandsData;
 
@@ -459,7 +491,9 @@ export default function App() {
   const allPerformersAcrossIslands = {
     ...(islandsData.lagoon?.performers || {}),
     ...(islandsData.trench?.performers || {}),
-    ...(islandsData.cavern?.performers || {})
+    ...(islandsData.cavern?.performers || {}),
+    ...(islandsData.sun_temple?.performers || {}),
+    ...(islandsData.cryo_reef?.performers || {})
   };
   const totalDiscoveredAcrossIslands = Object.values(allPerformersAcrossIslands).filter(p => p?.unlocked).length;
 
@@ -691,7 +725,9 @@ export default function App() {
     const p = performers[id];
     if (!p) return 1;
     const discoBonus = ownedDecorations.includes('disco_coral') ? 1 : 0;
-    return ((p.isSupercharged ? 3 : 1) * (p.level || 1)) + discoBonus;
+    const rarityMultiplier = RARITY_TIERS[p.rarity || 'common']?.coinMultiplier || 1.0;
+    const baseAmount = ((p.isSupercharged ? 3 : 1) * (p.level || 1)) + discoBonus;
+    return Math.round(baseAmount * rarityMultiplier);
   };
 
   const collectCoin = (id, e) => {
@@ -733,19 +769,22 @@ export default function App() {
   };
 
   const recruitInfo = {
-    lagoon: { id: 'bob', name: 'BOB', icon: '📦', fullName: 'Boombox Bob', bonusMsg: '⭐ BOOMBOX BOB DELIVERED! +5 🪙' },
-    trench: { id: 'vent', name: 'VENT', icon: '💨', fullName: 'Vent Cracker', bonusMsg: '🔥 VENT CRACKER DELIVERED! +5 🪙' },
-    cavern: { id: 'nautilus', name: 'NAUTILUS', icon: '🐚', fullName: 'Echo Nautilus', bonusMsg: '🐚 ECHO NAUTILUS DELIVERED! +5 🪙' }
-  }[currentIsland] || { id: 'bob', name: 'BOB', icon: '📦', fullName: 'Boombox Bob', bonusMsg: '⭐ DELIVERED! +5 🪙' };
+    lagoon: { id: 'bob', name: 'BOB', icon: '📦', cost: 15, fullName: 'Boombox Bob', bonusMsg: '⭐ BOOMBOX BOB DELIVERED! +5 🪙' },
+    trench: { id: 'vent', name: 'VENT', icon: '💨', cost: 15, fullName: 'Vent Cracker', bonusMsg: '🔥 VENT CRACKER DELIVERED! +5 🪙' },
+    cavern: { id: 'nautilus', name: 'NAUTILUS', icon: '🐚', cost: 15, fullName: 'Echo Nautilus', bonusMsg: '🐚 ECHO NAUTILUS DELIVERED! +5 🪙' },
+    sun_temple: { id: 'marimba_manta', name: 'MANTA', icon: '🪁', cost: 20, fullName: 'Marimba Manta', bonusMsg: '☀️ MARIMBA MANTA DELIVERED! +5 🪙' },
+    cryo_reef: { id: 'glacier_chime', name: 'CHIME', icon: '🎐', cost: 25, fullName: 'Glacier Chime', bonusMsg: '❄️ GLACIER CHIME DELIVERED! +5 🪙' }
+  }[currentIsland] || { id: 'bob', name: 'BOB', icon: '📦', cost: 15, fullName: 'Boombox Bob', bonusMsg: '⭐ DELIVERED! +5 🪙' };
 
   const handleRecruitPerformer = () => {
     const targetId = recruitInfo.id;
-    if (coins < 15 || performers[targetId]?.unlocked) return;
-    setCoins((c) => c - 15);
+    const cost = recruitInfo.cost || 15;
+    if (coins < cost || performers[targetId]?.unlocked) return;
+    setCoins((c) => c - cost);
 
     setPerformers((prev) => ({
       ...prev,
-      [targetId]: { ...prev[targetId], unlocked: true }
+      [targetId]: { ...prev[targetId], unlocked: true, rarity: 'common' }
     }));
     engineRef.current?.playJackpotSound();
     engineRef.current?.unlockPerformer(targetId);
@@ -774,10 +813,13 @@ export default function App() {
       const targetPerfs = islandsData[targetIsland]?.performers || ISLANDS[targetIsland]?.defaultPerformers || {};
       const isAlreadyUnlocked = targetPerfs[targetSpecies]?.unlocked;
       const obeliskActive = ownedDecorations.includes('crystal_obelisk');
+      const rolledRarity = rollBreedingRarity(obeliskActive);
+      const rarityData = RARITY_TIERS[rolledRarity] || RARITY_TIERS.common;
 
       if (!isAlreadyUnlocked) {
         // --- 1. BRAND NEW DISCOVERY ---
         const startLevel = obeliskActive ? 2 : 1;
+        const rarityCoinBonus = rolledRarity === 'epic' ? 35 : rolledRarity === 'rare' ? 20 : (spec?.hatchBonus || 10);
         setIslandsData((prev) => ({
           ...prev,
           [targetIsland]: {
@@ -787,25 +829,37 @@ export default function App() {
               [targetSpecies]: {
                 ...(prev[targetIsland]?.performers?.[targetSpecies] || {}),
                 unlocked: true,
-                level: startLevel
+                level: startLevel,
+                rarity: rolledRarity
               }
             }
           }
         }));
         engineRef.current?.startHybridSynth(targetSpecies);
         engineRef.current?.setPerformerVolume(targetSpecies, volumes[targetSpecies] ?? 100);
-        setCoins((c) => c + (spec?.hatchBonus || 10));
-        triggerComicPop('NEW DISCOVERY!', 'cyan', '✨');
+        setCoins((c) => c + rarityCoinBonus);
+
+        if (rolledRarity === 'epic') {
+          triggerComicPop('👑 EPIC HATCH!', 'pink', '👑');
+          triggerCoinBonusToast(`👑 EPIC HATCH! ${spec?.name.toUpperCase()} (2x COINS PER DROP)!`);
+        } else if (rolledRarity === 'rare') {
+          triggerComicPop('⭐ RARE HATCH!', 'gold', '⭐');
+          triggerCoinBonusToast(`🌟 RARE HATCH! ${spec?.name.toUpperCase()} (+50% COINS PER DROP)!`);
+        } else {
+          triggerComicPop('NEW DISCOVERY!', 'cyan', '✨');
+        }
 
         setHatchModal({
           isNew: true,
-          speciesName: spec?.name || 'Hybrid Monster',
-          message: `Congratulations! Your parents (${JELLY_SPECIES[parents[0]]?.name} + ${JELLY_SPECIES[parents[1]]?.name}) created a brand-new hybrid species! It is now living on ${ISLANDS[targetIsland]?.name || 'the reef'}.${obeliskActive ? ' ✨ Sea Crystal Obelisk empowered this hatchling with +1 Bonus Level!' : ''}`,
-          rewardText: `🎉 DISCOVERED: ${spec?.name || 'New Monster'}! (Lv.${startLevel}) +${spec?.hatchBonus || 10} 🪙 Discovery Bonus & New Musical Stem!`
+          speciesName: `${spec?.name || 'Hybrid Monster'} [${rarityData.label}]`,
+          message: `Congratulations! Your parents (${JELLY_SPECIES[parents[0]]?.name} + ${JELLY_SPECIES[parents[1]]?.name}) created a ${rarityData.label} hybrid species! It is now singing on ${ISLANDS[targetIsland]?.name || 'the reef'}.${rolledRarity !== 'common' ? ` ✨ ${rarityData.label} Trait: ${rarityData.coinMultiplier}x Coin Generation Rate!` : ''}${obeliskActive ? ' ✨ Sea Crystal Obelisk empowered this hatchling with +1 Bonus Level!' : ''}`,
+          rewardText: `🎉 DISCOVERED: ${spec?.name || 'New Monster'} (${rarityData.label} ${rarityData.icon})! (Lv.${startLevel}) +${rarityCoinBonus} 🪙 Discovery Bonus & New Musical Stem!`
         });
       } else {
         // --- 2. DUPLICATE BREEDING FUSION ---
         const currentLevel = targetPerfs[targetSpecies]?.level || 1;
+        const currentRarity = targetPerfs[targetSpecies]?.rarity || 'common';
+        const upgradedRarity = (rolledRarity === 'epic' || (rolledRarity === 'rare' && currentRarity === 'common')) ? rolledRarity : currentRarity;
         const canLevelUp = currentLevel < 5;
         const levelBoost = obeliskActive ? 2 : 1;
         const newLevel = canLevelUp ? Math.min(5, currentLevel + levelBoost) : 5;
@@ -820,6 +874,7 @@ export default function App() {
               [targetSpecies]: {
                 ...(prev[targetIsland]?.performers?.[targetSpecies] || {}),
                 level: newLevel,
+                rarity: upgradedRarity,
                 isSupercharged: true,
                 isSleeping: false
               }
@@ -830,14 +885,21 @@ export default function App() {
           engineRef.current?.setMute(targetSpecies, false);
         }
         setCoins((c) => c + bonusCoins);
-        triggerComicPop('FUSION LEVEL UP!', 'gold', '🧬');
+
+        const rarityUpgraded = upgradedRarity !== currentRarity;
+        if (rarityUpgraded) {
+          triggerComicPop(`TIER UP! ${upgradedRarity.toUpperCase()}`, 'pink', '👑');
+          triggerCoinBonusToast(`👑 RARITY UPGRADE! ${spec?.name} IS NOW ${upgradedRarity.toUpperCase()}!`);
+        } else {
+          triggerComicPop('FUSION LEVEL UP!', 'gold', '🧬');
+        }
 
         setHatchModal({
           isNew: false,
-          speciesName: spec?.name || 'Hybrid Monster',
+          speciesName: `${spec?.name || 'Hybrid Monster'} [${RARITY_TIERS[upgradedRarity]?.label || 'COMMON'}]`,
           message: canLevelUp
-            ? `You already have ${spec?.name} in your band! The newly hatched duplicate fused with your performer, leveling it up to Lv. ${newLevel}! Its coin generation rate has increased to +${newLevel} per drop!${obeliskActive ? ' (Crystal Obelisk bonus +1 Lv applied!)' : ''}`
-            : `You already have ${spec?.name} at MAX LEVEL 5! The egg exploded into a golden coin shower and gave your band member a Supercharged Sugar Rush!`,
+            ? `You already have ${spec?.name} in your band! The newly hatched duplicate fused with your performer, leveling it up to Lv. ${newLevel}!${rarityUpgraded ? ` ✨ Rarity upgraded to ${upgradedRarity.toUpperCase()} (${RARITY_TIERS[upgradedRarity]?.coinMultiplier}x coin rate)!` : ''}`
+            : `You already have ${spec?.name} at MAX LEVEL 5! The egg exploded into a golden coin shower and gave your band member a Supercharged Sugar Rush!${rarityUpgraded ? ` ✨ Rarity upgraded to ${upgradedRarity.toUpperCase()}!` : ''}`,
           rewardText: canLevelUp
             ? `⭐ FUSION LEVEL UP: ${spec?.name} is now Lv.${newLevel}! +${bonusCoins} 🪙 & Sugar Rush!`
             : `🌟 MAX LEVEL SUPER JACKPOT: +${bonusCoins} 🪙 & 3x Sugar Rush!`
@@ -998,7 +1060,9 @@ export default function App() {
       setIslandsData({
         lagoon: { performers: { ...ISLANDS.lagoon.defaultPerformers }, ownedDecorations: [], volumes: INITIAL_VOLUMES },
         trench: { performers: { ...ISLANDS.trench.defaultPerformers }, ownedDecorations: [], volumes: INITIAL_VOLUMES },
-        cavern: { performers: { ...ISLANDS.cavern.defaultPerformers }, ownedDecorations: [], volumes: INITIAL_VOLUMES }
+        cavern: { performers: { ...ISLANDS.cavern.defaultPerformers }, ownedDecorations: [], volumes: INITIAL_VOLUMES },
+        sun_temple: { performers: { ...ISLANDS.sun_temple.defaultPerformers }, ownedDecorations: [], volumes: INITIAL_VOLUMES },
+        cryo_reef: { performers: { ...ISLANDS.cryo_reef.defaultPerformers }, ownedDecorations: [], volumes: INITIAL_VOLUMES }
       });
       setOwnedCostumes([]);
       setEquippedCostumes({});
@@ -1526,7 +1590,8 @@ export default function App() {
               onOpenWardrobe={() => setIsWardrobeOpen(true)}
               onOpenDecorations={() => setIsDecorationsOpen(true)}
               recruitName={recruitInfo.name}
-              recruitIcon={recruitInfo.icon}
+              recruitIcon={recruitIcon}
+              recruitCost={recruitInfo.cost || 15}
               recruitUnlocked={performers[recruitInfo.id]?.unlocked}
               onRecruit={handleRecruitPerformer}
             />

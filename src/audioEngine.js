@@ -1,21 +1,27 @@
-// --- HARDWARE-SYNCED MULTI-TRACK AUDIO ENGINE WITH 17 AUTHENTIC VOCAL STEMS ---
+// --- HARDWARE-SYNCED MULTI-TRACK AUDIO ENGINE WITH 27 AUTHENTIC VOCAL STEMS ---
 
 export const ALL_SPECIES_LIST = [
   'diva', 'zap', 'bob', 'siren', 'sparkpuff', 'queen', 'starlight',
   'angler', 'magma', 'vent', 'obsidian', 'pyre',
-  'crystal_bell', 'lofi_spore', 'nautilus', 'prism_bloom', 'lapis_groove'
+  'crystal_bell', 'lofi_spore', 'nautilus', 'prism_bloom', 'lapis_groove',
+  'sol_clam', 'conch_horn', 'marimba_manta', 'solar_siren', 'sun_coral',
+  'cryo_jelly', 'frost_fin', 'glacier_chime', 'ice_walrus', 'aurora_nautilus'
 ];
 
 export const SPECIES_ISLAND_MAP = {
   diva: 'lagoon', zap: 'lagoon', bob: 'lagoon', siren: 'lagoon', sparkpuff: 'lagoon', queen: 'lagoon', starlight: 'lagoon',
   angler: 'trench', magma: 'trench', vent: 'trench', obsidian: 'trench', pyre: 'trench',
-  crystal_bell: 'cavern', lofi_spore: 'cavern', nautilus: 'cavern', prism_bloom: 'cavern', lapis_groove: 'cavern'
+  crystal_bell: 'cavern', lofi_spore: 'cavern', nautilus: 'cavern', prism_bloom: 'cavern', lapis_groove: 'cavern',
+  sol_clam: 'sun_temple', conch_horn: 'sun_temple', marimba_manta: 'sun_temple', solar_siren: 'sun_temple', sun_coral: 'sun_temple',
+  cryo_jelly: 'cryo_reef', frost_fin: 'cryo_reef', glacier_chime: 'cryo_reef', ice_walrus: 'cryo_reef', aurora_nautilus: 'cryo_reef'
 };
 
 export const DEFAULT_UNLOCKED = {
   diva: true, zap: true,
   angler: true, magma: true,
-  crystal_bell: true, lofi_spore: true
+  crystal_bell: true, lofi_spore: true,
+  sol_clam: true, conch_horn: true,
+  cryo_jelly: true, frost_fin: true
 };
 
 export class JellyAudioEngine {
@@ -263,7 +269,19 @@ export class JellyAudioEngine {
       lofi_spore: -0.12,   // Lo-Fi Spore (Center-Left)
       nautilus: 0.18,      // Echo Nautilus (Center-Right)
       prism_bloom: 0.5,    // Prism Bloom (Far-Right)
-      lapis_groove: 0.0    // Lapis Groove (Center)
+      lapis_groove: 0.0,   // Lapis Groove (Center)
+      // Sunken Sun Temple
+      sol_clam: -0.38,     // Sol Clam (Mid-Left)
+      conch_horn: 0.42,    // Conch Horn (Mid-Right)
+      marimba_manta: 0.0,  // Marimba Manta (Center Bass)
+      solar_siren: -0.18,  // Solar Siren (Center-Left)
+      sun_coral: 0.22,     // Sun Coral (Center-Right)
+      // Glacial Cryo Reef
+      cryo_jelly: -0.35,   // Cryo Jelly (Mid-Left)
+      frost_fin: 0.0,      // Frost Fin (Center Sub-Bass)
+      glacier_chime: 0.45, // Glacier Chime (Right)
+      ice_walrus: -0.15,   // Ice Walrus (Center-Left)
+      aurora_nautilus: 0.25 // Aurora Nautilus (Center-Right)
     };
     panner.pan.setValueAtTime(panMap[name] ?? 0, this.ctx.currentTime);
     return panner;

@@ -10,6 +10,8 @@ import StarlightJelly from './StarlightJelly';
 
 import { AnglerBass, MagmaMedusa, VentCracker, ObsidianSiren, PyrePuff } from './monsters/TrenchMonsters';
 import { CrystalBell, LoFiSpore, EchoNautilus, PrismBloom, LapisGroove } from './monsters/CavernMonsters';
+import { SolClam, ConchHorn, MarimbaManta, SolarSiren, SunCoral } from './monsters/SunTempleMonsters';
+import { CryoJelly, FrostFin, GlacierChime, IceWalrus, AuroraNautilus } from './monsters/CryoReefMonsters';
 import StagePedestal from './StagePedestal';
 import ReefStageLandscape from './scenery/ReefStageLandscape';
 import StageFXOverlay from './StageFXOverlay';
@@ -187,6 +189,9 @@ export default function LivingHabitatWorld({
     const isPoked = pokedPerformer?.id === id;
     const isTickled = isPoked && pokedPerformer?.isTickled;
     const selectionIdx = selectedParents.indexOf(id) + 1;
+    const rarity = p?.rarity || 'common';
+    const isRare = rarity === 'rare';
+    const isEpic = rarity === 'epic';
 
     // Habitat slot depth styling
     const scale = (slot.depthScale || 1.0) * (isSleeping ? 0.92 : 1.0);
@@ -234,8 +239,61 @@ export default function LivingHabitatWorld({
         {isUnlocked ? (
           <div
             className={`monster-actor-wrap ${isPoked && !isTickled ? 'monster-squish-poke' : ''} ${isTickled ? 'jelly-tickle-active' : ''}`}
-            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              filter: isEpic 
+                ? 'drop-shadow(0 0 16px rgba(236, 72, 153, 0.75)) drop-shadow(0 0 8px rgba(168, 85, 247, 0.6))' 
+                : isRare 
+                ? 'drop-shadow(0 0 14px rgba(250, 204, 21, 0.8))' 
+                : 'none'
+            }}
           >
+            {/* Rarity Pill Badge */}
+            {isEpic && !isSleeping && (
+              <div style={{
+                position: 'absolute',
+                top: '-22px',
+                background: 'linear-gradient(135deg, #a855f7, #ec4899)',
+                border: '2px solid #fbcfe8',
+                borderRadius: '12px',
+                padding: '1px 8px',
+                fontSize: '10.5px',
+                fontWeight: '900',
+                color: '#ffffff',
+                boxShadow: '0 3px 10px rgba(236, 72, 153, 0.8)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '3px',
+                letterSpacing: '0.5px',
+                zIndex: 12
+              }}>
+                <span>👑</span> EPIC
+              </div>
+            )}
+            {isRare && !isSleeping && (
+              <div style={{
+                position: 'absolute',
+                top: '-22px',
+                background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                border: '2px solid #fef08a',
+                borderRadius: '12px',
+                padding: '1px 8px',
+                fontSize: '10.5px',
+                fontWeight: '900',
+                color: '#ffffff',
+                boxShadow: '0 3px 8px rgba(245, 158, 11, 0.7)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '3px',
+                letterSpacing: '0.5px',
+                zIndex: 12
+              }}>
+                <span>⭐</span> RARE
+              </div>
+            )}
+
             {/* 1. Monster Sprite Component — 100% Clean! */}
             {id === 'diva' && (
               <Jellyfish
@@ -509,6 +567,170 @@ export default function LivingHabitatWorld({
               />
             )}
 
+            {/* SUNKEN SUN TEMPLE MONSTERS */}
+            {id === 'sol_clam' && (
+              <SolClam
+                isSleeping={isSleeping}
+                isSupercharged={isSupercharged}
+                hasCoin={hasCoin}
+                level={level}
+                costumeId={costumeId}
+                tempoSpeed={tempoSpeed}
+                isNight={isNight}
+                isSelecting={isSelectingParents}
+                selectionIndex={selectionIdx}
+                rarity={rarity}
+                onCoinCollect={(e) => onCoinCollect?.(id, e)}
+                onClick={handleMonsterClick}
+              />
+            )}
+            {id === 'conch_horn' && (
+              <ConchHorn
+                isSleeping={isSleeping}
+                isSupercharged={isSupercharged}
+                hasCoin={hasCoin}
+                level={level}
+                costumeId={costumeId}
+                tempoSpeed={tempoSpeed}
+                isNight={isNight}
+                isSelecting={isSelectingParents}
+                selectionIndex={selectionIdx}
+                rarity={rarity}
+                onCoinCollect={(e) => onCoinCollect?.(id, e)}
+                onClick={handleMonsterClick}
+              />
+            )}
+            {id === 'marimba_manta' && (
+              <MarimbaManta
+                isSleeping={isSleeping}
+                isSupercharged={isSupercharged}
+                hasCoin={hasCoin}
+                level={level}
+                costumeId={costumeId}
+                tempoSpeed={tempoSpeed}
+                isNight={isNight}
+                isSelecting={isSelectingParents}
+                selectionIndex={selectionIdx}
+                rarity={rarity}
+                onCoinCollect={(e) => onCoinCollect?.(id, e)}
+                onClick={handleMonsterClick}
+              />
+            )}
+            {id === 'solar_siren' && (
+              <SolarSiren
+                isSleeping={isSleeping}
+                isSupercharged={isSupercharged}
+                hasCoin={hasCoin}
+                level={level}
+                costumeId={costumeId}
+                tempoSpeed={tempoSpeed}
+                isNight={isNight}
+                isSelecting={isSelectingParents}
+                selectionIndex={selectionIdx}
+                rarity={rarity}
+                onCoinCollect={(e) => onCoinCollect?.(id, e)}
+                onClick={handleMonsterClick}
+              />
+            )}
+            {id === 'sun_coral' && (
+              <SunCoral
+                isSleeping={isSleeping}
+                isSupercharged={isSupercharged}
+                hasCoin={hasCoin}
+                level={level}
+                costumeId={costumeId}
+                tempoSpeed={tempoSpeed}
+                isNight={isNight}
+                isSelecting={isSelectingParents}
+                selectionIndex={selectionIdx}
+                rarity={rarity}
+                onCoinCollect={(e) => onCoinCollect?.(id, e)}
+                onClick={handleMonsterClick}
+              />
+            )}
+
+            {/* GLACIAL CRYO REEF MONSTERS */}
+            {id === 'cryo_jelly' && (
+              <CryoJelly
+                isSleeping={isSleeping}
+                isSupercharged={isSupercharged}
+                hasCoin={hasCoin}
+                level={level}
+                costumeId={costumeId}
+                tempoSpeed={tempoSpeed}
+                isNight={isNight}
+                isSelecting={isSelectingParents}
+                selectionIndex={selectionIdx}
+                rarity={rarity}
+                onCoinCollect={(e) => onCoinCollect?.(id, e)}
+                onClick={handleMonsterClick}
+              />
+            )}
+            {id === 'frost_fin' && (
+              <FrostFin
+                isSleeping={isSleeping}
+                isSupercharged={isSupercharged}
+                hasCoin={hasCoin}
+                level={level}
+                costumeId={costumeId}
+                tempoSpeed={tempoSpeed}
+                isNight={isNight}
+                isSelecting={isSelectingParents}
+                selectionIndex={selectionIdx}
+                rarity={rarity}
+                onCoinCollect={(e) => onCoinCollect?.(id, e)}
+                onClick={handleMonsterClick}
+              />
+            )}
+            {id === 'glacier_chime' && (
+              <GlacierChime
+                isSleeping={isSleeping}
+                isSupercharged={isSupercharged}
+                hasCoin={hasCoin}
+                level={level}
+                costumeId={costumeId}
+                tempoSpeed={tempoSpeed}
+                isNight={isNight}
+                isSelecting={isSelectingParents}
+                selectionIndex={selectionIdx}
+                rarity={rarity}
+                onCoinCollect={(e) => onCoinCollect?.(id, e)}
+                onClick={handleMonsterClick}
+              />
+            )}
+            {id === 'ice_walrus' && (
+              <IceWalrus
+                isSleeping={isSleeping}
+                isSupercharged={isSupercharged}
+                hasCoin={hasCoin}
+                level={level}
+                costumeId={costumeId}
+                tempoSpeed={tempoSpeed}
+                isNight={isNight}
+                isSelecting={isSelectingParents}
+                selectionIndex={selectionIdx}
+                rarity={rarity}
+                onCoinCollect={(e) => onCoinCollect?.(id, e)}
+                onClick={handleMonsterClick}
+              />
+            )}
+            {id === 'aurora_nautilus' && (
+              <AuroraNautilus
+                isSleeping={isSleeping}
+                isSupercharged={isSupercharged}
+                hasCoin={hasCoin}
+                level={level}
+                costumeId={costumeId}
+                tempoSpeed={tempoSpeed}
+                isNight={isNight}
+                isSelecting={isSelectingParents}
+                selectionIndex={selectionIdx}
+                rarity={rarity}
+                onCoinCollect={(e) => onCoinCollect?.(id, e)}
+                onClick={handleMonsterClick}
+              />
+            )}
+
             {/* 2. Natural Reef Stage Pedestal Platform (Zero Clutter!) */}
             <StagePedestal
               islandId={islandId}
@@ -516,6 +738,7 @@ export default function LivingHabitatWorld({
               tempoSpeed={tempoSpeed}
               isSelected={isSelected}
               isSoloed={isSoloed}
+              rarity={rarity}
               onClick={handleMonsterClick}
             />
           </div>

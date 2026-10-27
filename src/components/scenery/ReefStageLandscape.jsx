@@ -18,6 +18,8 @@ export default function ReefStageLandscape({
   const isLagoon = islandId === 'lagoon';
   const isTrench = islandId === 'trench';
   const isCavern = islandId === 'cavern';
+  const isSunTemple = islandId === 'sun_temple';
+  const isCryoReef = islandId === 'cryo_reef';
 
   // Dynamic tempo pulse duration
   const pulseDuration = `${1.2 / tempoSpeed}s`;
@@ -592,6 +594,106 @@ export default function ReefStageLandscape({
             stroke="#065f46"
             strokeWidth="5"
           />
+        </svg>
+      )}
+
+      {/* ========================================================
+          4. SUNKEN SUN TEMPLE: GOLDEN ATLANTIS ATOLL
+          ======================================================== */}
+      {isSunTemple && (
+        <svg
+          width="1400"
+          height="820"
+          viewBox="0 0 1400 820"
+          style={{ width: '100%', height: '100%' }}
+        >
+          {/* Hand-Painted 2D Sunken Sun Temple Backdrop */}
+          <image 
+            href="/assets/art/sun_temple_painted_bg.jpg" 
+            x="0" 
+            y="0" 
+            width="1400" 
+            height="820" 
+            preserveAspectRatio="xMidYMid slice" 
+            opacity={isNight ? "0.55" : "0.95"} 
+          />
+
+          {/* Sleeping Sun Temple Colossus Titan */}
+          <g 
+            className="sleeping-colossus-face"
+            style={{ 
+              animation: `colossusBreathe ${pulseDuration} ease-in-out infinite`,
+              transformOrigin: '700px 240px'
+            }}
+          >
+            <image
+              href="/assets/art/sun_colossus_face.png"
+              x="570"
+              y="90"
+              width="270"
+              height="270"
+              preserveAspectRatio="xMidYMid meet"
+              style={{
+                filter: isNight 
+                  ? 'brightness(0.7) drop-shadow(0 16px 32px rgba(0,0,0,0.85))' 
+                  : 'drop-shadow(0 16px 36px rgba(0,0,0,0.65)) drop-shadow(0 0 25px rgba(234, 179, 8, 0.4))'
+              }}
+            />
+          </g>
+
+          {/* Golden Stepping Stele Stones */}
+          <ellipse cx="440" cy="410" rx="20" ry="11" fill="#fef08a" stroke="#78350f" strokeWidth="3" />
+          <ellipse cx="800" cy="410" rx="20" ry="11" fill="#fef08a" stroke="#78350f" strokeWidth="3" />
+        </svg>
+      )}
+
+      {/* ========================================================
+          5. GLACIAL CRYO REEF: SUB-ZERO ICE ABYSS
+          ======================================================== */}
+      {isCryoReef && (
+        <svg
+          width="1400"
+          height="820"
+          viewBox="0 0 1400 820"
+          style={{ width: '100%', height: '100%' }}
+        >
+          {/* Hand-Painted 2D Glacial Cryo Reef Backdrop */}
+          <image 
+            href="/assets/art/cryo_reef_painted_bg.jpg" 
+            x="0" 
+            y="0" 
+            width="1400" 
+            height="820" 
+            preserveAspectRatio="xMidYMid slice" 
+            opacity={isNight ? "0.6" : "0.95"} 
+          />
+
+          {/* Sleeping Frost Colossus Titan */}
+          <g 
+            className="sleeping-colossus-face"
+            style={{ 
+              animation: `colossusBreathe ${pulseDuration} ease-in-out infinite`,
+              transformOrigin: '700px 240px'
+            }}
+          >
+            <image
+              href="/assets/art/frost_colossus_face.png"
+              x="570"
+              y="90"
+              width="270"
+              height="270"
+              preserveAspectRatio="xMidYMid meet"
+              style={{
+                filter: isNight 
+                  ? 'brightness(0.7) drop-shadow(0 16px 32px rgba(0,0,0,0.85))' 
+                  : 'drop-shadow(0 16px 36px rgba(0,0,0,0.65)) drop-shadow(0 0 25px rgba(56, 189, 248, 0.45))'
+              }}
+            />
+          </g>
+
+          {/* Translucent Frost Stepping Ice Floes */}
+          <ellipse cx="440" cy="410" rx="22" ry="11" fill="#bae6fd" stroke="#0369a1" strokeWidth="3" />
+          <ellipse cx="800" cy="410" rx="22" ry="11" fill="#bae6fd" stroke="#0369a1" strokeWidth="3" />
         </svg>
       )}
     </div>
