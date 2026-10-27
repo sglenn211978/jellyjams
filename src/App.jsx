@@ -268,6 +268,7 @@ export default function App() {
 
   // Mystery Drops
   const [mysteryCrate, setMysteryCrate] = useState(null);
+  const [selectedMonsterId, setSelectedMonsterId] = useState(null);
 
   // Alerts, Modals & Toasts
   const [bonusToast, setBonusToast] = useState(null);
@@ -945,6 +946,7 @@ export default function App() {
   const handleTravelToIsland = (targetIslandId) => {
     if (targetIslandId === currentIsland || !unlockedIslands.includes(targetIslandId)) return;
     setIsMapOpen(false);
+    setSelectedMonsterId(null);
     setIsDiving(true);
     setDiveDestination(ISLANDS[targetIslandId]?.name || '');
     engineRef.current?.playClamPop();
@@ -1487,6 +1489,8 @@ export default function App() {
               onToggleSolo={handleToggleSolo}
               onPopBubble={handlePopStageFXBubble}
               coins={coins}
+              selectedMonsterId={selectedMonsterId}
+              onSelectMonster={setSelectedMonsterId}
               onFeedMonster={(id, treatType) => {
                 const cost = treatType === 'donut' ? 12 : 5;
                 if (coins >= cost) {
@@ -1508,8 +1512,8 @@ export default function App() {
         </div>
       )}
 
-      {/* Seafloor Activity Bar: Relative Responsive Flex Slots */}
-      {hasStarted && (
+      {/* Seafloor Activity Bar: Hidden when Monster Action Tray is open to eliminate overlap! */}
+      {hasStarted && !selectedMonsterId && (
         <div className="seafloor-activity-bar">
           <div className="seafloor-slot seafloor-slot-left" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <BakeryTruck

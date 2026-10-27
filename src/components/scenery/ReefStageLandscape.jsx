@@ -423,29 +423,42 @@ export default function ReefStageLandscape({
             </linearGradient>
           </defs>
 
-          <rect width="1400" height="820" fill="url(#trenchWaterBg)" />
+          {/* Hand-Painted 2D Magma Trench Backdrop */}
+          <image 
+            href="/assets/art/magma_trench_painted_bg.jpg" 
+            x="0" 
+            y="0" 
+            width="1400" 
+            height="820" 
+            preserveAspectRatio="xMidYMid slice" 
+            opacity="0.95" 
+          />
+          {/* Ambient Volcanic Lighting Overlay */}
+          <rect width="1400" height="820" fill="url(#trenchWaterBg)" style={{ mixBlendMode: 'multiply' }} />
 
           {/* High Tier Basalt Chimneys */}
           <polygon points="320,400 350,200 410,200 440,400" fill="#1c1917" stroke="#44403c" strokeWidth="4" />
           <polygon points="980,400 1010,210 1070,210 1100,400" fill="#1c1917" stroke="#44403c" strokeWidth="4" />
 
-          {/* Sleeping Obsidian Titan Face */}
+          {/* Sleeping Obsidian Magma Titan Colossus */}
           <g 
             className="sleeping-colossus-face"
             style={{ 
               animation: `colossusBreathe ${pulseDuration} ease-in-out infinite`,
-              transformOrigin: '700px 300px'
+              transformOrigin: '700px 240px'
             }}
           >
-            <path
-              d="M 640 330 C 640 250 760 250 760 330 C 760 360 640 360 640 330 Z"
-              fill="#1c1917"
-              stroke="#ea580c"
-              strokeWidth="4"
+            <image
+              href="/assets/art/magma_colossus_face.png"
+              x="570"
+              y="110"
+              width="260"
+              height="260"
+              preserveAspectRatio="xMidYMid meet"
+              style={{
+                filter: 'drop-shadow(0 16px 32px rgba(0,0,0,0.85)) drop-shadow(0 0 20px rgba(234, 88, 12, 0.45))'
+              }}
             />
-            <path d="M 662 300 Q 675 312 688 300" stroke="#f97316" strokeWidth="4" fill="none" strokeLinecap="round" />
-            <path d="M 712 300 Q 725 312 738 300" stroke="#f97316" strokeWidth="4" fill="none" strokeLinecap="round" />
-            <path d="M 686 332 Q 700 344 714 332" stroke="#ea580c" strokeWidth="3.5" fill="none" strokeLinecap="round" />
           </g>
 
           {/* Magma Fissures Pulsing with Tempo */}
@@ -512,31 +525,42 @@ export default function ReefStageLandscape({
             </linearGradient>
           </defs>
 
-          <rect width="1400" height="820" fill="url(#cavernWaterBg)" />
+          {/* Hand-Painted 2D Bioluminescent Cavern Backdrop */}
+          <image 
+            href="/assets/art/bioluminescent_cavern_painted_bg.jpg" 
+            x="0" 
+            y="0" 
+            width="1400" 
+            height="820" 
+            preserveAspectRatio="xMidYMid slice" 
+            opacity="0.95" 
+          />
+          {/* Ambient Emerald Lighting Overlay */}
+          <rect width="1400" height="820" fill="url(#cavernWaterBg)" style={{ mixBlendMode: 'multiply' }} />
 
           {/* Back Giant Glowing Emerald & Amethyst Crystals */}
           <polygon points="320,400 350,190 390,160 430,220 410,400" fill="#10b981" stroke="#a7f3d0" strokeWidth="4" filter="drop-shadow(0 0 14px #10b981)" opacity="0.9" />
           <polygon points="980,400 1020,180 1060,150 1100,210 1070,400" fill="#a855f7" stroke="#e9d5ff" strokeWidth="4" filter="drop-shadow(0 0 14px #c084fc)" opacity="0.85" />
 
-          {/* Sleeping Crystal Titan Face */}
+          {/* Sleeping Crystal Cavern Titan Colossus */}
           <g 
             className="sleeping-colossus-face"
             style={{ 
               animation: `colossusBreathe ${pulseDuration} ease-in-out infinite`,
-              transformOrigin: '700px 300px'
+              transformOrigin: '700px 240px'
             }}
           >
-            <path
-              d="M 640 330 C 640 250 760 250 760 330 C 760 360 640 360 640 330 Z"
-              fill="#065f46"
-              stroke="#34d399"
-              strokeWidth="4"
+            <image
+              href="/assets/art/crystal_colossus_face.png"
+              x="570"
+              y="110"
+              width="260"
+              height="260"
+              preserveAspectRatio="xMidYMid meet"
+              style={{
+                filter: 'drop-shadow(0 16px 32px rgba(0,0,0,0.85)) drop-shadow(0 0 20px rgba(52, 211, 153, 0.45))'
+              }}
             />
-            <path d="M 662 300 Q 675 312 688 300" stroke="#34d399" strokeWidth="4" fill="none" strokeLinecap="round" />
-            <path d="M 712 300 Q 725 312 738 300" stroke="#34d399" strokeWidth="4" fill="none" strokeLinecap="round" />
-            <path d="M 686 332 Q 700 344 714 332" stroke="#2dd4bf" strokeWidth="3.5" fill="none" strokeLinecap="round" />
-            {/* Crystal Forehead Crown */}
-            <polygon points="700,230 685,260 715,260" fill="#22d3ee" stroke="#cffafe" strokeWidth="2" />
           </g>
 
           {/* Runic Glowing Energy Stream */}

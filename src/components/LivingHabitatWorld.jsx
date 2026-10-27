@@ -30,6 +30,8 @@ export default function LivingHabitatWorld({
   stageFXList = [],
   zoomLevel = 1.0,
   coins = 0,
+  selectedMonsterId: propSelectedMonsterId,
+  onSelectMonster,
   onZoomChange,
   onPerformerClick,
   onCoinCollect,
@@ -41,7 +43,12 @@ export default function LivingHabitatWorld({
 }) {
   const containerRef = useRef(null);
   const [pan, setPan] = useState({ x: 0, y: 0 });
-  const [selectedMonsterId, setSelectedMonsterId] = useState(null);
+  const [localSelectedMonsterId, setLocalSelectedMonsterId] = useState(null);
+  const selectedMonsterId = propSelectedMonsterId !== undefined ? propSelectedMonsterId : localSelectedMonsterId;
+  const setSelectedMonsterId = (val) => {
+    setLocalSelectedMonsterId(val);
+    onSelectMonster?.(val);
+  };
   const isDraggingRef = useRef(false);
   const startDragRef = useRef({ x: 0, y: 0, panX: 0, panY: 0 });
   const touchDistanceRef = useRef(null);
