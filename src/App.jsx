@@ -249,6 +249,7 @@ export default function App() {
   const [isRhythmRushOpen, setIsRhythmRushOpen] = useState(false);
   const [isWheelOpen, setIsWheelOpen] = useState(false);
   const [isQuestsOpen, setIsQuestsOpen] = useState(false);
+  const [isDJConsoleOpen, setIsDJConsoleOpen] = useState(false);
 
   // Breeding & Nursery State
   const [isSelectingParents, setIsSelectingParents] = useState(false);
@@ -1168,173 +1169,134 @@ export default function App() {
       <div onClick={handleBubblePop} title="Pop the bubble! +1 🪙" className="ambient-bubble clickable-bubble" style={{ left: '72%', width: '18px', height: '18px', animationDuration: '11s', animationDelay: '1.5s' }} />
       <div onClick={handleBubblePop} title="Pop the bubble! +1 🪙" className="ambient-bubble clickable-bubble" style={{ left: '88%', width: '26px', height: '26px', animationDuration: '13s', animationDelay: '5s' }} />
 
-      {/* Responsive Top Header Bar */}
-      <header className="game-header-bar">
-        {/* Top Left: Plaque & Compact Single-Row Action Toolbar */}
-        <div className="header-hud-left">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'nowrap' }}>
-            {/* Carved Wooden Island Signpost (MSM Style) */}
-            <div 
-              onClick={() => setIsMapOpen(true)}
-              className="cartoon-hud-token"
+      {/* Clean Mobile Game Top Header Bar (Level Bar, Island Crest, Coin Vault) */}
+      <header className="game-header-bar" style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        padding: '12px 20px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        zIndex: 50,
+        pointerEvents: 'none'
+      }}>
+        {/* Top Left: Carved Stone Level & Fame Progress Bar */}
+        <div style={{ pointerEvents: 'auto' }}>
+          {hasStarted && (
+            <button
+              type="button"
+              onClick={() => setIsQuestsOpen(true)}
               style={{
-                background: 'linear-gradient(180deg, #92400e 0%, #78350f 40%, #451a03 100%)',
-                color: '#fef08a',
-                padding: '6px 14px',
-                minHeight: '48px',
-                gap: '9px',
-                cursor: 'pointer'
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                background: 'linear-gradient(180deg, #1e293b 0%, #0f172a 100%)',
+                border: '3.5px solid #090d16',
+                borderRadius: '24px',
+                padding: '6px 14px 6px 8px',
+                boxShadow: '0 5px 0 #090d16, inset 0 2px 0 rgba(255,255,255,0.25), 0 8px 18px rgba(0,0,0,0.6)',
+                cursor: 'pointer',
+                minHeight: '52px'
               }}
-              title="Jelly Jams: Musical Monster Reef — Tap for Island Map"
+              title={`Band Fame: ${currentFameRank.title} (Level ${currentFameRank.level}) - ${currentFameRank.currentLevelXP}/${currentFameRank.neededXP} XP`}
             >
-              <span style={{ fontSize: '26px', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.4))' }}>🪼</span>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                <span style={{
-                  fontFamily: "'Lilita One', 'Fredoka', cursive, sans-serif",
-                  fontSize: '15px',
-                  fontWeight: '900',
-                  color: '#fef08a',
-                  lineHeight: 1,
-                  letterSpacing: '0.6px'
+              <span style={{
+                background: 'linear-gradient(135deg, #f59e0b, #ef4444)',
+                color: '#ffffff',
+                borderRadius: '16px',
+                padding: '4px 10px',
+                fontSize: '14px',
+                fontWeight: '900',
+                border: '2px solid #090d16',
+                fontFamily: "'Lilita One', 'Fredoka', cursive",
+                letterSpacing: '0.5px'
+              }}>
+                ⭐ Lv.{currentFameRank.level}
+              </span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', minWidth: '80px' }}>
+                <div style={{
+                  width: '100%',
+                  height: '12px',
+                  background: '#090d16',
+                  borderRadius: '6px',
+                  overflow: 'hidden',
+                  border: '1.5px solid #334155',
+                  position: 'relative'
                 }}>
-                  JELLY JAMS
-                </span>
-                <span style={{
-                  fontSize: '10.5px',
-                  fontWeight: '900',
-                  color: '#bae6fd',
-                  marginTop: '2px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '3px'
-                }}>
-                  🏝️ {currentIslandConfig.name.toUpperCase()} ▾
+                  <div style={{
+                    width: `${currentFameRank.progressPercent}%`,
+                    height: '100%',
+                    background: 'linear-gradient(90deg, #22c55e, #86efac)',
+                    borderRadius: '4px',
+                    transition: 'width 0.3s ease'
+                  }} />
+                </div>
+                <span style={{ fontSize: '10px', fontWeight: '900', color: '#94a3b8', textAlign: 'center', lineHeight: 1 }}>
+                  {currentFameRank.progressPercent}% FAME
                 </span>
               </div>
-            </div>
-
-            {hasStarted && (
-              <>
-                {/* 1. DEX ALMANAC */}
-                <button
-                  type="button"
-                  onClick={() => setIsDexOpen(true)}
-                  className="cartoon-hud-token game-btn-yellow"
-                  title="Open Jelly Dex Almanac"
-                >
-                  <span style={{ fontSize: '22px' }}>📖</span>
-                  <span>DEX</span>
-                </button>
-
-                {/* 2. DAILY QUESTS & STICKERS */}
-                <button
-                  type="button"
-                  onClick={() => setIsQuestsOpen(true)}
-                  className="cartoon-hud-token game-btn-purple"
-                  style={{ position: 'relative' }}
-                  title="Open Daily Quests & Sticker Album"
-                >
-                  <span style={{ fontSize: '22px' }}>⭐</span>
-                  <span>QUESTS</span>
-                  {dailyQuests.filter(q => (q.progress || 0) >= q.target && !q.claimed).length > 0 && (
-                    <span style={{
-                      position: 'absolute',
-                      top: '-6px',
-                      right: '-6px',
-                      background: '#ef4444',
-                      color: '#ffffff',
-                      borderRadius: '50%',
-                      width: '20px',
-                      height: '20px',
-                      fontSize: '12px',
-                      fontWeight: '900',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      border: '2px solid #ffffff',
-                      boxShadow: '0 2px 5px rgba(0,0,0,0.5)'
-                    }}>!</span>
-                  )}
-                </button>
-
-                {/* 3. LUCKY WHEEL */}
-                <button
-                  type="button"
-                  onClick={() => setIsWheelOpen(true)}
-                  className="cartoon-hud-token game-btn-pink"
-                  title="Spin the Prize Wheel"
-                >
-                  <span style={{ fontSize: '22px' }}>🎡</span>
-                  <span>WHEEL</span>
-                </button>
-
-                {/* 4. ECHO JAM MEMORY GAME */}
-                <button
-                  type="button"
-                  onClick={() => setIsEchoJamOpen(true)}
-                  className="cartoon-hud-token game-btn-cyan"
-                  title="Play Reef Echo Jam Memory Game"
-                >
-                  <span style={{ fontSize: '22px' }}>🎮</span>
-                  <span>ECHO</span>
-                </button>
-
-                {/* 5. RHYTHM RUSH BEATS GAME */}
-                <button
-                  type="button"
-                  onClick={() => setIsRhythmRushOpen(true)}
-                  className="cartoon-hud-token game-btn-green"
-                  title="Play Rhythm Rush Beats Mini-Game"
-                >
-                  <span style={{ fontSize: '22px' }}>🎵</span>
-                  <span>RUSH</span>
-                </button>
-
-                {/* 6. DAY / NIGHT RAVE TOGGLE */}
-                <button
-                  type="button"
-                  onClick={toggleNightRave}
-                  className={`cartoon-hud-token ${isNightRave ? 'game-btn-purple' : 'game-btn-yellow'}`}
-                  title="Toggle Day / Night Rave"
-                >
-                  <span style={{ fontSize: '22px' }}>{isNightRave ? '🌙' : '☀️'}</span>
-                  <span>{isNightRave ? 'RAVE' : 'DAY'}</span>
-                </button>
-              </>
-            )}
-          </div>
+            </button>
+          )}
         </div>
 
-        {/* Top Center: DJ Console & Action Banner */}
-        <div className="header-hud-center">
-          {hasStarted && (
-            <DJConsole
-              currentSpeed={tempoSpeed}
-              onSpeedChange={handleSpeedChange}
-              onOpenMixer={() => setIsMixerOpen(true)}
-              onOpenDJBooth={() => setIsDJBoothOpen(true)}
-              onTriggerConfetti={() => handleTriggerLiveFX('confetti')}
-              onTriggerBubbles={() => handleTriggerLiveFX('bubbles')}
-              onTriggerSparks={() => handleTriggerLiveFX('sparks')}
-            />
-          )}
+        {/* Top Center: Tropical Wooden Island Signpost & Active Notice */}
+        <div style={{ pointerEvents: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
+          <div
+            onClick={() => setIsMapOpen(true)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              background: 'linear-gradient(180deg, #92400e 0%, #78350f 45%, #451a03 100%)',
+              border: '3.5px solid #090d16',
+              borderRadius: '24px',
+              padding: '6px 18px',
+              boxShadow: '0 5px 0 #090d16, inset 0 2px 0 rgba(255,255,255,0.3), 0 8px 18px rgba(0,0,0,0.6)',
+              cursor: 'pointer',
+              minHeight: '52px'
+            }}
+            title="Tap to travel to another island"
+          >
+            <span style={{ fontSize: '28px', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.4))' }}>🏝️</span>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+              <span style={{
+                fontFamily: "'Lilita One', 'Fredoka', cursive",
+                fontSize: '16px',
+                fontWeight: '900',
+                color: '#fef08a',
+                letterSpacing: '0.8px',
+                paintOrder: 'stroke fill',
+                WebkitTextStroke: '2px #78350f',
+                lineHeight: 1
+              }}>
+                {currentIslandConfig.name.toUpperCase()}
+              </span>
+              <span style={{
+                fontSize: '10.5px',
+                fontWeight: '900',
+                color: '#bae6fd',
+                marginTop: '2px'
+              }}>
+                MAP & TRAVEL ▾
+              </span>
+            </div>
+          </div>
 
+          {/* Contextual Action Notices (Breeding or Treats) */}
           {isSelectingParents ? (
             <div style={{
               background: 'linear-gradient(180deg, #d8b4fe 0%, #a855f7 40%, #7e22ce 100%)',
               color: '#ffffff',
-              padding: '8px 22px',
+              padding: '6px 18px',
               borderRadius: '9999px',
               fontFamily: "'Fredoka', 'Lilita One', sans-serif",
-              fontSize: '18px',
+              fontSize: '15px',
               fontWeight: '900',
-              letterSpacing: '0.8px',
-              boxShadow: 'inset 0 3px 0 rgba(255,255,255,0.8), inset 0 -4px 0 rgba(0,0,0,0.3), 0 6px 0 #090d16, 0 12px 24px rgba(0,0,0,0.5)',
-              border: '4px solid #090d16',
-              whiteSpace: 'nowrap',
-              paintOrder: 'stroke fill',
-              WebkitTextStroke: '3.5px #090d16',
-              textShadow: '0 3px 0 #090d16'
+              boxShadow: '0 5px 0 #090d16',
+              border: '3px solid #090d16',
+              whiteSpace: 'nowrap'
             }}>
               🧬 TAP 2 MONSTERS TO REMIX! ({selectedParents.length}/2)
             </div>
@@ -1344,108 +1306,53 @@ export default function App() {
                 ? 'linear-gradient(180deg, #f472b6 0%, #ec4899 40%, #db2777 100%)' 
                 : 'linear-gradient(180deg, #fff066 0%, #facc15 40%, #ca8a04 100%)',
               color: '#ffffff',
-              padding: '8px 22px',
+              padding: '6px 18px',
               borderRadius: '9999px',
               fontFamily: "'Fredoka', 'Lilita One', sans-serif",
-              fontSize: '18px',
+              fontSize: '15px',
               fontWeight: '900',
-              letterSpacing: '0.8px',
-              boxShadow: 'inset 0 3px 0 rgba(255,255,255,0.8), inset 0 -4px 0 rgba(0,0,0,0.3), 0 6px 0 #090d16, 0 12px 24px rgba(0,0,0,0.5)',
-              border: '4px solid #090d16',
-              whiteSpace: 'nowrap',
-              paintOrder: 'stroke fill',
-              WebkitTextStroke: '3.5px #090d16',
-              textShadow: '0 3px 0 #090d16'
+              boxShadow: '0 5px 0 #090d16',
+              border: '3px solid #090d16',
+              whiteSpace: 'nowrap'
             }}>
-              {activeTreat === 'donut' 
-                ? '🍩 TAP A MONSTER TO FEED! (+2 LV)'
-                : '🧁 TAP A MONSTER TO FEED! (+1 LV)'}
+              {activeTreat === 'donut' ? '🍩 TAP A MONSTER TO FEED! (+2 LV)' : '🧁 TAP A MONSTER TO FEED! (+1 LV)'}
             </div>
           )}
         </div>
 
-        {/* Top Right: Squad Badge, Bank HUD & Settings */}
-        <div className="header-hud-right">
+        {/* Top Right: Squad Badge, Golden Coin Vault, Day/Night & Reset */}
+        <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: '10px' }}>
           {hasStarted && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <>
               {squadSynergy.active && (
                 <button
                   type="button"
                   onClick={() => setIsWardrobeOpen(true)}
                   className="cartoon-hud-token game-btn-yellow"
-                  title={`${squadSynergy.themeName} Squad (${squadSynergy.count} Match): ${squadSynergy.bonusText}`}
+                  style={{ minHeight: '52px', padding: '6px 14px', borderRadius: '20px' }}
+                  title={`${squadSynergy.themeName} Squad: ${squadSynergy.bonusText}`}
                 >
                   <span style={{ fontSize: '22px' }}>{squadSynergy.icon}</span>
-                  <span>SQUAD x{squadSynergy.count}</span>
+                  <span>x{squadSynergy.count}</span>
                 </button>
               )}
 
-              {/* MSM Style Carved Level & Fame Progress Bar */}
-              <button
-                onClick={() => setIsQuestsOpen(true)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  background: 'linear-gradient(180deg, #1e293b 0%, #0f172a 100%)',
-                  border: '3px solid #090d16',
-                  borderRadius: '20px',
-                  padding: '4px 12px 4px 6px',
-                  boxShadow: '0 4px 0 #090d16, inset 0 2px 0 rgba(255,255,255,0.2)',
-                  cursor: 'pointer'
-                }}
-                title={`Band Fame: ${currentFameRank.title} (Level ${currentFameRank.level}) - ${currentFameRank.currentLevelXP}/${currentFameRank.neededXP} XP • ${currentFameRank.perk}`}
-              >
-                <span style={{
-                  background: 'linear-gradient(135deg, #f59e0b, #ef4444)',
-                  color: '#ffffff',
-                  borderRadius: '12px',
-                  padding: '3px 8px',
-                  fontSize: '12px',
-                  fontWeight: '900',
-                  border: '2px solid #090d16',
-                  fontFamily: "'Lilita One', 'Fredoka', cursive",
-                  letterSpacing: '0.5px'
-                }}>
-                  ⭐ Lv.{currentFameRank.level}
-                </span>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', minWidth: '68px' }}>
-                  <div style={{
-                    width: '100%',
-                    height: '10px',
-                    background: '#090d16',
-                    borderRadius: '6px',
-                    overflow: 'hidden',
-                    border: '1.5px solid #334155',
-                    position: 'relative'
-                  }}>
-                    <div style={{
-                      width: `${currentFameRank.progressPercent}%`,
-                      height: '100%',
-                      background: 'linear-gradient(90deg, #22c55e, #86efac)',
-                      borderRadius: '4px',
-                      transition: 'width 0.3s ease'
-                    }} />
-                  </div>
-                  <span style={{ fontSize: '9px', fontWeight: '900', color: '#94a3b8', textAlign: 'center', lineHeight: 1 }}>
-                    {currentFameRank.progressPercent}% FAME
-                  </span>
-                </div>
-              </button>
-
+              {/* Big Golden Coin Vault */}
               <div 
                 ref={bankBadgeRef}
                 className={`game-coin-badge ${bankPulsing ? 'bank-pulse-active bank-impact-active' : ''}`}
                 style={{
-                  padding: '8px 20px',
-                  gap: '10px'
+                  padding: '6px 18px',
+                  gap: '10px',
+                  minHeight: '52px',
+                  borderRadius: '24px'
                 }}
               >
                 <span style={{ fontSize: '32px', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.4))' }}>🪙</span>
                 <span style={{
                   color: '#fef08a',
                   fontSize: '28px',
-                  fontFamily: "'Fredoka', 'Lilita One', sans-serif",
+                  fontFamily: "'Lilita One', 'Fredoka', sans-serif",
                   fontWeight: '900',
                   letterSpacing: '1px',
                   paintOrder: 'stroke fill',
@@ -1456,17 +1363,117 @@ export default function App() {
                 </span>
               </div>
 
+              {/* Day / Night Rave Toggle */}
               <button
+                type="button"
+                onClick={toggleNightRave}
+                className={`game-btn ${isNightRave ? 'game-btn-purple' : 'game-btn-yellow'}`}
+                style={{
+                  width: '52px',
+                  height: '52px',
+                  borderRadius: '20px',
+                  padding: 0,
+                  fontSize: '24px'
+                }}
+                title="Toggle Day / Night Rave"
+              >
+                {isNightRave ? '🌙' : '☀️'}
+              </button>
+
+              {/* Reset Saved Progress */}
+              <button
+                type="button"
                 onClick={handleResetProgress}
-                className="game-btn game-btn-round game-btn-red"
+                className="game-btn game-btn-red"
+                style={{
+                  width: '52px',
+                  height: '52px',
+                  borderRadius: '20px',
+                  padding: 0,
+                  fontSize: '22px'
+                }}
                 title="Reset saved progress back to default"
               >
-                <span style={{ fontSize: '22px' }}>🔄</span>
+                🔄
               </button>
-            </div>
+            </>
           )}
         </div>
       </header>
+
+      {/* Left-Side Thumb Dock: Big Chunky Kid-Friendly Cartoon Bubbles (62px) */}
+      {hasStarted && (
+        <div className="cartoon-activity-dock-left">
+          {/* 1. JELLY DEX */}
+          <button
+            type="button"
+            onClick={() => setIsDexOpen(true)}
+            className="cartoon-bubble-btn bubble-yellow"
+            title="Open Jelly Dex Almanac"
+          >
+            <span className="bubble-icon">📖</span>
+            <span className="bubble-label">DEX</span>
+          </button>
+
+          {/* 2. DAILY QUESTS */}
+          <button
+            type="button"
+            onClick={() => setIsQuestsOpen(true)}
+            className="cartoon-bubble-btn bubble-purple"
+            title="Open Daily Quests & Sticker Album"
+          >
+            <span className="bubble-icon">⭐</span>
+            <span className="bubble-label">QUESTS</span>
+            {dailyQuests.some(q => (q.progress || 0) >= q.target && !q.claimed) && (
+              <span className="bubble-badge">!</span>
+            )}
+          </button>
+
+          {/* 3. LUCKY WHEEL */}
+          <button
+            type="button"
+            onClick={() => setIsWheelOpen(true)}
+            className="cartoon-bubble-btn bubble-pink"
+            title="Spin the Prize Wheel"
+          >
+            <span className="bubble-icon">🎡</span>
+            <span className="bubble-label">WHEEL</span>
+          </button>
+
+          {/* 4. ECHO JAM MEMORY GAME */}
+          <button
+            type="button"
+            onClick={() => setIsEchoJamOpen(true)}
+            className="cartoon-bubble-btn bubble-cyan"
+            title="Play Reef Echo Jam Memory Game"
+          >
+            <span className="bubble-icon">🎮</span>
+            <span className="bubble-label">ECHO</span>
+          </button>
+
+          {/* 5. RHYTHM RUSH BEATS GAME */}
+          <button
+            type="button"
+            onClick={() => setIsRhythmRushOpen(true)}
+            className="cartoon-bubble-btn bubble-green"
+            title="Play Rhythm Rush Beats Mini-Game"
+          >
+            <span className="bubble-icon">🎵</span>
+            <span className="bubble-label">RUSH</span>
+          </button>
+
+          {/* 6. DJ & TEMPO SOUNDBOX */}
+          <button
+            type="button"
+            onClick={() => setIsDJConsoleOpen(true)}
+            className="cartoon-bubble-btn bubble-gold"
+            title="Open DJ Soundbox, Tempo & Party FX"
+          >
+            <span className="bubble-icon">🎧</span>
+            <span className="bubble-label">DJ</span>
+          </button>
+        </div>
+      )}
 
       {/* Hype Dolphin */}
       {hasStarted && dolphinActive && (
@@ -1814,6 +1821,19 @@ export default function App() {
         ref={flyingCoinRef}
         targetRef={bankBadgeRef}
         onCoinArrived={handleCoinArrived}
+      />
+
+      {/* 🎧 Live DJ Soundbox & Tempo Control Modal */}
+      <DJConsole
+        isOpen={isDJConsoleOpen}
+        currentSpeed={tempoSpeed}
+        onSpeedChange={handleSpeedChange}
+        onOpenMixer={() => setIsMixerOpen(true)}
+        onOpenDJBooth={() => setIsDJBoothOpen(true)}
+        onTriggerConfetti={() => handleTriggerLiveFX('confetti')}
+        onTriggerBubbles={() => handleTriggerLiveFX('bubbles')}
+        onTriggerSparks={() => handleTriggerLiveFX('sparks')}
+        onClose={() => setIsDJConsoleOpen(false)}
       />
     </div>
   );
