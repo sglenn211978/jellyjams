@@ -1590,7 +1590,7 @@ export default function App() {
               onOpenWardrobe={() => setIsWardrobeOpen(true)}
               onOpenDecorations={() => setIsDecorationsOpen(true)}
               recruitName={recruitInfo.name}
-              recruitIcon={recruitIcon}
+              recruitIcon={recruitInfo.icon}
               recruitCost={recruitInfo.cost || 15}
               recruitUnlocked={performers[recruitInfo.id]?.unlocked}
               onRecruit={handleRecruitPerformer}
