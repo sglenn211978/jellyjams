@@ -1173,117 +1173,132 @@ export default function App() {
         {/* Top Left: Plaque & Compact Single-Row Action Toolbar */}
         <div className="header-hud-left">
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'nowrap' }}>
-            {/* Compact Brand Badge */}
+            {/* Carved Wooden Island Signpost (MSM Style) */}
             <div 
-              className="kid-game-logo-crest" 
               onClick={() => setIsMapOpen(true)}
+              className="cartoon-hud-token"
+              style={{
+                background: 'linear-gradient(180deg, #92400e 0%, #78350f 40%, #451a03 100%)',
+                color: '#fef08a',
+                padding: '6px 14px',
+                minHeight: '48px',
+                gap: '9px',
+                cursor: 'pointer'
+              }}
               title="Jelly Jams: Musical Monster Reef — Tap for Island Map"
-              style={{ padding: '6px 12px', cursor: 'pointer', gap: '8px' }}
             >
-              <span style={{ fontSize: '24px' }}>🪼</span>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <span style={{ fontSize: '26px', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.4))' }}>🪼</span>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                 <span style={{
-                  fontFamily: "'Fredoka', 'Lilita One', cursive, sans-serif",
-                  fontSize: '16px',
+                  fontFamily: "'Lilita One', 'Fredoka', cursive, sans-serif",
+                  fontSize: '15px',
                   fontWeight: '900',
                   color: '#fef08a',
-                  letterSpacing: '0.5px',
-                  paintOrder: 'stroke fill',
-                  WebkitTextStroke: '2.5px #78350f',
-                  lineHeight: 1
+                  lineHeight: 1,
+                  letterSpacing: '0.6px'
                 }}>
                   JELLY JAMS
                 </span>
                 <span style={{
-                  fontFamily: "'Fredoka', sans-serif",
-                  fontSize: '9.5px',
+                  fontSize: '10.5px',
                   fontWeight: '900',
                   color: '#bae6fd',
-                  marginTop: '1px'
+                  marginTop: '2px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '3px'
                 }}>
-                  {currentIslandConfig.name.toUpperCase()} ▾
+                  🏝️ {currentIslandConfig.name.toUpperCase()} ▾
                 </span>
               </div>
             </div>
 
             {hasStarted && (
               <>
+                {/* 1. DEX ALMANAC */}
                 <button
+                  type="button"
                   onClick={() => setIsDexOpen(true)}
-                  className="kid-toy-btn kid-toy-gold"
-                  style={{ padding: '6px 10px', minWidth: 'auto', gap: '4px' }}
+                  className="cartoon-hud-token game-btn-yellow"
                   title="Open Jelly Dex Almanac"
                 >
-                  <span className="kid-toy-icon" style={{ fontSize: '15px' }}>📖</span>
-                  <span className="kid-toy-title" style={{ fontSize: '11px' }}>DEX</span>
+                  <span style={{ fontSize: '22px' }}>📖</span>
+                  <span>DEX</span>
                 </button>
 
+                {/* 2. DAILY QUESTS & STICKERS */}
                 <button
+                  type="button"
                   onClick={() => setIsQuestsOpen(true)}
-                  className="kid-toy-btn kid-toy-purple"
-                  style={{ padding: '6px 10px', minWidth: 'auto', gap: '4px', position: 'relative' }}
+                  className="cartoon-hud-token game-btn-purple"
+                  style={{ position: 'relative' }}
                   title="Open Daily Quests & Sticker Album"
                 >
-                  <span className="kid-toy-icon" style={{ fontSize: '15px' }}>⭐</span>
-                  <span className="kid-toy-title" style={{ fontSize: '11px' }}>QUESTS</span>
+                  <span style={{ fontSize: '22px' }}>⭐</span>
+                  <span>QUESTS</span>
                   {dailyQuests.filter(q => (q.progress || 0) >= q.target && !q.claimed).length > 0 && (
                     <span style={{
                       position: 'absolute',
-                      top: '-4px',
-                      right: '-4px',
+                      top: '-6px',
+                      right: '-6px',
                       background: '#ef4444',
                       color: '#ffffff',
                       borderRadius: '50%',
-                      width: '16px',
-                      height: '16px',
-                      fontSize: '10px',
+                      width: '20px',
+                      height: '20px',
+                      fontSize: '12px',
                       fontWeight: '900',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      border: '1.5px solid #ffffff'
+                      border: '2px solid #ffffff',
+                      boxShadow: '0 2px 5px rgba(0,0,0,0.5)'
                     }}>!</span>
                   )}
                 </button>
 
+                {/* 3. LUCKY WHEEL */}
                 <button
+                  type="button"
                   onClick={() => setIsWheelOpen(true)}
-                  className="kid-toy-btn kid-toy-coral"
-                  style={{ padding: '6px 10px', minWidth: 'auto', gap: '4px' }}
+                  className="cartoon-hud-token game-btn-pink"
                   title="Spin the Prize Wheel"
                 >
-                  <span className="kid-toy-icon" style={{ fontSize: '15px' }}>🎡</span>
-                  <span className="kid-toy-title" style={{ fontSize: '11px' }}>WHEEL</span>
+                  <span style={{ fontSize: '22px' }}>🎡</span>
+                  <span>WHEEL</span>
                 </button>
 
+                {/* 4. ECHO JAM MEMORY GAME */}
                 <button
+                  type="button"
                   onClick={() => setIsEchoJamOpen(true)}
-                  className="kid-toy-btn kid-toy-cyan"
-                  style={{ padding: '6px 10px', minWidth: 'auto', gap: '4px' }}
+                  className="cartoon-hud-token game-btn-cyan"
                   title="Play Reef Echo Jam Memory Game"
                 >
-                  <span className="kid-toy-icon" style={{ fontSize: '15px' }}>🎮</span>
-                  <span className="kid-toy-title" style={{ fontSize: '11px' }}>ECHO</span>
+                  <span style={{ fontSize: '22px' }}>🎮</span>
+                  <span>ECHO</span>
                 </button>
 
+                {/* 5. RHYTHM RUSH BEATS GAME */}
                 <button
+                  type="button"
                   onClick={() => setIsRhythmRushOpen(true)}
-                  className="kid-toy-btn kid-toy-green"
-                  style={{ padding: '6px 10px', minWidth: 'auto', gap: '4px' }}
+                  className="cartoon-hud-token game-btn-green"
                   title="Play Rhythm Rush Beats Mini-Game"
                 >
-                  <span className="kid-toy-icon" style={{ fontSize: '15px' }}>🎵</span>
-                  <span className="kid-toy-title" style={{ fontSize: '11px' }}>RUSH</span>
+                  <span style={{ fontSize: '22px' }}>🎵</span>
+                  <span>RUSH</span>
                 </button>
 
+                {/* 6. DAY / NIGHT RAVE TOGGLE */}
                 <button
+                  type="button"
                   onClick={toggleNightRave}
-                  className={`kid-toy-btn ${isNightRave ? 'kid-toy-purple' : 'kid-toy-gold'}`}
-                  style={{ padding: '6px 10px', minWidth: 'auto', gap: '4px' }}
+                  className={`cartoon-hud-token ${isNightRave ? 'game-btn-purple' : 'game-btn-yellow'}`}
                   title="Toggle Day / Night Rave"
                 >
-                  <span className="kid-toy-icon" style={{ fontSize: '15px' }}>{isNightRave ? '🌙' : '☀️'}</span>
-                  <span className="kid-toy-title" style={{ fontSize: '11px' }}>{isNightRave ? 'RAVE' : 'DAY'}</span>
+                  <span style={{ fontSize: '22px' }}>{isNightRave ? '🌙' : '☀️'}</span>
+                  <span>{isNightRave ? 'RAVE' : 'DAY'}</span>
                 </button>
               </>
             )}
@@ -1355,13 +1370,13 @@ export default function App() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               {squadSynergy.active && (
                 <button
+                  type="button"
                   onClick={() => setIsWardrobeOpen(true)}
-                  className="kid-toy-btn kid-toy-gold"
+                  className="cartoon-hud-token game-btn-yellow"
                   title={`${squadSynergy.themeName} Squad (${squadSynergy.count} Match): ${squadSynergy.bonusText}`}
                 >
-                  <span className="kid-toy-icon">{squadSynergy.icon}</span>
-                  <span className="kid-toy-title">SQUAD x{squadSynergy.count}</span>
-                  <span className="kid-toy-sub">{squadSynergy.shortBonus || 'BONUS!'}</span>
+                  <span style={{ fontSize: '22px' }}>{squadSynergy.icon}</span>
+                  <span>SQUAD x{squadSynergy.count}</span>
                 </button>
               )}
 

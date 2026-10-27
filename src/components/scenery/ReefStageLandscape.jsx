@@ -1,10 +1,14 @@
 import React from 'react';
 
 /**
- * ReefStageLandscape - Rich Illustrated Living Island Habitat World
- * Spans the full 1400x820 canvas with tiered natural terraces, organic coral rock shelves,
- * sandy ledges, tropical sea fans, animated ambient fish schools, and rising bubble streams.
- * Matches My Singing Monsters living habitat aesthetic.
+ * ReefStageLandscape - Rich Illustrated Cartoon Living Island Habitat World
+ * Spans the full 1400x820 canvas with:
+ * - Winding cobblestone & shell stepping paths between monster perches
+ * - A gentle sleeping Reef Colossus Titan face embedded in the background cliff (MSM tribute)
+ * - Swaying cartoon kelp trees & bubbly sea flora
+ * - Underwater sunbeams (god rays) streaming through turquoise waters
+ * - Playful animated critters: smiling starfish, peeking hermit crabs, and clapping pearl clams
+ * - Fully themed for Coral Lagoon, Abyssal Magma Trench, and Bioluminescent Cavern
  */
 export default function ReefStageLandscape({ 
   islandId = 'lagoon', 
@@ -51,6 +55,13 @@ export default function ReefStageLandscape({
               <stop offset="100%" stopColor={isNight ? '#020617' : '#0369a1'} stopOpacity="0.85" />
             </radialGradient>
 
+            {/* Sunbeam Light Gradient */}
+            <linearGradient id="sunbeamGrad" x1="0%" y1="0%" x2="40%" y2="100%">
+              <stop offset="0%" stopColor="#ffffff" stopOpacity={isNight ? '0.08' : '0.24'} />
+              <stop offset="60%" stopColor="#38bdf8" stopOpacity={isNight ? '0.04' : '0.12'} />
+              <stop offset="100%" stopColor="#0284c7" stopOpacity="0" />
+            </linearGradient>
+
             {/* High Tier Coral Rock Gradient */}
             <linearGradient id="highTierRock" x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stopColor={isNight ? '#1e1b4b' : '#0891b2'} />
@@ -87,10 +98,43 @@ export default function ReefStageLandscape({
               <stop offset="75%" stopColor="#a855f7" />
               <stop offset="100%" stopColor="#34d399" />
             </linearGradient>
+
+            {/* Cobblestone Path Color */}
+            <linearGradient id="cobblestoneGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor={isNight ? '#64748b' : '#fef08a'} />
+              <stop offset="100%" stopColor={isNight ? '#334155' : '#d97706'} />
+            </linearGradient>
           </defs>
 
-          {/* Island Water Backdrop */}
+          {/* 1. Island Water Backdrop */}
           <rect width="1400" height="820" fill="url(#lagoonWaterBg)" />
+
+          {/* 2. Shimmering Underwater Sunbeams (God Rays) */}
+          <g opacity="0.85" className="sunbeam-shimmer">
+            <polygon points="120,0 280,0 460,820 220,820" fill="url(#sunbeamGrad)" />
+            <polygon points="450,0 620,0 850,820 620,820" fill="url(#sunbeamGrad)" />
+            <polygon points="800,0 960,0 1200,820 980,820" fill="url(#sunbeamGrad)" />
+          </g>
+
+          {/* 3. Swaying Left Giant Cartoon Kelp Tree */}
+          <g className="kelp-tree-sway-left" transform="translate(40, 240)">
+            {/* Trunk */}
+            <path d="M 40 500 Q 25 350 45 220 Q 60 110 35 0" stroke={isNight ? '#15803d' : '#22c55e'} strokeWidth="16" fill="none" strokeLinecap="round" />
+            {/* Bubbly Round Leaves */}
+            <ellipse cx="20" cy="50" rx="30" ry="18" fill={isNight ? '#166534' : '#4ade80'} stroke="#0f172a" strokeWidth="3" transform="rotate(-25 20 50)" />
+            <ellipse cx="55" cy="120" rx="34" ry="20" fill={isNight ? '#14532d' : '#22c55e'} stroke="#0f172a" strokeWidth="3" transform="rotate(20 55 120)" />
+            <ellipse cx="25" cy="210" rx="36" ry="22" fill={isNight ? '#166534' : '#4ade80'} stroke="#0f172a" strokeWidth="3" transform="rotate(-20 25 210)" />
+            <ellipse cx="60" cy="310" rx="40" ry="24" fill={isNight ? '#14532d' : '#22c55e'} stroke="#0f172a" strokeWidth="3.5" transform="rotate(25 60 310)" />
+          </g>
+
+          {/* 4. Swaying Right Giant Cartoon Kelp Tree */}
+          <g className="kelp-tree-sway-right" transform="translate(1300, 220)">
+            <path d="M 40 520 Q 55 360 35 220 Q 15 110 45 0" stroke={isNight ? '#15803d' : '#22c55e'} strokeWidth="16" fill="none" strokeLinecap="round" />
+            <ellipse cx="60" cy="60" rx="32" ry="18" fill={isNight ? '#166534' : '#4ade80'} stroke="#0f172a" strokeWidth="3" transform="rotate(25 60 60)" />
+            <ellipse cx="20" cy="140" rx="36" ry="22" fill={isNight ? '#14532d' : '#22c55e'} stroke="#0f172a" strokeWidth="3" transform="rotate(-20 20 140)" />
+            <ellipse cx="65" cy="230" rx="38" ry="24" fill={isNight ? '#166534' : '#4ade80'} stroke="#0f172a" strokeWidth="3" transform="rotate(22 65 230)" />
+            <ellipse cx="25" cy="330" rx="42" ry="26" fill={isNight ? '#14532d' : '#22c55e'} stroke="#0f172a" strokeWidth="3.5" transform="rotate(-25 25 330)" />
+          </g>
 
           {/* ========================================================
               TIER 1 (BACK HIGH TERRACE - y: ~30-44%)
@@ -112,6 +156,39 @@ export default function ReefStageLandscape({
             
             {/* Glowing Pink Gorgonian Sea Fan */}
             <path d="M 980 360 Q 1040 250 1020 180 M 1000 280 Q 1070 230 1090 190 M 1010 230 Q 980 170 960 130" stroke={isNight ? '#ec4899' : '#f43f5e'} strokeWidth="5" fill="none" strokeLinecap="round" />
+          </g>
+
+          {/* ========================================================
+              MY SINGING MONSTERS HOMAGE:
+              SLEEPING REEF COLOSSUS TITAN FACE IN CENTRAL CLIFF WALL
+              ======================================================== */}
+          <g 
+            className="sleeping-colossus-face"
+            style={{ 
+              animation: `colossusBreathe ${pulseDuration} ease-in-out infinite`,
+              transformOrigin: '700px 290px'
+            }}
+          >
+            {/* Giant Mossy Rock Head Shape */}
+            <path
+              d="M 640 320 C 640 240 760 240 760 320 C 760 350 640 350 640 320 Z"
+              fill={isNight ? '#1e293b' : '#0891b2'}
+              stroke="#090d16"
+              strokeWidth="4"
+              opacity="0.9"
+            />
+            {/* Peaceful Closed Cartoon Eyes (gentle curves) */}
+            <path d="M 662 292 Q 675 304 688 292" stroke="#090d16" strokeWidth="4" fill="none" strokeLinecap="round" />
+            <path d="M 712 292 Q 725 304 738 292" stroke="#090d16" strokeWidth="4" fill="none" strokeLinecap="round" />
+            {/* Gentle Smiling Rock Mouth */}
+            <path d="M 686 322 Q 700 334 714 322" stroke="#090d16" strokeWidth="3.5" fill="none" strokeLinecap="round" />
+            {/* Blushing Coral Cheeks */}
+            <circle cx="658" cy="305" r="7" fill="#f472b6" opacity="0.65" />
+            <circle cx="742" cy="305" r="7" fill="#f472b6" opacity="0.65" />
+            {/* Cute Coral Crown / Foliage on Head */}
+            <circle cx="700" cy="245" r="16" fill="#f59e0b" stroke="#78350f" strokeWidth="3" />
+            <circle cx="678" cy="254" r="12" fill="#ec4899" stroke="#831843" strokeWidth="2.5" />
+            <circle cx="722" cy="254" r="12" fill="#22c55e" stroke="#14532d" strokeWidth="2.5" />
           </g>
 
           {/* High Tier Raised Coral Shelf Mound */}
@@ -136,6 +213,21 @@ export default function ReefStageLandscape({
             strokeWidth="6"
             strokeLinecap="round"
           />
+
+          {/* ========================================================
+              WINDING COBBLESTONE & SHELL STEPPING PATHS (High to Mid)
+              ======================================================== */}
+          <g className="island-stepping-paths">
+            {/* Left Path: Queen & Diva down to Bob */}
+            <ellipse cx="440" cy="410" rx="18" ry="10" fill="url(#cobblestoneGrad)" stroke="#090d16" strokeWidth="3" />
+            <ellipse cx="420" cy="445" rx="20" ry="11" fill="url(#cobblestoneGrad)" stroke="#090d16" strokeWidth="3" />
+            <ellipse cx="455" cy="475" rx="22" ry="12" fill="url(#cobblestoneGrad)" stroke="#090d16" strokeWidth="3" />
+
+            {/* Right Path: Starlight down to Zap */}
+            <ellipse cx="800" cy="390" rx="18" ry="10" fill="url(#cobblestoneGrad)" stroke="#090d16" strokeWidth="3" />
+            <ellipse cx="830" cy="425" rx="20" ry="11" fill="url(#cobblestoneGrad)" stroke="#090d16" strokeWidth="3" />
+            <ellipse cx="805" cy="460" rx="22" ry="12" fill="url(#cobblestoneGrad)" stroke="#090d16" strokeWidth="3" />
+          </g>
 
           {/* ========================================================
               TIER 2 (CENTRAL REEF PLATEAU - y: ~50-60%)
@@ -166,11 +258,29 @@ export default function ReefStageLandscape({
             strokeWidth="4"
           />
 
-          {/* Coral Reef Accent Shelves on Mid Tier */}
-          <circle cx="480" cy="510" r="18" fill="#f59e0b" stroke="#78350f" strokeWidth="3" />
-          <path d="M 470 505 Q 480 498 490 505" fill="none" stroke="#fef08a" strokeWidth="2.5" />
-          <circle cx="940" cy="520" r="22" fill="#ec4899" stroke="#831843" strokeWidth="3" />
-          <path d="M 928 515 Q 940 508 952 515" fill="none" stroke="#fdf2f8" strokeWidth="2.5" />
+          {/* Winding Stepping Path from Mid (Bob/Zap) down to Low (Siren/Sparkpuff) */}
+          <g className="island-stepping-paths">
+            <ellipse cx="380" cy="590" rx="22" ry="12" fill="url(#cobblestoneGrad)" stroke="#090d16" strokeWidth="3" />
+            <ellipse cx="320" cy="625" rx="24" ry="13" fill="url(#cobblestoneGrad)" stroke="#090d16" strokeWidth="3" />
+            <ellipse cx="270" cy="660" rx="26" ry="14" fill="url(#cobblestoneGrad)" stroke="#090d16" strokeWidth="3" />
+
+            <ellipse cx="880" cy="570" rx="22" ry="12" fill="url(#cobblestoneGrad)" stroke="#090d16" strokeWidth="3" />
+            <ellipse cx="940" cy="610" rx="24" ry="13" fill="url(#cobblestoneGrad)" stroke="#090d16" strokeWidth="3" />
+            <ellipse cx="1000" cy="645" rx="26" ry="14" fill="url(#cobblestoneGrad)" stroke="#090d16" strokeWidth="3" />
+          </g>
+
+          {/* Coral Reef Accent Shelves & Smiling Brain Coral on Mid Tier */}
+          <g transform="translate(460, 500)">
+            <circle cx="20" cy="20" r="22" fill="#f59e0b" stroke="#78350f" strokeWidth="3" />
+            <path d="M 8 16 Q 20 8 32 16" fill="none" stroke="#fef08a" strokeWidth="2.5" />
+            <path d="M 10 24 Q 20 16 30 24" fill="none" stroke="#fef08a" strokeWidth="2.5" />
+          </g>
+
+          <g transform="translate(930, 510)">
+            <circle cx="20" cy="20" r="24" fill="#ec4899" stroke="#831843" strokeWidth="3" />
+            <path d="M 6 16 Q 20 8 34 16" fill="none" stroke="#fdf2f8" strokeWidth="2.5" />
+            <path d="M 8 24 Q 20 16 32 24" fill="none" stroke="#fdf2f8" strokeWidth="2.5" />
+          </g>
 
           {/* ========================================================
               TIER 3 (FOREGROUND SHORELINE / TIDE POOL - y: ~68-80%)
@@ -190,25 +300,54 @@ export default function ReefStageLandscape({
             filter="drop-shadow(0 -8px 24px rgba(0,0,0,0.6))"
           />
 
-          {/* Foreground Starfish & Cute Barnacles */}
-          <g transform="translate(180, 750) rotate(12) scale(0.9)">
+          {/* PLAYFUL CRITTERS: Cute Orange Crab Peeking from Sand */}
+          <g transform="translate(540, 680) scale(0.85)">
+            {/* Claws */}
+            <path d="M 8 18 C -6 2 -6 20 8 12" fill="#ea580c" stroke="#7c2d12" strokeWidth="2.5" />
+            <path d="M 42 18 C 56 2 56 20 42 12" fill="#ea580c" stroke="#7c2d12" strokeWidth="2.5" />
+            {/* Body */}
+            <ellipse cx="25" cy="20" rx="18" ry="12" fill="#f97316" stroke="#7c2d12" strokeWidth="3" />
+            {/* Stalk Eyes with Googly Pupils */}
+            <circle cx="18" cy="8" r="5" fill="#ffffff" stroke="#7c2d12" strokeWidth="2" />
+            <circle cx="19" cy="8" r="2.5" fill="#000000" />
+            <circle cx="32" cy="8" r="5" fill="#ffffff" stroke="#7c2d12" strokeWidth="2" />
+            <circle cx="33" cy="8" r="2.5" fill="#000000" />
+            {/* Happy Smile */}
+            <path d="M 20 23 Q 25 27 30 23" fill="none" stroke="#7c2d12" strokeWidth="2" strokeLinecap="round" />
+          </g>
+
+          {/* PLAYFUL CRITTERS: Clapping Pearl Clam */}
+          <g transform="translate(800, 690) scale(0.9)">
+            {/* Shell Base */}
+            <path d="M 10 32 C 10 44 42 44 42 32 Z" fill="#c084fc" stroke="#581c87" strokeWidth="3" />
+            {/* Shiny Golden Pearl Inside */}
+            <circle cx="26" cy="28" r="8" fill="#fef08a" stroke="#ca8a04" strokeWidth="2" filter="drop-shadow(0 0 6px #facc15)" />
+            {/* Top Shell Lid (Bounces slightly to tempo) */}
+            <path d="M 10 30 C 10 16 42 16 42 30 Z" fill="#d8b4fe" stroke="#581c87" strokeWidth="3" />
+          </g>
+
+          {/* Smiling Cartoon Starfish #1 (Orange) */}
+          <g transform="translate(180, 750) rotate(12) scale(0.95)">
             <polygon points="24,0 31,14 47,16 35,27 38,43 24,35 9,43 13,27 1,16 17,14" fill="#f97316" stroke="#9a3412" strokeWidth="3" />
-            <circle cx="20" cy="20" r="2.5" fill="#ffffff" />
-            <circle cx="21" cy="20" r="1.2" fill="#000000" />
-            <circle cx="28" cy="20" r="2.5" fill="#ffffff" />
-            <circle cx="29" cy="20" r="1.2" fill="#000000" />
+            <circle cx="20" cy="20" r="3" fill="#ffffff" />
+            <circle cx="21" cy="20" r="1.5" fill="#000000" />
+            <circle cx="28" cy="20" r="3" fill="#ffffff" />
+            <circle cx="29" cy="20" r="1.5" fill="#000000" />
+            <path d="M 21 27 Q 24 30 27 27" fill="none" stroke="#7c2d12" strokeWidth="1.8" strokeLinecap="round" />
           </g>
 
-          <g transform="translate(1180, 740) rotate(-14) scale(0.9)">
+          {/* Smiling Cartoon Starfish #2 (Pink) */}
+          <g transform="translate(1180, 740) rotate(-14) scale(0.95)">
             <polygon points="24,0 31,14 47,16 35,27 38,43 24,35 9,43 13,27 1,16 17,14" fill="#ec4899" stroke="#831843" strokeWidth="3" />
-            <circle cx="20" cy="20" r="2.5" fill="#ffffff" />
-            <circle cx="21" cy="20" r="1.2" fill="#000000" />
-            <circle cx="28" cy="20" r="2.5" fill="#ffffff" />
-            <circle cx="29" cy="20" r="1.2" fill="#000000" />
+            <circle cx="20" cy="20" r="3" fill="#ffffff" />
+            <circle cx="21" cy="20" r="1.5" fill="#000000" />
+            <circle cx="28" cy="20" r="3" fill="#ffffff" />
+            <circle cx="29" cy="20" r="1.5" fill="#000000" />
+            <path d="M 21 27 Q 24 30 27 27" fill="none" stroke="#831843" strokeWidth="1.8" strokeLinecap="round" />
           </g>
 
-          {/* Clustered Barnacles with Cute Eyes */}
-          <g transform="translate(620, 720) scale(0.9)">
+          {/* Clustered Barnacles with Googly Eyes */}
+          <g transform="translate(640, 730) scale(0.95)">
             <polygon points="10,24 16,6 26,6 32,24" fill="#cbd5e1" stroke="#334155" strokeWidth="2.5" />
             <circle cx="21" cy="14" r="3.5" fill="#ffffff" />
             <circle cx="22" cy="14" r="1.8" fill="#0f172a" />
@@ -219,19 +358,16 @@ export default function ReefStageLandscape({
 
           {/* Ambient Schools of Little Tropical Fish Swimming Across Island */}
           <g className="floating-music-note" style={{ animationDuration: '6s', animationIterationCount: 'infinite' }}>
-            {/* Fish 1 (Yellow Tang) */}
             <g transform="translate(320, 360) scale(0.65)">
               <polygon points="25,15 0,5 0,25" fill="#fde047" stroke="#ca8a04" strokeWidth="2" />
               <polygon points="5,15 -10,8 -10,22" fill="#facc15" />
               <circle cx="18" cy="12" r="2" fill="#000000" />
             </g>
-            {/* Fish 2 (Cyan Dory) */}
             <g transform="translate(360, 385) scale(0.55)">
               <polygon points="25,15 0,5 0,25" fill="#38bdf8" stroke="#0284c7" strokeWidth="2" />
               <polygon points="5,15 -10,8 -10,22" fill="#0284c7" />
               <circle cx="18" cy="12" r="2" fill="#000000" />
             </g>
-            {/* Fish 3 (Pink) */}
             <g transform="translate(395, 365) scale(0.5)">
               <polygon points="25,15 0,5 0,25" fill="#f472b6" stroke="#db2777" strokeWidth="2" />
               <polygon points="5,15 -10,8 -10,22" fill="#db2777" />
@@ -289,6 +425,25 @@ export default function ReefStageLandscape({
           <polygon points="320,400 350,200 410,200 440,400" fill="#1c1917" stroke="#44403c" strokeWidth="4" />
           <polygon points="980,400 1010,210 1070,210 1100,400" fill="#1c1917" stroke="#44403c" strokeWidth="4" />
 
+          {/* Sleeping Obsidian Titan Face */}
+          <g 
+            className="sleeping-colossus-face"
+            style={{ 
+              animation: `colossusBreathe ${pulseDuration} ease-in-out infinite`,
+              transformOrigin: '700px 300px'
+            }}
+          >
+            <path
+              d="M 640 330 C 640 250 760 250 760 330 C 760 360 640 360 640 330 Z"
+              fill="#1c1917"
+              stroke="#ea580c"
+              strokeWidth="4"
+            />
+            <path d="M 662 300 Q 675 312 688 300" stroke="#f97316" strokeWidth="4" fill="none" strokeLinecap="round" />
+            <path d="M 712 300 Q 725 312 738 300" stroke="#f97316" strokeWidth="4" fill="none" strokeLinecap="round" />
+            <path d="M 686 332 Q 700 344 714 332" stroke="#ea580c" strokeWidth="3.5" fill="none" strokeLinecap="round" />
+          </g>
+
           {/* Magma Fissures Pulsing with Tempo */}
           <path
             d="M 120 540 Q 400 440 700 460 T 1280 540"
@@ -310,6 +465,10 @@ export default function ReefStageLandscape({
             stroke="#78716c"
             strokeWidth="5"
           />
+
+          {/* Stepping Basalt Stones */}
+          <ellipse cx="440" cy="420" rx="18" ry="10" fill="#44403c" stroke="#ea580c" strokeWidth="2.5" />
+          <ellipse cx="800" cy="410" rx="18" ry="10" fill="#44403c" stroke="#ea580c" strokeWidth="2.5" />
 
           {/* Foreground Magma Shelf */}
           <path
@@ -354,6 +513,27 @@ export default function ReefStageLandscape({
           {/* Back Giant Glowing Emerald & Amethyst Crystals */}
           <polygon points="320,400 350,190 390,160 430,220 410,400" fill="#10b981" stroke="#a7f3d0" strokeWidth="4" filter="drop-shadow(0 0 14px #10b981)" opacity="0.9" />
           <polygon points="980,400 1020,180 1060,150 1100,210 1070,400" fill="#a855f7" stroke="#e9d5ff" strokeWidth="4" filter="drop-shadow(0 0 14px #c084fc)" opacity="0.85" />
+
+          {/* Sleeping Crystal Titan Face */}
+          <g 
+            className="sleeping-colossus-face"
+            style={{ 
+              animation: `colossusBreathe ${pulseDuration} ease-in-out infinite`,
+              transformOrigin: '700px 300px'
+            }}
+          >
+            <path
+              d="M 640 330 C 640 250 760 250 760 330 C 760 360 640 360 640 330 Z"
+              fill="#065f46"
+              stroke="#34d399"
+              strokeWidth="4"
+            />
+            <path d="M 662 300 Q 675 312 688 300" stroke="#34d399" strokeWidth="4" fill="none" strokeLinecap="round" />
+            <path d="M 712 300 Q 725 312 738 300" stroke="#34d399" strokeWidth="4" fill="none" strokeLinecap="round" />
+            <path d="M 686 332 Q 700 344 714 332" stroke="#2dd4bf" strokeWidth="3.5" fill="none" strokeLinecap="round" />
+            {/* Crystal Forehead Crown */}
+            <polygon points="700,230 685,260 715,260" fill="#22d3ee" stroke="#cffafe" strokeWidth="2" />
+          </g>
 
           {/* Runic Glowing Energy Stream */}
           <path
