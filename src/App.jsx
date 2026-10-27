@@ -1365,15 +1365,57 @@ export default function App() {
                 </button>
               )}
 
-              {/* Fame Rank Badge */}
+              {/* MSM Style Carved Level & Fame Progress Bar */}
               <button
                 onClick={() => setIsQuestsOpen(true)}
-                className="kid-toy-btn kid-toy-purple"
-                style={{ padding: '6px 12px', minWidth: 'auto', gap: '5px' }}
-                title={`Band Fame: ${currentFameRank.title} (Level ${currentFameRank.level}) - ${currentFameRank.xp} XP • ${currentFameRank.perk}`}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  background: 'linear-gradient(180deg, #1e293b 0%, #0f172a 100%)',
+                  border: '3px solid #090d16',
+                  borderRadius: '20px',
+                  padding: '4px 12px 4px 6px',
+                  boxShadow: '0 4px 0 #090d16, inset 0 2px 0 rgba(255,255,255,0.2)',
+                  cursor: 'pointer'
+                }}
+                title={`Band Fame: ${currentFameRank.title} (Level ${currentFameRank.level}) - ${currentFameRank.currentLevelXP}/${currentFameRank.neededXP} XP • ${currentFameRank.perk}`}
               >
-                <span className="kid-toy-icon" style={{ fontSize: '16px' }}>{currentFameRank.icon}</span>
-                <span className="kid-toy-title" style={{ fontSize: '12px' }}>LV.{currentFameRank.level} FAME</span>
+                <span style={{
+                  background: 'linear-gradient(135deg, #f59e0b, #ef4444)',
+                  color: '#ffffff',
+                  borderRadius: '12px',
+                  padding: '3px 8px',
+                  fontSize: '12px',
+                  fontWeight: '900',
+                  border: '2px solid #090d16',
+                  fontFamily: "'Lilita One', 'Fredoka', cursive",
+                  letterSpacing: '0.5px'
+                }}>
+                  ⭐ Lv.{currentFameRank.level}
+                </span>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', minWidth: '68px' }}>
+                  <div style={{
+                    width: '100%',
+                    height: '10px',
+                    background: '#090d16',
+                    borderRadius: '6px',
+                    overflow: 'hidden',
+                    border: '1.5px solid #334155',
+                    position: 'relative'
+                  }}>
+                    <div style={{
+                      width: `${currentFameRank.progressPercent}%`,
+                      height: '100%',
+                      background: 'linear-gradient(90deg, #22c55e, #86efac)',
+                      borderRadius: '4px',
+                      transition: 'width 0.3s ease'
+                    }} />
+                  </div>
+                  <span style={{ fontSize: '9px', fontWeight: '900', color: '#94a3b8', textAlign: 'center', lineHeight: 1 }}>
+                    {currentFameRank.progressPercent}% FAME
+                  </span>
+                </div>
               </button>
 
               <div 
@@ -1470,6 +1512,15 @@ export default function App() {
               onCycleVolume={cyclePerformerVolume}
               onToggleSolo={handleToggleSolo}
               onPopBubble={handlePopStageFXBubble}
+              coins={coins}
+              onFeedMonster={(id, treatType) => {
+                const cost = treatType === 'donut' ? 12 : 5;
+                if (coins >= cost) {
+                  setCoins((c) => Math.max(0, c - cost));
+                  engineRef.current?.playNomSound();
+                  feedPerformer(id, treatType);
+                }
+              }}
             />
           )}
 

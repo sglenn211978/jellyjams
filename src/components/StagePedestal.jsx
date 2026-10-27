@@ -1,19 +1,12 @@
 export default function StagePedestal({ 
   islandId = 'lagoon', 
   isSleeping = false, 
-  level = 1,
   tempoSpeed = 1.0,
-  name,
-  isSupercharged = false,
-  volume = 1.0,
+  isSelected = false,
   isSoloed = false,
-  onClick,
-  onToggleSleep,
-  onCycleVolume,
-  onToggleSolo
+  onClick
 }) {
   const isSinging = !isSleeping;
-  const volPct = Math.round((volume ?? 1.0) * 100);
 
   // Island themed colors
   const theme = {
@@ -51,6 +44,7 @@ export default function StagePedestal({
   return (
     <div 
       onClick={onClick}
+      className="stage-pedestal-root"
       style={{
         position: 'relative',
         width: '100%',
@@ -108,180 +102,55 @@ export default function StagePedestal({
         </>
       )}
 
-      {/* 3D Cartoon Cel-Shaded Stage Pedestal Pad */}
-      <div style={{
-        position: 'relative',
-        width: '144px',
-        height: '36px',
-        borderRadius: '50%',
-        background: theme.padGrad,
-        border: isSoloed ? '3.5px solid #fde047' : '3.5px solid #0f172a',
-        boxShadow: isSoloed
-          ? '0 0 20px #facc15, 0 8px 0 #0f172a, inset 0 3.5px 0 rgba(255,255,255,0.75)'
-          : `0 8px 0 #0f172a, 0 14px 24px rgba(0, 0, 0, 0.5), inset 0 3.5px 0 rgba(255,255,255,0.55)`,
-        filter: isSleeping ? 'grayscale(60%) opacity(0.6)' : 'none',
-        transition: 'all 0.3s ease'
-      }}>
+      {/* 3D Cartoon Cel-Shaded Stage Pedestal Pad - Clean, Organic Island Perch */}
+      <div 
+        style={{
+          position: 'relative',
+          width: '144px',
+          height: '36px',
+          borderRadius: '50%',
+          background: theme.padGrad,
+          border: isSelected 
+            ? '4px solid #facc15' 
+            : isSoloed 
+            ? '3.5px solid #fde047' 
+            : '3.5px solid #0f172a',
+          boxShadow: isSelected
+            ? '0 0 28px #facc15, 0 8px 0 #0f172a, inset 0 3.5px 0 rgba(255,255,255,0.85)'
+            : isSoloed
+            ? '0 0 20px #facc15, 0 8px 0 #0f172a, inset 0 3.5px 0 rgba(255,255,255,0.75)'
+            : `0 8px 0 #0f172a, 0 14px 24px rgba(0, 0, 0, 0.5), inset 0 3.5px 0 rgba(255,255,255,0.55)`,
+          filter: isSleeping ? 'grayscale(60%) opacity(0.6)' : 'none',
+          transition: 'all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
+          transform: isSelected ? 'scale(1.08)' : 'scale(1.0)'
+        }}
+      >
         {/* Subtle stage rim pearls */}
         <div style={{
           position: 'absolute',
           inset: '2px',
           borderRadius: '50%',
-          border: '1.5px dashed rgba(255,255,255,0.4)',
+          border: isSelected ? '2px dashed #ffffff' : '1.5px dashed rgba(255,255,255,0.4)',
           pointerEvents: 'none'
         }} />
+
+        {/* Selected Focus Spotlight Ring under creature */}
+        {isSelected && (
+          <div
+            style={{
+              position: 'absolute',
+              top: '-10px',
+              left: '-10px',
+              right: '-10px',
+              bottom: '-10px',
+              borderRadius: '50%',
+              border: '2px solid rgba(250, 204, 21, 0.6)',
+              animation: 'spin 6s linear infinite',
+              pointerEvents: 'none'
+            }}
+          />
+        )}
       </div>
-
-      {/* Mounted 3D Arcade Character Plaque */}
-      {name && (
-        <div style={{
-          marginTop: '-8px',
-          padding: '6px 14px',
-          borderRadius: '20px',
-          background: 'linear-gradient(180deg, #1e293b 0%, #0f172a 100%)',
-          border: isSoloed ? '3px solid #facc15' : '3px solid #0f172a',
-          boxShadow: isSoloed ? '0 0 16px #facc15, 0 5px 0 #0f172a, 0 10px 20px rgba(0,0,0,0.5)' : '0 5px 0 #0f172a, 0 10px 20px rgba(0,0,0,0.5)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '6px',
-          zIndex: 5,
-          userSelect: 'none'
-        }}>
-          {/* Top Row: Monster Name & Level Badge */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{
-              background: level >= 5 ? 'linear-gradient(135deg, #f59e0b, #ef4444)' : 'linear-gradient(135deg, #38bdf8, #0284c7)',
-              color: '#ffffff',
-              padding: '2px 8px',
-              borderRadius: '10px',
-              border: '2px solid #0f172a',
-              fontSize: '12px',
-              fontWeight: '900',
-              letterSpacing: '0.5px'
-            }}>
-              {level >= 5 ? `⭐ Lv.${level}` : `Lv.${level}`}
-            </span>
-
-            <span style={{
-              fontFamily: "'Fredoka', 'Lilita One', sans-serif",
-              fontSize: '15px',
-              fontWeight: '900',
-              color: '#ffffff',
-              letterSpacing: '0.5px'
-            }}>
-              {name}
-            </span>
-          </div>
-
-          {/* Bottom Row: BIG TOUCH-FRIENDLY MUTE/SING TOGGLE & SOLO */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                if (onToggleSleep) {
-                  onToggleSleep(e);
-                }
-              }}
-              title={isSleeping ? `Wake up ${name} to sing!` : `Put ${name} to sleep (mute)`}
-              style={{
-                background: isSleeping
-                  ? 'linear-gradient(180deg, #475569 0%, #1e293b 100%)'
-                  : isSupercharged
-                  ? 'linear-gradient(180deg, #fde047 0%, #eab308 100%)'
-                  : 'linear-gradient(180deg, #22c55e 0%, #15803d 100%)',
-                color: isSleeping ? '#cbd5e1' : '#ffffff',
-                border: '2.5px solid #0f172a',
-                borderRadius: '16px',
-                padding: '8px 16px',
-                minHeight: '44px',
-                minWidth: '110px',
-                fontSize: '13px',
-                fontWeight: '900',
-                fontFamily: "'Fredoka', 'Lilita One', sans-serif",
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '6px',
-                boxShadow: isSleeping ? '0 3px 0 #0f172a' : '0 4px 0 #0f172a, 0 0 12px rgba(34, 197, 94, 0.45)',
-                transition: 'all 0.15s ease'
-              }}
-            >
-              <span style={{ fontSize: '18px' }}>{isSleeping ? '💤' : '🎤'}</span>
-              <span>{isSleeping ? 'MUTED' : 'SINGING'}</span>
-            </button>
-
-            {onCycleVolume && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onCycleVolume(e);
-                }}
-                title={`Tap to boost ${name}'s volume! (Currently ${volPct}%)`}
-                style={{
-                  background: volPct >= 180
-                    ? 'linear-gradient(180deg, #fb923c 0%, #ea580c 100%)'
-                    : volPct >= 130
-                    ? 'linear-gradient(180deg, #fde047 0%, #ca8a04 100%)'
-                    : 'linear-gradient(180deg, #38bdf8 0%, #0284c7 100%)',
-                  color: '#ffffff',
-                  border: '2.5px solid #0f172a',
-                  borderRadius: '16px',
-                  padding: '8px 10px',
-                  minHeight: '44px',
-                  fontSize: '12px',
-                  fontWeight: '900',
-                  fontFamily: "'Fredoka', 'Lilita One', sans-serif",
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                  boxShadow: '0 3px 0 #0f172a'
-                }}
-              >
-                <span style={{ fontSize: '15px' }}>{volPct >= 180 ? '🔥' : volPct <= 60 ? '🔉' : '🔊'}</span>
-                <span>{volPct}%</span>
-              </button>
-            )}
-
-            {onToggleSolo && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onToggleSolo(e);
-                }}
-                title={isSoloed ? `Un-solo ${name} (hear full band)` : `Solo ${name} (hear only this monster!)`}
-                style={{
-                  background: isSoloed
-                    ? 'linear-gradient(180deg, #fde047 0%, #ca8a04 100%)'
-                    : 'linear-gradient(180deg, #334155 0%, #1e293b 100%)',
-                  color: isSoloed ? '#451a03' : '#e2e8f0',
-                  border: '2.5px solid #0f172a',
-                  borderRadius: '16px',
-                  padding: '8px 12px',
-                  minHeight: '44px',
-                  fontSize: '12px',
-                  fontWeight: '900',
-                  fontFamily: "'Fredoka', 'Lilita One', sans-serif",
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '4px',
-                  boxShadow: isSoloed ? '0 4px 0 #0f172a, 0 0 12px rgba(250, 204, 21, 0.5)' : '0 3px 0 #0f172a'
-                }}
-              >
-                <span style={{ fontSize: '15px' }}>⭐</span>
-                <span>{isSoloed ? 'SOLOED!' : 'SOLO'}</span>
-              </button>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

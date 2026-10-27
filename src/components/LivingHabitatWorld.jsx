@@ -13,6 +13,7 @@ import { CrystalBell, LoFiSpore, EchoNautilus, PrismBloom, LapisGroove } from '.
 import StagePedestal from './StagePedestal';
 import ReefStageLandscape from './scenery/ReefStageLandscape';
 import StageFXOverlay from './StageFXOverlay';
+import MonsterActionTray from './MonsterActionTray';
 
 export default function LivingHabitatWorld({
   islandId = 'lagoon',
@@ -28,22 +29,30 @@ export default function LivingHabitatWorld({
   fameRank = 1,
   stageFXList = [],
   zoomLevel = 1.0,
+  coins = 0,
   onZoomChange,
   onPerformerClick,
   onCoinCollect,
   onToggleSleep,
   onCycleVolume,
   onToggleSolo,
-  onPopBubble
+  onPopBubble,
+  onFeedMonster
 }) {
   const containerRef = useRef(null);
   const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [selectedMonsterId, setSelectedMonsterId] = useState(null);
   const isDraggingRef = useRef(false);
   const startDragRef = useRef({ x: 0, y: 0, panX: 0, panY: 0 });
   const touchDistanceRef = useRef(null);
   const didDragRef = useRef(false);
 
   const habitatSlots = ISLAND_HABITAT_SLOTS[islandId] || ISLAND_HABITAT_SLOTS.lagoon;
+
+  // Reset selected monster when switching islands or if monster is locked
+  useEffect(() => {
+    setSelectedMonsterId(null);
+  }, [islandId]);
 
   // Clamping boundaries to prevent dragging completely off-screen
   const clampPan = (newX, newY, currentZoom) => {
@@ -106,8 +115,8 @@ export default function LivingHabitatWorld({
 
   // Mouse drag support for desktop testing
   const handleMouseDown = (e) => {
-    // Only drag on left click and not on buttons
-    if (e.button !== 0 || e.target.closest('button')) return;
+    // Only drag on left click and not on interactive buttons
+    if (e.button !== 0 || e.target.closest('button') || e.target.closest('.monster-action-tray-container')) return;
     isDraggingRef.current = true;
     didDragRef.current = false;
     startDragRef.current = {
@@ -150,6 +159,14 @@ export default function LivingHabitatWorld({
     return () => el.removeEventListener('wheel', handleWheel);
   }, [zoomLevel, onZoomChange]);
 
+  const handleViewportClick = (e) => {
+    if (didDragRef.current) return;
+    // If tapping empty background, dismiss selected monster tray
+    if (!e.target.closest('.living-habitat-perch') && !e.target.closest('.monster-action-tray-container')) {
+      setSelectedMonsterId(null);
+    }
+  };
+
   const renderMonster = (id, slot) => {
     const p = performers[id];
     const isUnlocked = p?.unlocked;
@@ -159,7 +176,7 @@ export default function LivingHabitatWorld({
     const level = p?.level || 1;
     const costumeId = equippedCostumes[id];
     const isSoloed = soloedPerformer === id;
-    const volume = volumes[id] ?? 1.0;
+    const isSelected = selectedMonsterId === id;
     const isPoked = pokedPerformer?.id === id;
     const isTickled = isPoked && pokedPerformer?.isTickled;
     const selectionIdx = selectedParents.indexOf(id) + 1;
@@ -168,34 +185,51 @@ export default function LivingHabitatWorld({
     const scale = (slot.depthScale || 1.0) * (isSleeping ? 0.92 : 1.0);
 
     const handleMonsterClick = (e) => {
-      // If user was actively dragging the camera, do not trigger click
+      // If user was actively dragging the camera, ignore click
       if (didDragRef.current) return;
-      onPerformerClick?.(id, e);
+      e?.stopPropagation?.();
+
+      // 1. Instant Coin Collection if holding a coin
+      if (hasCoin) {
+        onCoinCollect?.(id, e);
+        return;
+      }
+
+      // 2. Breeding parent selection
+      if (isSelectingParents) {
+        onPerformerClick?.(id, e);
+        return;
+      }
+
+      // 3. Direct monster tap selects the monster to open the MSM action tray!
+      setSelectedMonsterId((prev) => (prev === id ? null : id));
     };
 
     return (
       <div
         key={id}
-        className={`living-habitat-perch tier-${slot.tier}`}
+        className={`living-habitat-perch tier-${slot.tier} ${isSelected ? 'perch-selected' : ''}`}
         style={{
           position: 'absolute',
           left: `${slot.x}%`,
           top: `${slot.y}%`,
           transform: `translate(-50%, -50%) scale(${scale})`,
-          zIndex: slot.zIndex || 15,
+          zIndex: isSelected ? 30 : slot.zIndex || 15,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           userSelect: 'none',
+          cursor: isUnlocked ? 'pointer' : 'default',
           transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
         }}
+        onClick={handleMonsterClick}
       >
         {isUnlocked ? (
           <div
             className={`monster-actor-wrap ${isPoked && !isTickled ? 'monster-squish-poke' : ''} ${isTickled ? 'jelly-tickle-active' : ''}`}
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
           >
-            {/* 1. Monster Sprite Component */}
+            {/* 1. Monster Sprite Component — 100% Clean! */}
             {id === 'diva' && (
               <Jellyfish
                 name="Floaty Diva"
@@ -468,20 +502,14 @@ export default function LivingHabitatWorld({
               />
             )}
 
-            {/* 2. Tactile Touch-Friendly Pedestal Controls */}
+            {/* 2. Natural Reef Stage Pedestal Platform (Zero Clutter!) */}
             <StagePedestal
               islandId={islandId}
-              name={p?.name || id}
               isSleeping={isSleeping}
-              isSupercharged={isSupercharged}
-              level={level}
               tempoSpeed={tempoSpeed}
-              volume={volume}
+              isSelected={isSelected}
               isSoloed={isSoloed}
               onClick={handleMonsterClick}
-              onToggleSleep={() => onToggleSleep?.(id)}
-              onCycleVolume={() => onCycleVolume?.(id)}
-              onToggleSolo={() => onToggleSolo?.(id)}
             />
           </div>
         ) : (
@@ -521,6 +549,7 @@ export default function LivingHabitatWorld({
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
+      onClick={handleViewportClick}
       style={{
         position: 'relative',
         width: '100%',
@@ -563,6 +592,22 @@ export default function LivingHabitatWorld({
         {/* 2.5D Living Monsters distributed naturally across the reef */}
         {Object.keys(habitatSlots).map((id) => renderMonster(id, habitatSlots[id]))}
       </div>
+
+      {/* My Singing Monsters Style Chunk Cartoon Selected Monster Action Tray */}
+      {selectedMonsterId && performers[selectedMonsterId] && (
+        <MonsterActionTray
+          monsterId={selectedMonsterId}
+          monster={performers[selectedMonsterId]}
+          volume={volumes[selectedMonsterId]}
+          isSoloed={soloedPerformer === selectedMonsterId}
+          coins={coins}
+          onToggleSleep={() => onToggleSleep?.(selectedMonsterId)}
+          onFeed={(treatType) => onFeedMonster?.(selectedMonsterId, treatType)}
+          onCycleVolume={() => onCycleVolume?.(selectedMonsterId)}
+          onToggleSolo={() => onToggleSolo?.(selectedMonsterId)}
+          onClose={() => setSelectedMonsterId(null)}
+        />
+      )}
     </div>
   );
 }

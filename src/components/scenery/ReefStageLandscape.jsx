@@ -1,3 +1,11 @@
+import React from 'react';
+
+/**
+ * ReefStageLandscape - Rich Illustrated Living Island Habitat World
+ * Spans the full 1400x820 canvas with tiered natural terraces, organic coral rock shelves,
+ * sandy ledges, tropical sea fans, animated ambient fish schools, and rising bubble streams.
+ * Matches My Singing Monsters living habitat aesthetic.
+ */
 export default function ReefStageLandscape({ 
   islandId = 'lagoon', 
   isNight = false, 
@@ -15,496 +23,368 @@ export default function ReefStageLandscape({
       className="reef-stage-landscape"
       style={{
         position: 'absolute',
-        bottom: '-12px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        width: 'min(1280px, 98vw)',
-        height: '280px',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
         pointerEvents: 'none',
         zIndex: 2,
-        userSelect: 'none'
+        userSelect: 'none',
+        overflow: 'hidden'
       }}
     >
       {/* ========================================================
-          1. LAGOON ISLAND: CARTOON SUNLIT CORAL REEF ATOLL
+          1. CORAL LAGOON: LUSH SUNLIT TROPICAL REEF ATOLL ISLAND
           ======================================================== */}
       {isLagoon && (
-        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-          {/* Back Coral Spires & Sea Fans (Rises up behind the monsters) */}
-          <div style={{ position: 'absolute', top: '-110px', left: '1%', width: '180px', height: '180px', zIndex: 1 }}>
-            <svg width="180" height="180" viewBox="0 0 180 180">
-              {/* Giant Purple Tube Sponges with bubble caps */}
-              <g>
-                {/* Spire 1 */}
-                <path d="M 40 180 L 48 50 C 48 42 66 42 66 50 L 74 180 Z" fill={isNight ? '#4c1d95' : '#7c3aed'} stroke="#3b0764" strokeWidth="3" />
-                <ellipse cx="57" cy="50" rx="9" ry="5" fill="#c084fc" stroke="#3b0764" strokeWidth="2" />
-                <ellipse cx="57" cy="50" rx="5" ry="3" fill="#2e1065" />
-                {/* Tiny bubbles rising from tube */}
-                <circle cx="57" cy="38" r="4" fill="rgba(255,255,255,0.8)" stroke="#38bdf8" strokeWidth="1.5" className="floating-music-note" style={{ animationDuration: '3s' }} />
-                <circle cx="59" cy="22" r="6" fill="rgba(255,255,255,0.7)" stroke="#38bdf8" strokeWidth="1.5" className="floating-music-note" style={{ animationDuration: '2.5s', animationDelay: '1s' }} />
+        <svg
+          width="1400"
+          height="820"
+          viewBox="0 0 1400 820"
+          style={{ width: '100%', height: '100%' }}
+        >
+          <defs>
+            {/* Ocean Waters Ambient Gradient */}
+            <radialGradient id="lagoonWaterBg" cx="50%" cy="40%" r="65%">
+              <stop offset="0%" stopColor={isNight ? '#0369a1' : '#38bdf8'} stopOpacity={isNight ? '0.4' : '0.28'} />
+              <stop offset="55%" stopColor={isNight ? '#082f49' : '#0284c7'} stopOpacity={isNight ? '0.6' : '0.45'} />
+              <stop offset="100%" stopColor={isNight ? '#020617' : '#0369a1'} stopOpacity="0.85" />
+            </radialGradient>
 
-                {/* Spire 2 (Shorter) */}
-                <path d="M 80 180 L 86 85 C 86 78 100 78 100 85 L 106 180 Z" fill={isNight ? '#6b21a8' : '#9333ea'} stroke="#3b0764" strokeWidth="3" />
-                <ellipse cx="93" cy="85" rx="7" ry="4" fill="#d8b4fe" stroke="#3b0764" strokeWidth="2" />
-                <ellipse cx="93" cy="85" rx="4" ry="2" fill="#2e1065" />
-                <circle cx="93" cy="74" r="3.5" fill="rgba(255,255,255,0.8)" stroke="#38bdf8" strokeWidth="1.5" className="floating-music-note" style={{ animationDuration: '3.2s', animationDelay: '0.5s' }} />
+            {/* High Tier Coral Rock Gradient */}
+            <linearGradient id="highTierRock" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor={isNight ? '#1e1b4b' : '#0891b2'} />
+              <stop offset="50%" stopColor={isNight ? '#0f172a' : '#0e7490'} />
+              <stop offset="100%" stopColor={isNight ? '#020617' : '#155e75'} />
+            </linearGradient>
 
-                {/* Spire 3 (Curved) */}
-                <path d="M 112 180 Q 125 130 135 110 C 140 102 152 108 146 116 Q 134 135 124 180 Z" fill={isNight ? '#581c87' : '#a855f7'} stroke="#3b0764" strokeWidth="3" />
-              </g>
-              {/* Golden Sea Anemone Fan */}
-              <path d="M 10 180 Q 22 135 14 110 Q 30 125 24 180" stroke="#f59e0b" strokeWidth="4" fill="none" strokeLinecap="round" />
-              <path d="M 18 180 Q 38 120 32 90 Q 42 125 30 180" stroke="#fbbf24" strokeWidth="5" fill="none" strokeLinecap="round" />
-            </svg>
-          </div>
+            {/* High Tier Sand / Moss Top */}
+            <linearGradient id="highTierSand" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor={isNight ? '#38bdf8' : '#22d3ee'} />
+              <stop offset="70%" stopColor={isNight ? '#0284c7' : '#06b6d4'} />
+              <stop offset="100%" stopColor={isNight ? '#0369a1' : '#0891b2'} />
+            </linearGradient>
 
-          {/* Right Coral Garden (Sea Fans & Brain Coral) */}
-          <div style={{ position: 'absolute', top: '-105px', right: '1%', width: '190px', height: '175px', zIndex: 1 }}>
-            <svg width="190" height="175" viewBox="0 0 190 175">
-              {/* Vibrant Pink Gorgonian Sea Fan */}
-              <path d="M 140 175 Q 120 110 90 70 M 115 105 Q 85 90 60 75 M 100 85 Q 90 55 75 35 M 130 125 Q 155 105 170 85 M 145 95 Q 170 75 160 50" stroke={isNight ? '#ec4899' : '#f43f5e'} strokeWidth="4" fill="none" strokeLinecap="round" />
-              {/* Glowing Yellow Brain Coral Dome */}
-              <circle cx="65" cy="150" r="32" fill={isNight ? '#b45309' : '#f59e0b'} stroke="#78350f" strokeWidth="3" />
-              <path d="M 45 140 Q 55 132 65 140 Q 75 148 85 140" fill="none" stroke="#fef08a" strokeWidth="2.5" strokeLinecap="round" />
-              <path d="M 48 152 Q 58 144 68 152 Q 78 160 88 152" fill="none" stroke="#fef08a" strokeWidth="2.5" strokeLinecap="round" />
-              <path d="M 52 164 Q 62 156 72 164" fill="none" stroke="#fef08a" strokeWidth="2.5" strokeLinecap="round" />
-            </svg>
-          </div>
+            {/* Mid Tier Central Island Plateau */}
+            <linearGradient id="midTierRock" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor={isNight ? '#1e293b' : '#0d9488'} />
+              <stop offset="40%" stopColor={isNight ? '#0f172a' : '#0f766e'} />
+              <stop offset="100%" stopColor={isNight ? '#020617' : '#115e59'} />
+            </linearGradient>
 
-          {/* Main Stage Rock Shelf Plateau SVG */}
-          <svg 
-            width="100%" 
-            height="240" 
-            viewBox="0 0 1200 240" 
-            preserveAspectRatio="none"
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              filter: 'drop-shadow(0 -4px 18px rgba(0, 0, 0, 0.45))',
-              zIndex: 2
-            }}
-          >
-            <defs>
-              <linearGradient id="lagoonShelfTopGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor={isNight ? '#38bdf8' : '#67e8f9'} />
-                <stop offset="35%" stopColor={isNight ? '#0284c7' : '#06b6d4'} />
-                <stop offset="100%" stopColor={isNight ? '#0369a1' : '#0891b2'} />
-              </linearGradient>
+            {/* Low Tier Sandy Shoreline */}
+            <linearGradient id="lowTierSand" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor={isNight ? '#2dd4bf' : '#fed7aa'} />
+              <stop offset="45%" stopColor={isNight ? '#0d9488' : '#fcd34d'} />
+              <stop offset="100%" stopColor={isNight ? '#134e4a' : '#f59e0b'} />
+            </linearGradient>
 
-              <linearGradient id="lagoonShelfRockGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor={isNight ? '#0f172a' : '#0e7490'} />
-                <stop offset="50%" stopColor={isNight ? '#082f49' : '#155e75'} />
-                <stop offset="100%" stopColor={isNight ? '#030712' : '#083344'} />
-              </linearGradient>
+            {/* Rainbow Coral Glow */}
+            <linearGradient id="coralRainbowGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#f472b6" />
+              <stop offset="25%" stopColor="#38bdf8" />
+              <stop offset="50%" stopColor="#fde047" />
+              <stop offset="75%" stopColor="#a855f7" />
+              <stop offset="100%" stopColor="#34d399" />
+            </linearGradient>
+          </defs>
 
-              <linearGradient id="coralRimGlow" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#f472b6" />
-                <stop offset="25%" stopColor="#38bdf8" />
-                <stop offset="50%" stopColor="#fde047" />
-                <stop offset="75%" stopColor="#a855f7" />
-                <stop offset="100%" stopColor="#34d399" />
-              </linearGradient>
-            </defs>
+          {/* Island Water Backdrop */}
+          <rect width="1400" height="820" fill="url(#lagoonWaterBg)" />
 
-            {/* Cliff Drop-Shadow Silhouette */}
-            <path 
-              d="M 15 65 Q 280 40 600 44 Q 920 40 1185 65 L 1195 240 L 5 240 Z" 
-              fill="rgba(0,0,0,0.3)" 
-            />
+          {/* ========================================================
+              TIER 1 (BACK HIGH TERRACE - y: ~30-44%)
+              Carries Queen Beatbox (36%), Starlight Jelly (64%), Diva (22%)
+              ======================================================== */}
+          {/* Back Giant Coral Spires & Sea Fans */}
+          <g opacity={isNight ? '0.75' : '0.9'}>
+            {/* Left Coral Spires behind Diva/Queen */}
+            <path d="M 220 380 L 250 180 C 250 160 280 160 280 180 L 310 380 Z" fill={isNight ? '#4c1d95' : '#7c3aed'} stroke="#3b0764" strokeWidth="4" />
+            <ellipse cx="265" cy="180" rx="15" ry="8" fill="#c084fc" stroke="#3b0764" strokeWidth="2.5" />
+            <ellipse cx="265" cy="180" rx="8" ry="4" fill="#2e1065" />
 
-            {/* Deep Rock Cliff Strata (Layer 1 - Dark Sea Rock) */}
-            <path 
-              d="M 25 70 
-                 Q 160 55 340 60 
-                 T 720 54 
-                 T 1050 62 
-                 L 1175 75 
-                 L 1185 240 
-                 L 15 240 Z" 
-              fill="url(#lagoonShelfRockGrad)" 
-              stroke="#042f2e" 
-              strokeWidth="4" 
-            />
+            <path d="M 310 380 L 330 220 C 330 205 355 205 355 220 L 375 380 Z" fill={isNight ? '#6b21a8' : '#9333ea'} stroke="#3b0764" strokeWidth="4" />
+            <ellipse cx="342" cy="220" rx="12.5" ry="7" fill="#d8b4fe" stroke="#3b0764" strokeWidth="2.5" />
 
-            {/* Coral Rock Strata Crevices & Texture */}
-            <path d="M 120 110 Q 220 135 340 115" stroke={isNight ? '#0369a1' : '#0e7490'} strokeWidth="5" fill="none" strokeLinecap="round" opacity="0.6" />
-            <path d="M 460 145 Q 600 170 760 135" stroke={isNight ? '#0369a1' : '#0e7490'} strokeWidth="6" fill="none" strokeLinecap="round" opacity="0.6" />
-            <path d="M 880 120 Q 990 140 1080 115" stroke={isNight ? '#0369a1' : '#0e7490'} strokeWidth="5" fill="none" strokeLinecap="round" opacity="0.6" />
+            {/* Right Sea Fan & Spires behind Starlight Jelly */}
+            <path d="M 880 370 L 910 170 C 910 150 940 150 940 170 L 970 370 Z" fill={isNight ? '#581c87' : '#a855f7'} stroke="#3b0764" strokeWidth="4" />
+            <ellipse cx="925" cy="170" rx="15" ry="8" fill="#e9d5ff" stroke="#3b0764" strokeWidth="2.5" />
+            
+            {/* Glowing Pink Gorgonian Sea Fan */}
+            <path d="M 980 360 Q 1040 250 1020 180 M 1000 280 Q 1070 230 1090 190 M 1010 230 Q 980 170 960 130" stroke={isNight ? '#ec4899' : '#f43f5e'} strokeWidth="5" fill="none" strokeLinecap="round" />
+          </g>
 
-            {/* Cartoon Fossil Shell in Cliff Wall */}
-            <g transform="translate(240, 155) rotate(-15) scale(0.7)">
-              <circle cx="20" cy="20" r="18" fill="#0891b2" stroke="#164e63" strokeWidth="3" />
-              <path d="M 8 20 A 12 12 0 0 1 32 20 A 8 8 0 0 1 20 28 A 4 4 0 0 1 18 20" fill="none" stroke="#bae6fd" strokeWidth="2.5" />
+          {/* High Tier Raised Coral Shelf Mound */}
+          <path
+            d="M 160 380
+               C 280 270 480 270 650 280
+               C 800 270 1000 275 1160 380
+               C 1040 440 850 435 650 440
+               C 450 435 260 440 160 380 Z"
+            fill="url(#highTierSand)"
+            stroke="#bae6fd"
+            strokeWidth="5"
+            filter="drop-shadow(0 6px 12px rgba(0,0,0,0.45))"
+          />
+          {/* High Tier Rim Highlight */}
+          <path
+            d="M 180 370
+               C 290 278 480 278 650 288
+               C 800 278 990 282 1140 370"
+            fill="none"
+            stroke="url(#coralRainbowGlow)"
+            strokeWidth="6"
+            strokeLinecap="round"
+          />
+
+          {/* ========================================================
+              TIER 2 (CENTRAL REEF PLATEAU - y: ~50-60%)
+              Carries Boombox Bob (50%, 56%) and Zap Jelly (76%, 50%)
+              ======================================================== */}
+          {/* Central Living Island Rock Base */}
+          <path
+            d="M 100 580
+               C 180 430 450 430 700 440
+               C 950 430 1200 430 1300 580
+               C 1180 660 920 660 700 650
+               C 460 660 220 660 100 580 Z"
+            fill="url(#midTierRock)"
+            stroke="#042f2e"
+            strokeWidth="6"
+            filter="drop-shadow(0 10px 24px rgba(0,0,0,0.5))"
+          />
+
+          {/* Central Sand / Coral Bed */}
+          <path
+            d="M 140 560
+               C 220 450 460 450 700 458
+               C 940 450 1160 450 1260 560
+               C 1150 630 910 630 700 620
+               C 470 630 250 630 140 560 Z"
+            fill="url(#highTierSand)"
+            stroke="#67e8f9"
+            strokeWidth="4"
+          />
+
+          {/* Coral Reef Accent Shelves on Mid Tier */}
+          <circle cx="480" cy="510" r="18" fill="#f59e0b" stroke="#78350f" strokeWidth="3" />
+          <path d="M 470 505 Q 480 498 490 505" fill="none" stroke="#fef08a" strokeWidth="2.5" />
+          <circle cx="940" cy="520" r="22" fill="#ec4899" stroke="#831843" strokeWidth="3" />
+          <path d="M 928 515 Q 940 508 952 515" fill="none" stroke="#fdf2f8" strokeWidth="2.5" />
+
+          {/* ========================================================
+              TIER 3 (FOREGROUND SHORELINE / TIDE POOL - y: ~68-80%)
+              Carries Volt Siren (18%, 72%) and DJ Sparkpuff (82%, 70%)
+              ======================================================== */}
+          {/* Giant Bottom Coral Cliff Shelf */}
+          <path
+            d="M -20 840
+               L -20 680
+               C 120 630 320 640 480 670
+               C 650 700 850 700 1020 660
+               C 1180 620 1340 640 1420 680
+               L 1420 840 Z"
+            fill="url(#lowTierSand)"
+            stroke="#78350f"
+            strokeWidth="6"
+            filter="drop-shadow(0 -8px 24px rgba(0,0,0,0.6))"
+          />
+
+          {/* Foreground Starfish & Cute Barnacles */}
+          <g transform="translate(180, 750) rotate(12) scale(0.9)">
+            <polygon points="24,0 31,14 47,16 35,27 38,43 24,35 9,43 13,27 1,16 17,14" fill="#f97316" stroke="#9a3412" strokeWidth="3" />
+            <circle cx="20" cy="20" r="2.5" fill="#ffffff" />
+            <circle cx="21" cy="20" r="1.2" fill="#000000" />
+            <circle cx="28" cy="20" r="2.5" fill="#ffffff" />
+            <circle cx="29" cy="20" r="1.2" fill="#000000" />
+          </g>
+
+          <g transform="translate(1180, 740) rotate(-14) scale(0.9)">
+            <polygon points="24,0 31,14 47,16 35,27 38,43 24,35 9,43 13,27 1,16 17,14" fill="#ec4899" stroke="#831843" strokeWidth="3" />
+            <circle cx="20" cy="20" r="2.5" fill="#ffffff" />
+            <circle cx="21" cy="20" r="1.2" fill="#000000" />
+            <circle cx="28" cy="20" r="2.5" fill="#ffffff" />
+            <circle cx="29" cy="20" r="1.2" fill="#000000" />
+          </g>
+
+          {/* Clustered Barnacles with Cute Eyes */}
+          <g transform="translate(620, 720) scale(0.9)">
+            <polygon points="10,24 16,6 26,6 32,24" fill="#cbd5e1" stroke="#334155" strokeWidth="2.5" />
+            <circle cx="21" cy="14" r="3.5" fill="#ffffff" />
+            <circle cx="22" cy="14" r="1.8" fill="#0f172a" />
+            <polygon points="30,26 35,10 43,10 48,26" fill="#94a3b8" stroke="#334155" strokeWidth="2.5" />
+            <circle cx="39" cy="17" r="3" fill="#ffffff" />
+            <circle cx="40" cy="17" r="1.5" fill="#0f172a" />
+          </g>
+
+          {/* Ambient Schools of Little Tropical Fish Swimming Across Island */}
+          <g className="floating-music-note" style={{ animationDuration: '6s', animationIterationCount: 'infinite' }}>
+            {/* Fish 1 (Yellow Tang) */}
+            <g transform="translate(320, 360) scale(0.65)">
+              <polygon points="25,15 0,5 0,25" fill="#fde047" stroke="#ca8a04" strokeWidth="2" />
+              <polygon points="5,15 -10,8 -10,22" fill="#facc15" />
+              <circle cx="18" cy="12" r="2" fill="#000000" />
             </g>
-
-            {/* Secret Glowing Eyes in Cave Crevice (Left) */}
-            <g transform="translate(160, 180)">
-              <ellipse cx="25" cy="18" rx="28" ry="14" fill="#020617" />
-              <g className="blinking-cave-eyes">
-                <circle cx="18" cy="18" r="4.5" fill="#facc15" />
-                <circle cx="19" cy="18" r="2" fill="#000000" />
-                <circle cx="32" cy="18" r="4.5" fill="#facc15" />
-                <circle cx="33" cy="18" r="2" fill="#000000" />
-              </g>
+            {/* Fish 2 (Cyan Dory) */}
+            <g transform="translate(360, 385) scale(0.55)">
+              <polygon points="25,15 0,5 0,25" fill="#38bdf8" stroke="#0284c7" strokeWidth="2" />
+              <polygon points="5,15 -10,8 -10,22" fill="#0284c7" />
+              <circle cx="18" cy="12" r="2" fill="#000000" />
             </g>
-
-            {/* Secret Glowing Eyes in Cave Crevice (Right) */}
-            <g transform="translate(980, 175)">
-              <ellipse cx="25" cy="18" rx="26" ry="13" fill="#020617" />
-              <g className="blinking-cave-eyes" style={{ animationDelay: '2.5s' }}>
-                <circle cx="18" cy="18" r="4" fill="#4ade80" />
-                <circle cx="19" cy="18" r="1.8" fill="#000000" />
-                <circle cx="32" cy="18" r="4" fill="#4ade80" />
-                <circle cx="33" cy="18" r="1.8" fill="#000000" />
-              </g>
+            {/* Fish 3 (Pink) */}
+            <g transform="translate(395, 365) scale(0.5)">
+              <polygon points="25,15 0,5 0,25" fill="#f472b6" stroke="#db2777" strokeWidth="2" />
+              <polygon points="5,15 -10,8 -10,22" fill="#db2777" />
+              <circle cx="18" cy="12" r="2" fill="#000000" />
             </g>
+          </g>
 
-            {/* Top Coral Plateau Shelf (Layer 2 - Vibrant Step where performers stand) */}
-            <path 
-              d="M 30 68 
-                 C 140 45 320 48 500 46 
-                 C 700 44 880 48 1060 46 
-                 C 1120 45 1160 55 1170 68 
-                 C 1160 85 1120 90 1060 88 
-                 C 880 84 700 88 500 86 
-                 C 320 84 140 90 30 68 Z" 
-              fill="url(#lagoonShelfTopGrad)" 
-              stroke="#bae6fd" 
-              strokeWidth="4" 
-            />
-
-            {/* Vibrant Rainbow Coral Stage Rim Highlight */}
-            <path 
-              d="M 36 62 
-                 C 140 42 320 45 500 43 
-                 C 700 41 880 45 1060 43 
-                 C 1120 42 1150 50 1164 62" 
-              fill="none" 
-              stroke="url(#coralRimGlow)" 
-              strokeWidth="5" 
-              strokeLinecap="round"
-              filter="drop-shadow(0 2px 4px rgba(255,255,255,0.7))"
-            />
-
-            {/* Cartoon Starfish #1 Clinging to Cliff Shelf (Smiling, Bright Orange) */}
-            <g transform="translate(380, 78) rotate(14) scale(0.85)">
-              <polygon 
-                points="24,0 31,14 47,16 35,27 38,43 24,35 9,43 13,27 1,16 17,14" 
-                fill="#f97316" 
-                stroke="#c2410c" 
-                strokeWidth="2.5" 
-              />
-              <circle cx="20" cy="20" r="2.5" fill="#ffffff" />
-              <circle cx="21" cy="20" r="1.2" fill="#000000" />
-              <circle cx="28" cy="20" r="2.5" fill="#ffffff" />
-              <circle cx="29" cy="20" r="1.2" fill="#000000" />
-              <path d="M 21 26 Q 24 29 27 26" fill="none" stroke="#7c2d12" strokeWidth="1.5" strokeLinecap="round" />
+          {/* Right School of Little Fish */}
+          <g className="floating-music-note" style={{ animationDuration: '7s', animationDelay: '1.5s', animationIterationCount: 'infinite' }}>
+            <g transform="translate(1050, 480) scale(-0.6, 0.6)">
+              <polygon points="25,15 0,5 0,25" fill="#4ade80" stroke="#16a34a" strokeWidth="2" />
+              <polygon points="5,15 -10,8 -10,22" fill="#16a34a" />
+              <circle cx="18" cy="12" r="2" fill="#000000" />
             </g>
-
-            {/* Cartoon Starfish #2 Clinging to Right Cliff Shelf (Cute Magenta) */}
-            <g transform="translate(840, 80) rotate(-18) scale(0.8)">
-              <polygon 
-                points="24,0 31,14 47,16 35,27 38,43 24,35 9,43 13,27 1,16 17,14" 
-                fill="#ec4899" 
-                stroke="#9d174d" 
-                strokeWidth="2.5" 
-              />
-              <circle cx="20" cy="20" r="2.2" fill="#ffffff" />
-              <circle cx="21" cy="20" r="1.2" fill="#000000" />
-              <circle cx="28" cy="20" r="2.2" fill="#ffffff" />
-              <circle cx="29" cy="20" r="1.2" fill="#000000" />
-              <path d="M 21 26 Q 24 29 27 26" fill="none" stroke="#831843" strokeWidth="1.5" strokeLinecap="round" />
+            <g transform="translate(1090, 505) scale(-0.5, 0.5)">
+              <polygon points="25,15 0,5 0,25" fill="#fb923c" stroke="#c2410c" strokeWidth="2" />
+              <polygon points="5,15 -10,8 -10,22" fill="#c2410c" />
+              <circle cx="18" cy="12" r="2" fill="#000000" />
             </g>
-
-            {/* Clustered Barnacles with Googly Eyes */}
-            <g transform="translate(680, 88) scale(0.75)">
-              <polygon points="10,24 16,6 26,6 32,24" fill="#cbd5e1" stroke="#475569" strokeWidth="2" />
-              <ellipse cx="21" cy="6" rx="5" ry="2.5" fill="#334155" />
-              <circle cx="21" cy="14" r="3" fill="#ffffff" />
-              <circle cx="22" cy="14" r="1.5" fill="#0f172a" />
-
-              <polygon points="30,26 35,10 43,10 48,26" fill="#94a3b8" stroke="#475569" strokeWidth="2" />
-              <ellipse cx="39" cy="10" rx="4" ry="2" fill="#1e293b" />
-              <circle cx="39" cy="17" r="2.5" fill="#ffffff" />
-              <circle cx="40" cy="17" r="1.2" fill="#0f172a" />
-            </g>
-          </svg>
-        </div>
+          </g>
+        </svg>
       )}
 
       {/* ========================================================
-          2. MAGMA TRENCH: BASALT CRAGS & VOLCANIC FISSURES
+          2. ABYSSAL MAGMA TRENCH: VOLCANIC BASALT RIDGE ISLAND
           ======================================================== */}
       {isTrench && (
-        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-          {/* Back Basalt Spire & Geothermal Vent Steam */}
-          <div style={{ position: 'absolute', top: '-130px', left: '2%', width: '190px', height: '200px', zIndex: 1 }}>
-            <svg width="190" height="200" viewBox="0 0 190 200">
-              {/* Jagged Basalt Column */}
-              <polygon points="50,200 45,40 70,30 95,45 85,200" fill="#1c1917" stroke="#44403c" strokeWidth="3" />
-              <polygon points="90,200 85,60 110,50 135,65 125,200" fill="#292524" stroke="#44403c" strokeWidth="3" />
-              {/* Glowing Lava River down the spire */}
-              <path d="M 68 35 Q 60 110 74 200" stroke="#f97316" strokeWidth="4" fill="none" filter="drop-shadow(0 0 6px #ea580c)" />
-              <path d="M 110 55 Q 120 120 108 200" stroke="#ef4444" strokeWidth="3" fill="none" filter="drop-shadow(0 0 6px #dc2626)" />
-              {/* Steaming Vent Wisps */}
-              <ellipse cx="70" cy="24" rx="14" ry="7" fill="rgba(254, 215, 170, 0.35)" className="floating-music-note" style={{ animationDuration: '2.8s' }} />
-              <ellipse cx="110" cy="40" rx="12" ry="6" fill="rgba(254, 215, 170, 0.3)" className="floating-music-note" style={{ animationDuration: '3.1s', animationDelay: '0.8s' }} />
-            </svg>
-          </div>
+        <svg
+          width="1400"
+          height="820"
+          viewBox="0 0 1400 820"
+          style={{ width: '100%', height: '100%' }}
+        >
+          <defs>
+            <radialGradient id="trenchWaterBg" cx="50%" cy="40%" r="65%">
+              <stop offset="0%" stopColor="#450a0a" stopOpacity="0.4" />
+              <stop offset="60%" stopColor="#1c1917" stopOpacity="0.75" />
+              <stop offset="100%" stopColor="#0c0a09" stopOpacity="0.95" />
+            </radialGradient>
+            <linearGradient id="trenchBasaltGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#44403c" />
+              <stop offset="40%" stopColor="#292524" />
+              <stop offset="100%" stopColor="#0c0a09" />
+            </linearGradient>
+            <linearGradient id="trenchMagmaFlow" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#ef4444" />
+              <stop offset="50%" stopColor="#fde047" />
+              <stop offset="100%" stopColor="#ea580c" />
+            </linearGradient>
+          </defs>
 
-          {/* Right Volcanic Chimney */}
-          <div style={{ position: 'absolute', top: '-120px', right: '2%', width: '180px', height: '190px', zIndex: 1 }}>
-            <svg width="180" height="190" viewBox="0 0 180 190">
-              <polygon points="40,190 60,50 95,45 110,190" fill="#1c1917" stroke="#44403c" strokeWidth="3" />
-              {/* Lava Vent Mouth */}
-              <ellipse cx="78" cy="48" rx="18" ry="8" fill="#f97316" stroke="#fbbf24" strokeWidth="2.5" filter="drop-shadow(0 0 8px #f97316)" />
-              <ellipse cx="78" cy="48" rx="10" ry="4" fill="#fef08a" />
-              <ellipse cx="78" cy="30" rx="12" ry="6" fill="rgba(254, 215, 170, 0.4)" className="floating-music-note" style={{ animationDuration: '2.6s' }} />
-            </svg>
-          </div>
+          <rect width="1400" height="820" fill="url(#trenchWaterBg)" />
 
-          {/* Main Basalt Magma Stage Shelf SVG */}
-          <svg 
-            width="100%" 
-            height="240" 
-            viewBox="0 0 1200 240" 
-            preserveAspectRatio="none"
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              filter: 'drop-shadow(0 -4px 20px rgba(234, 88, 12, 0.35))',
-              zIndex: 2
-            }}
-          >
-            <defs>
-              <linearGradient id="trenchBasaltGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#292524" />
-                <stop offset="50%" stopColor="#1c1917" />
-                <stop offset="100%" stopColor="#0c0a09" />
-              </linearGradient>
+          {/* High Tier Basalt Chimneys */}
+          <polygon points="320,400 350,200 410,200 440,400" fill="#1c1917" stroke="#44403c" strokeWidth="4" />
+          <polygon points="980,400 1010,210 1070,210 1100,400" fill="#1c1917" stroke="#44403c" strokeWidth="4" />
 
-              <linearGradient id="magmaFissureGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#ea580c" />
-                <stop offset="30%" stopColor="#f97316" />
-                <stop offset="50%" stopColor="#fde047" />
-                <stop offset="70%" stopColor="#f97316" />
-                <stop offset="100%" stopColor="#dc2626" />
-              </linearGradient>
-            </defs>
+          {/* Magma Fissures Pulsing with Tempo */}
+          <path
+            d="M 120 540 Q 400 440 700 460 T 1280 540"
+            stroke="url(#trenchMagmaFlow)"
+            strokeWidth="8"
+            fill="none"
+            filter="drop-shadow(0 0 14px #ea580c)"
+            style={{ animation: `lavaGlowPulse ${pulseDuration} ease-in-out infinite` }}
+          />
 
-            {/* Jagged Hexagonal Basalt Cliff Face */}
-            <path 
-              d="M 20 65 
-                 L 140 50 L 260 56 L 420 48 L 600 52 L 780 46 L 940 54 L 1080 48 L 1180 65 
-                 L 1190 240 L 10 240 Z" 
-              fill="url(#trenchBasaltGrad)" 
-              stroke="#44403c" 
-              strokeWidth="4" 
-            />
+          {/* Central Plateau */}
+          <path
+            d="M 140 580
+               C 280 460 520 460 700 470
+               C 880 460 1120 460 1260 580
+               C 1140 660 880 660 700 650
+               C 500 660 260 660 140 580 Z"
+            fill="url(#trenchBasaltGrad)"
+            stroke="#78716c"
+            strokeWidth="5"
+          />
 
-            {/* Glowing Magma Fissures Pulsing with Tempo */}
-            <path 
-              d="M 80 120 Q 220 150 360 110 T 680 130 T 960 115 T 1120 130" 
-              stroke="url(#magmaFissureGrad)" 
-              strokeWidth="6" 
-              fill="none" 
-              strokeLinecap="round"
-              filter="drop-shadow(0 0 10px #ea580c)"
-              style={{ animation: `lavaGlowPulse ${pulseDuration} ease-in-out infinite` }}
-            />
-            <path 
-              d="M 240 135 L 290 190 M 520 125 L 560 185 M 820 122 L 870 195" 
-              stroke="#ea580c" 
-              strokeWidth="4" 
-              fill="none" 
-              strokeLinecap="round"
-              filter="drop-shadow(0 0 6px #ea580c)"
-            />
-
-            {/* Glowing Magma Core Eyes Peeking from Basalt Fissure */}
-            <g transform="translate(560, 150)">
-              <ellipse cx="25" cy="18" rx="26" ry="12" fill="#0c0a09" />
-              <g className="blinking-cave-eyes">
-                <circle cx="18" cy="18" r="4.5" fill="#ef4444" filter="drop-shadow(0 0 4px #ef4444)" />
-                <circle cx="19" cy="18" r="2" fill="#fde047" />
-                <circle cx="32" cy="18" r="4.5" fill="#ef4444" filter="drop-shadow(0 0 4px #ef4444)" />
-                <circle cx="33" cy="18" r="2" fill="#fde047" />
-              </g>
-            </g>
-
-            {/* Top Basalt Rim where monsters stand */}
-            <path 
-              d="M 25 64 
-                 Q 300 42 600 46 
-                 Q 900 42 1175 64 
-                 Q 900 82 600 78 
-                 Q 300 82 25 64 Z" 
-              fill="#44403c" 
-              stroke="#78716c" 
-              strokeWidth="3.5" 
-            />
-
-            {/* Glowing Lava Lip */}
-            <path 
-              d="M 30 60 
-                 Q 300 38 600 42 
-                 Q 900 38 1170 60" 
-              stroke="url(#magmaFissureGrad)" 
-              strokeWidth="5" 
-              fill="none" 
-              strokeLinecap="round"
-              filter="drop-shadow(0 0 8px #f97316)"
-            />
-
-            {/* Spiky Obsidian Crystals along the shelf */}
-            <g transform="translate(180, 52) scale(0.7)">
-              <polygon points="15,40 5,0 25,40" fill="#1c1917" stroke="#ea580c" strokeWidth="2" />
-              <polygon points="25,40 20,8 35,40" fill="#292524" stroke="#ea580c" strokeWidth="2" />
-            </g>
-            <g transform="translate(1000, 52) scale(0.7)">
-              <polygon points="15,40 10,2 25,40" fill="#1c1917" stroke="#ea580c" strokeWidth="2" />
-              <polygon points="25,40 32,10 40,40" fill="#292524" stroke="#ea580c" strokeWidth="2" />
-            </g>
-          </svg>
-        </div>
+          {/* Foreground Magma Shelf */}
+          <path
+            d="M -20 840 L -20 680 C 200 640 500 680 700 700 C 900 680 1200 640 1420 680 L 1420 840 Z"
+            fill="#1c1917"
+            stroke="#44403c"
+            strokeWidth="5"
+          />
+        </svg>
       )}
 
       {/* ========================================================
-          3. BIOLUMINESCENT CAVERN: GLOWING CRYSTALS & RUNIC GROTTO
+          3. BIOLUMINESCENT CAVERN: GLOWING CRYSTAL GROTTO
           ======================================================== */}
       {isCavern && (
-        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-          {/* Back Giant Crystal Cluster (Left) */}
-          <div style={{ position: 'absolute', top: '-135px', left: '2%', width: '190px', height: '210px', zIndex: 1 }}>
-            <svg width="190" height="210" viewBox="0 0 190 210">
-              {/* Amethyst / Emerald Crystal Prisms */}
-              <polygon points="40,210 20,60 55,20 75,70 65,210" fill="#10b981" stroke="#a7f3d0" strokeWidth="3" filter="drop-shadow(0 0 12px #10b981)" opacity="0.9" />
-              <polygon points="65,210 60,75 90,40 110,85 100,210" fill="#065f46" stroke="#34d399" strokeWidth="2.5" />
-              <polygon points="95,210 95,95 125,65 145,105 130,210" fill="#a855f7" stroke="#e9d5ff" strokeWidth="3" filter="drop-shadow(0 0 10px #c084fc)" opacity="0.85" />
-            </svg>
-          </div>
+        <svg
+          width="1400"
+          height="820"
+          viewBox="0 0 1400 820"
+          style={{ width: '100%', height: '100%' }}
+        >
+          <defs>
+            <radialGradient id="cavernWaterBg" cx="50%" cy="40%" r="65%">
+              <stop offset="0%" stopColor="#064e3b" stopOpacity="0.4" />
+              <stop offset="60%" stopColor="#022c22" stopOpacity="0.75" />
+              <stop offset="100%" stopColor="#021a14" stopOpacity="0.95" />
+            </radialGradient>
+            <linearGradient id="cavernRockGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#047857" />
+              <stop offset="40%" stopColor="#064e3b" />
+              <stop offset="100%" stopColor="#022c22" />
+            </linearGradient>
+            <linearGradient id="crystalGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#34d399" />
+              <stop offset="50%" stopColor="#22d3ee" />
+              <stop offset="100%" stopColor="#c084fc" />
+            </linearGradient>
+          </defs>
 
-          {/* Back Giant Crystal Cluster (Right) */}
-          <div style={{ position: 'absolute', top: '-125px', right: '2%', width: '180px', height: '200px', zIndex: 1 }}>
-            <svg width="180" height="200" viewBox="0 0 180 200">
-              <polygon points="50,200 70,50 105,15 125,65 110,200" fill="#06b6d4" stroke="#cffafe" strokeWidth="3" filter="drop-shadow(0 0 12px #22d3ee)" opacity="0.9" />
-              <polygon points="105,200 115,70 145,35 160,80 145,200" fill="#8b5cf6" stroke="#ddd6fe" strokeWidth="2.5" filter="drop-shadow(0 0 10px #a78bfa)" opacity="0.85" />
-            </svg>
-          </div>
+          <rect width="1400" height="820" fill="url(#cavernWaterBg)" />
 
-          {/* Main Crystal Cavern Plateau Shelf SVG */}
-          <svg 
-            width="100%" 
-            height="240" 
-            viewBox="0 0 1200 240" 
-            preserveAspectRatio="none"
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              filter: 'drop-shadow(0 -4px 22px rgba(16, 185, 129, 0.4))',
-              zIndex: 2
-            }}
-          >
-            <defs>
-              <linearGradient id="cavernShelfGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#042f2e" />
-                <stop offset="50%" stopColor="#022c22" />
-                <stop offset="100%" stopColor="#021a14" />
-              </linearGradient>
+          {/* Back Giant Glowing Emerald & Amethyst Crystals */}
+          <polygon points="320,400 350,190 390,160 430,220 410,400" fill="#10b981" stroke="#a7f3d0" strokeWidth="4" filter="drop-shadow(0 0 14px #10b981)" opacity="0.9" />
+          <polygon points="980,400 1020,180 1060,150 1100,210 1070,400" fill="#a855f7" stroke="#e9d5ff" strokeWidth="4" filter="drop-shadow(0 0 14px #c084fc)" opacity="0.85" />
 
-              <linearGradient id="runicGlowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#34d399" />
-                <stop offset="25%" stopColor="#22d3ee" />
-                <stop offset="50%" stopColor="#c084fc" />
-                <stop offset="75%" stopColor="#2dd4bf" />
-                <stop offset="100%" stopColor="#a78bfa" />
-              </linearGradient>
-            </defs>
+          {/* Runic Glowing Energy Stream */}
+          <path
+            d="M 140 540 Q 400 450 700 465 T 1260 540"
+            stroke="url(#crystalGlow)"
+            strokeWidth="7"
+            fill="none"
+            filter="drop-shadow(0 0 12px #34d399)"
+            style={{ animation: `lavaGlowPulse ${pulseDuration} ease-in-out infinite` }}
+          />
 
-            {/* Deep Subterranean Gemstone Cliff Strata */}
-            <path 
-              d="M 25 70 
-                 Q 280 46 600 50 
-                 Q 920 46 1175 70 
-                 L 1185 240 L 15 240 Z" 
-              fill="url(#cavernShelfGrad)" 
-              stroke="#064e3b" 
-              strokeWidth="4" 
-            />
+          {/* Central Geode Shelf */}
+          <path
+            d="M 140 580
+               C 280 460 520 460 700 470
+               C 880 460 1120 460 1260 580
+               C 1140 660 880 660 700 650
+               C 500 660 260 660 140 580 Z"
+            fill="url(#cavernRockGrad)"
+            stroke="#6ee7b7"
+            strokeWidth="5"
+          />
 
-            {/* Ancient Glowing Musical Runes Etched into Cliff Face */}
-            <g 
-              stroke="url(#runicGlowGrad)" 
-              strokeWidth="4" 
-              fill="none" 
-              strokeLinecap="round"
-              filter="drop-shadow(0 0 8px #2dd4bf)"
-              style={{ animation: `lavaGlowPulse ${pulseDuration} ease-in-out infinite` }}
-            >
-              {/* Rune 1 (Treble Clef Symbol variation) */}
-              <path d="M 160 140 C 140 120 170 100 170 150 C 170 170 150 170 150 160" />
-              {/* Rune 2 (Cadence Wave) */}
-              <path d="M 380 150 Q 420 120 460 150 T 540 150" />
-              {/* Rune 3 (Harmony Triad) */}
-              <polygon points="680,165 710,120 740,165" strokeWidth="3" />
-              <circle cx="710" cy="145" r="4" fill="#a78bfa" />
-              {/* Rune 4 (Rhythm Spiral) */}
-              <path d="M 920 150 Q 945 125 970 150 Q 985 165 965 170 Q 945 165 955 150" />
-            </g>
-
-            {/* Glowing Cave Hollow with Friendly Eyes */}
-            <g transform="translate(800, 160)">
-              <ellipse cx="25" cy="18" rx="26" ry="13" fill="#021a14" />
-              <g className="blinking-cave-eyes">
-                <circle cx="18" cy="18" r="4.5" fill="#38bdf8" filter="drop-shadow(0 0 5px #38bdf8)" />
-                <circle cx="19" cy="18" r="2" fill="#ffffff" />
-                <circle cx="32" cy="18" r="4.5" fill="#38bdf8" filter="drop-shadow(0 0 5px #38bdf8)" />
-                <circle cx="33" cy="18" r="2" fill="#ffffff" />
-              </g>
-            </g>
-
-            {/* Top Crystal Ledge Step */}
-            <path 
-              d="M 30 68 
-                 Q 300 45 600 48 
-                 Q 900 45 1170 68 
-                 Q 900 86 600 82 
-                 Q 300 86 30 68 Z" 
-              fill="#065f46" 
-              stroke="#6ee7b7" 
-              strokeWidth="3.5" 
-            />
-
-            {/* Luminous Neon Emerald Edge */}
-            <path 
-              d="M 35 62 
-                 Q 300 40 600 43 
-                 Q 900 40 1165 62" 
-              stroke="url(#runicGlowGrad)" 
-              strokeWidth="5" 
-              fill="none" 
-              strokeLinecap="round"
-              filter="drop-shadow(0 0 10px #34d399)"
-            />
-
-            {/* Sprouting Glowing Bioluminescent Mushrooms */}
-            <g transform="translate(260, 68) scale(0.8)">
-              <path d="M 12 30 Q 14 16 16 10" stroke="#f0fdf4" strokeWidth="3" fill="none" />
-              <path d="M 4 12 C 4 2 28 2 28 12 Z" fill="#ec4899" stroke="#be185d" strokeWidth="2" filter="drop-shadow(0 0 6px #f472b6)" />
-              <circle cx="11" cy="7" r="2" fill="#ffffff" />
-              <circle cx="21" cy="7" r="2" fill="#ffffff" />
-            </g>
-            <g transform="translate(930, 68) scale(0.85)">
-              <path d="M 14 30 Q 15 16 16 10" stroke="#f0fdf4" strokeWidth="3" fill="none" />
-              <path d="M 4 12 C 4 2 28 2 28 12 Z" fill="#a855f7" stroke="#7e22ce" strokeWidth="2" filter="drop-shadow(0 0 6px #c084fc)" />
-              <circle cx="10" cy="7" r="2" fill="#ffffff" />
-              <circle cx="20" cy="7" r="2" fill="#ffffff" />
-            </g>
-          </svg>
-        </div>
+          {/* Foreground Crystal Cavern Ledge */}
+          <path
+            d="M -20 840 L -20 680 C 200 640 500 680 700 700 C 900 680 1200 640 1420 680 L 1420 840 Z"
+            fill="#022c22"
+            stroke="#065f46"
+            strokeWidth="5"
+          />
+        </svg>
       )}
     </div>
   );
