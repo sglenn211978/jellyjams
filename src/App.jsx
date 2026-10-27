@@ -15,7 +15,6 @@ import KelpForestWings from './components/KelpForestWings';
 import DJConsole from './components/DJConsole';
 import ReefFanClub from './components/ReefFanClub';
 import BakeryTruck from './components/BakeryTruck';
-import HypeDolphin from './components/HypeDolphin';
 import TreasureCrate from './components/TreasureCrate';
 import HatchModal from './components/HatchModal';
 import JellyDexModal from './components/JellyDexModal';
@@ -267,10 +266,7 @@ export default function App() {
   const handleZoomOut = () => setZoomLevel((z) => Math.max(0.75, Number((z - 0.15).toFixed(2))));
   const handleResetZoom = () => setZoomLevel(1.0);
 
-  // Hype Dolphin & Drops
-  const [dolphinActive, setDolphinActive] = useState(false);
-  const [dolphinKey, setDolphinKey] = useState(0);
-  const [dolphinFlipping, setDolphinFlipping] = useState(false);
+  // Mystery Drops
   const [mysteryCrate, setMysteryCrate] = useState(null);
 
   // Alerts, Modals & Toasts
@@ -466,24 +462,6 @@ export default function App() {
   };
   const totalDiscoveredAcrossIslands = Object.values(allPerformersAcrossIslands).filter(p => p?.unlocked).length;
 
-  // Periodic Hype Dolphin Spawner
-  useEffect(() => {
-    if (!hasStarted) return;
-
-    const spawnDolphin = () => {
-      setDolphinKey((k) => k + 1);
-      setDolphinActive(true);
-      engineRef.current?.playDolphinChirp();
-
-      setTimeout(() => {
-        setDolphinActive(false);
-      }, 11000);
-    };
-
-    const interval = setInterval(spawnDolphin, 16000);
-    return () => clearInterval(interval);
-  }, [hasStarted]);
-
   // Periodic Coin Drop Generator
   useEffect(() => {
     if (!hasStarted) return;
@@ -663,14 +641,13 @@ export default function App() {
       if (selectedParents.includes(member)) return;
       const updated = [...selectedParents, member];
       setSelectedParents(updated);
-      engineRef.current?.playMonsterSolo(member);
+      engineRef.current?.playClamPop();
 
       if (updated.length === 2) {
         setCoins((c) => c - 10);
         setIsSelectingParents(false);
         setSelectedParents([]);
         setIncubatingEgg({ islandId: currentIsland, parents: updated, tapsRemaining: 3 });
-        engineRef.current?.playClamPop();
         triggerCoinBonusToast('🔮 EGG LAID IN REMIX POD!');
       }
       return;
@@ -685,12 +662,12 @@ export default function App() {
       return;
     }
 
-    // 3. DIRECT TAP TOGGLES SINGING / MUTED (SLEEP)
+    // 3. DIRECT TAP TOGGLES SINGING / MUTED (SLEEP) IN SYNC WITH ENSEMBLE
     const wasSleeping = performers[member]?.isSleeping;
     togglePerformerSleep(member);
 
     if (wasSleeping) {
-      engineRef.current?.playMonsterSolo(member);
+      // Unmuting: joins the ensemble singing in lockstep with everyone else!
       triggerCoinBonusToast(`🎤 ${performers[member]?.name || member.toUpperCase()} IS SINGING!`);
     } else {
       triggerCoinBonusToast(`💤 ${performers[member]?.name || member.toUpperCase()} MUTED (TAP TO SING)`);
@@ -765,25 +742,15 @@ export default function App() {
     if (coins < 15 || performers[targetId]?.unlocked) return;
     setCoins((c) => c - 15);
 
-    setDolphinKey((k) => k + 1);
-    setDolphinActive(true);
-    engineRef.current?.playDolphinChirp();
-
-    setTimeout(() => {
-      setPerformers((prev) => ({
-        ...prev,
-        [targetId]: { ...prev[targetId], unlocked: true }
-      }));
-      engineRef.current?.playJackpotSound();
-      engineRef.current?.unlockPerformer(targetId);
-      engineRef.current?.setPerformerVolume(targetId, volumes[targetId] ?? 100);
-      triggerCoinBonusToast(recruitInfo.bonusMsg);
-      setCoins((c) => c + 5);
-    }, 1800);
-
-    setTimeout(() => {
-      setDolphinActive(false);
-    }, 11000);
+    setPerformers((prev) => ({
+      ...prev,
+      [targetId]: { ...prev[targetId], unlocked: true }
+    }));
+    engineRef.current?.playJackpotSound();
+    engineRef.current?.unlockPerformer(targetId);
+    engineRef.current?.setPerformerVolume(targetId, volumes[targetId] ?? 100);
+    triggerCoinBonusToast(recruitInfo.bonusMsg);
+    setCoins((c) => c + 5);
   };
 
   const handleCrackEgg = () => {
@@ -953,7 +920,6 @@ export default function App() {
     if (performers[id]?.isSleeping) {
       togglePerformerSleep(id);
     }
-    engineRef.current?.playMonsterSolo(id);
   };
 
   const handleToggleSolo = (id) => {
@@ -1060,23 +1026,6 @@ export default function App() {
     addFameXP(25);
   };
 
-  const triggerDolphinFlip = (e) => {
-    e.stopPropagation();
-    if (dolphinFlipping) return;
-
-    setDolphinFlipping(true);
-    engineRef.current?.playDolphinChirp();
-
-    const rect = e.currentTarget.getBoundingClientRect();
-    setMysteryCrate({
-      x: Math.max(80, Math.min(window.innerWidth - 120, rect.left + 50)),
-      y: rect.top + 70
-    });
-
-    setTimeout(() => {
-      setDolphinFlipping(false);
-    }, 750);
-  };
 
   const collectMysteryCrate = (e) => {
     engineRef.current?.playJackpotSound();
@@ -1486,14 +1435,6 @@ export default function App() {
         </div>
       )}
 
-      {/* Hype Dolphin */}
-      {hasStarted && dolphinActive && (
-        <HypeDolphin
-          key={dolphinKey}
-          isFlipping={dolphinFlipping}
-          onClick={triggerDolphinFlip}
-        />
-      )}
 
       {/* Dropped Crate */}
       {mysteryCrate && (
