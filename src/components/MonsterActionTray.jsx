@@ -71,6 +71,18 @@ export default function MonsterActionTray({
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            {/* Runic Stone Pebble Icon */}
+            <img 
+              src="/assets/art/stone_pebble_button.png" 
+              alt="Rune" 
+              style={{
+                width: '32px',
+                height: '32px',
+                objectFit: 'contain',
+                filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))'
+              }}
+            />
+
             {/* Level Star Badge */}
             <span
               style={{

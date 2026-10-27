@@ -1337,26 +1337,37 @@ export default function App() {
                 </button>
               )}
 
-              {/* Big Golden Coin Vault */}
+              {/* Big Golden Coin Vault with Hand-Painted Clam Shell */}
               <div 
                 ref={bankBadgeRef}
                 className={`game-coin-badge ${bankPulsing ? 'bank-pulse-active bank-impact-active' : ''}`}
                 style={{
-                  padding: '6px 18px',
-                  gap: '10px',
-                  minHeight: '52px',
-                  borderRadius: '24px'
+                  padding: '4px 18px 4px 10px',
+                  gap: '8px',
+                  minHeight: '56px',
+                  borderRadius: '28px',
+                  display: 'flex',
+                  alignItems: 'center'
                 }}
               >
-                <span style={{ fontSize: '32px', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.4))' }}>🪙</span>
+                <img 
+                  src="/assets/art/gold_clam_coin_vault.png" 
+                  alt="Coin Vault" 
+                  style={{
+                    width: '46px',
+                    height: '46px',
+                    objectFit: 'contain',
+                    filter: 'drop-shadow(0 3px 6px rgba(0,0,0,0.45))'
+                  }} 
+                />
                 <span style={{
                   color: '#fef08a',
-                  fontSize: '28px',
+                  fontSize: '30px',
                   fontFamily: "'Lilita One', 'Fredoka', sans-serif",
                   fontWeight: '900',
-                  letterSpacing: '1px',
+                  letterSpacing: '1.2px',
                   paintOrder: 'stroke fill',
-                  WebkitTextStroke: '3px #78350f',
+                  WebkitTextStroke: '3.5px #78350f',
                   textShadow: '0 3px 0 #451a03'
                 }}>
                   {coins}

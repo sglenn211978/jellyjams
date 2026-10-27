@@ -106,11 +106,21 @@ export default function ReefStageLandscape({
             </linearGradient>
           </defs>
 
-          {/* 1. Island Water Backdrop */}
-          <rect width="1400" height="820" fill="url(#lagoonWaterBg)" />
+          {/* 1. Hand-Painted 2D Island Lagoon Backdrop */}
+          <image 
+            href="/assets/art/sunlit_lagoon_painted_bg.jpg" 
+            x="0" 
+            y="0" 
+            width="1400" 
+            height="820" 
+            preserveAspectRatio="xMidYMid slice" 
+            opacity={isNight ? "0.45" : "0.92"} 
+          />
+          {/* Ambient Lighting Overlay */}
+          <rect width="1400" height="820" fill="url(#lagoonWaterBg)" style={{ mixBlendMode: 'multiply' }} />
 
           {/* 2. Shimmering Underwater Sunbeams (God Rays) */}
-          <g opacity="0.85" className="sunbeam-shimmer">
+          <g opacity="0.65" className="sunbeam-shimmer">
             <polygon points="120,0 280,0 460,820 220,820" fill="url(#sunbeamGrad)" />
             <polygon points="450,0 620,0 850,820 620,820" fill="url(#sunbeamGrad)" />
             <polygon points="800,0 960,0 1200,820 980,820" fill="url(#sunbeamGrad)" />
@@ -166,29 +176,23 @@ export default function ReefStageLandscape({
             className="sleeping-colossus-face"
             style={{ 
               animation: `colossusBreathe ${pulseDuration} ease-in-out infinite`,
-              transformOrigin: '700px 290px'
+              transformOrigin: '700px 240px'
             }}
           >
-            {/* Giant Mossy Rock Head Shape */}
-            <path
-              d="M 640 320 C 640 240 760 240 760 320 C 760 350 640 350 640 320 Z"
-              fill={isNight ? '#1e293b' : '#0891b2'}
-              stroke="#090d16"
-              strokeWidth="4"
-              opacity="0.9"
+            {/* Hand-Painted Living Island Colossus Sprite */}
+            <image
+              href="/assets/art/reef_colossus_face.png"
+              x="570"
+              y="120"
+              width="260"
+              height="260"
+              preserveAspectRatio="xMidYMid meet"
+              style={{
+                filter: isNight 
+                  ? 'brightness(0.65) drop-shadow(0 14px 28px rgba(0,0,0,0.85))' 
+                  : 'drop-shadow(0 16px 32px rgba(0,0,0,0.6))'
+              }}
             />
-            {/* Peaceful Closed Cartoon Eyes (gentle curves) */}
-            <path d="M 662 292 Q 675 304 688 292" stroke="#090d16" strokeWidth="4" fill="none" strokeLinecap="round" />
-            <path d="M 712 292 Q 725 304 738 292" stroke="#090d16" strokeWidth="4" fill="none" strokeLinecap="round" />
-            {/* Gentle Smiling Rock Mouth */}
-            <path d="M 686 322 Q 700 334 714 322" stroke="#090d16" strokeWidth="3.5" fill="none" strokeLinecap="round" />
-            {/* Blushing Coral Cheeks */}
-            <circle cx="658" cy="305" r="7" fill="#f472b6" opacity="0.65" />
-            <circle cx="742" cy="305" r="7" fill="#f472b6" opacity="0.65" />
-            {/* Cute Coral Crown / Foliage on Head */}
-            <circle cx="700" cy="245" r="16" fill="#f59e0b" stroke="#78350f" strokeWidth="3" />
-            <circle cx="678" cy="254" r="12" fill="#ec4899" stroke="#831843" strokeWidth="2.5" />
-            <circle cx="722" cy="254" r="12" fill="#22c55e" stroke="#14532d" strokeWidth="2.5" />
           </g>
 
           {/* High Tier Raised Coral Shelf Mound */}

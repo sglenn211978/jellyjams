@@ -125,6 +125,20 @@ export default function StagePedestal({
           transform: isSelected ? 'scale(1.08)' : 'scale(1.0)'
         }}
       >
+        {/* Soft Ambient Contact Shadow Under Monster's Base */}
+        <div 
+          style={{
+            position: 'absolute',
+            top: '-14px',
+            left: '14px',
+            right: '14px',
+            height: '22px',
+            borderRadius: '50%',
+            background: 'radial-gradient(ellipse at center, rgba(15,23,42,0.75) 0%, rgba(15,23,42,0) 72%)',
+            pointerEvents: 'none'
+          }} 
+        />
+
         {/* Subtle stage rim pearls */}
         <div style={{
           position: 'absolute',
